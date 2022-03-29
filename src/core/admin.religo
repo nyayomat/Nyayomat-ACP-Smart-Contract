@@ -17,8 +17,14 @@ type return =  (list(operation), admin_storage);
 /// @dev Create a new admin record
 /// It's only the s.c owner who can create a new admin record
 /// @param adminId The address of the admin to create
-let create_admin = ((adminId, admin): (adminId, admin)): return => {
-
+let create_admin = ((adminId, init_admin_storage): (adminId, admin_storage)): return => {
+    let admin_kind: admin =
+        {
+            id: (adminId),
+            name: "",
+            created_at: "",
+            updated_at: ""
+        };
     // check if the caller is the s.c owner
    if(is_owner()) {
         failwith("Only the s.c owner can create a new admin record");
@@ -26,10 +32,11 @@ let create_admin = ((adminId, admin): (adminId, admin)): return => {
 
     /* Insert the admin into the storage */
 
-    let admin_storage = Big_map.add(adminId, admin, init_admin_storage);
-
-    (([]: list(operation)), admin_storage)
-}
+  let admin_storage = Big_map.add(
+      adminId, admin_kind, init_admin_storage);
+      
+  (([] : list(operation)), admin_storage)
+};
 
 /// @dev Helper function to check whether admin exists
 /// @param adminId The admin's id to check
