@@ -8,7 +8,7 @@ type admin = {
 }
 type admin_storage = big_map(address, admin);
 
-let init_storage: admin_storage = Big_map.empty;
+let init_admin_storage: admin_storage = Big_map.empty;
 
 type adminId = address;
 
@@ -26,7 +26,7 @@ let create_admin = ((adminId, admin): (adminId, admin)): return => {
 
     /* Insert the admin into the storage */
 
-    let admin_storage = Big_map.add(adminId, admin, init_storage);
+    let admin_storage = Big_map.add(adminId, admin, init_admin_storage);
 
     (([]: list(operation)), admin_storage)
 }
@@ -37,7 +37,7 @@ let admin_exists = ((adminId): (adminId)): bool => {
 
     /* Check whether admin exists */
 
-    switch(Big_map.find_opt(adminId, init_storage)){
+    switch(Big_map.find_opt(adminId, init_admin_storage)){
         | Some(_admin)=>
             true
         | None =>
@@ -59,7 +59,7 @@ let update_admin = ((adminId, admin): (adminId, admin)): return => {
 
 
     /* Update the admin in the storage */
-    let (_, new_admin_storage) = Big_map.get_and_update(adminId, Some(admin), init_storage);
+    let (_, new_admin_storage) = Big_map.get_and_update(adminId, Some(admin), init_admin_storage);
 
     (([]: list(operation)), new_admin_storage)
 
@@ -77,7 +77,7 @@ let remove_admin = ((adminId): (adminId)): return => {
 
     /* Remove the admin from the storage */
 
-    let admin_storage = Big_map.remove(adminId, init_storage);
+    let admin_storage = Big_map.remove(adminId, init_admin_storage);
 
     (([]: list(operation)), admin_storage)
 }
@@ -89,7 +89,7 @@ let get_admin = ((adminId): (adminId)): (list(operation), admin) => {
     /* Get the admin from the storage */
 
     let admin: admin = 
-        switch(Big_map.find_opt(adminId, init_storage)){
+        switch(Big_map.find_opt(adminId, init_admin_storage)){
             | Some(admin)=>
                 admin
             | None =>
@@ -98,3 +98,10 @@ let get_admin = ((adminId): (adminId)): (list(operation), admin) => {
 
     (([]: list(operation)), admin)
 }
+
+/// @dev Retrieves all admin records
+let get_admins = ((): return => {
+
+  
+    (([]: list(operation)), init_admin_storage)
+})

@@ -40,23 +40,10 @@ let get_listing = ((listingId): (listingId)): listing => {
 * @param get listings
  * @returns {(list(operation), listing_storage)}
  */
-let get_listings = ((filter): (option(listingType))): (list(operation), listing_storage) => {
+let get_listings = (()): (list(operation), listing_storage) => {
 
     /* Get all listings from the storage */
-    let listing_storage = switch (filter) {
-        | Some(listingType) =>
-            Big_map.filter(
-                (listing: listing): bool => {
-                    listing.listingType == listingType
-                },
-                init_storage
-            )
-        | None =>
-            init_storage
-    };
-
-   
-    (([]: list(operation)), listing_storage)
+    (([]: list(operation)), init_storage)
 
 }
 
