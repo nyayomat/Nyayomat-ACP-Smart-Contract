@@ -2,7 +2,7 @@
 
 type paymentFrequency = Daily | Weekly | Monthly | Yearly
 type paymentMethod = Mpesa | Card | Bank | Cash
-type listingStatus = Pending | Declined | Approved
+type listingType = APListing | MerchantListing
 
 type listing = {
     id: string,
@@ -15,7 +15,8 @@ type listing = {
     group: string,
     subGroup: string,
     category: string,
-    status: option(listingStatus),
+    status: option(status),
+    listingType: listingType,
     createdAt: timestamp,
     updatedAt: timestamp
 }
