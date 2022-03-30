@@ -47,8 +47,8 @@ let get_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => 
     /* Get the admin from the storage */
     let admin: admin_storage = 
         switch(Big_map.find_opt(adminId, admin_storage)){
-            | Some (_) =>
-                admin_storage 
+            | Some (admin) =>
+                Big_map.literal([(adminId, admin)]) 
             | None =>
                 (failwith("admin not found"): admin_storage)
         };
