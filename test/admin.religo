@@ -25,13 +25,19 @@ let test =
     let contract_address = Tezos.address (admin_contract);
 
     // TODO: Add test to check if admin exists
+    // TODO: Add test to remove admin
+    // TODO: Add test to get admin
     
-    let check_remove_admin = switch(admin_add_addr) {
-        | Success () =>
-            let storage = Test.get_storage(admin_add_addr);
-            // assert(remove_admin(admin_add_addr, storage))
-            ()
-        | Fail (Other) => failwith ("contract failed for an unknown reason")
-    };
+    /* Query a deployed contract */
+    let admin_contract_storage = Test.get_storage (admin_add_addr);
+    assert (admin_contract_storage == init_admin_storage);
 
-    assert (Test.get_storage(admin_contract) == init_admin_storage);
+
+
+    // let check_remove_admin = switch() {
+    //     | Success () =>
+    //         let storage = Test.get_storage(admin_add_addr);
+    //         // assert(remove_admin(admin_add_addr, storage))
+    //         ()
+    //     | Fail (Other) => failwith ("contract failed for an unknown reason")
+    // };
