@@ -4,7 +4,8 @@ type admin = {
     id: address,
     name: string,
     created_at: string,
-    updated_at: string
+    updated_at: string,
+    deleted_at: string,
 }
 type admin_storage = big_map(address, admin);
 
@@ -17,6 +18,8 @@ type return =  (list(operation), admin_storage);
 
 type parameter = 
     | Add_Admin (adminId)
+    | Get_Admin (adminId)
+    | Remove_Admin (adminId)
 
 
 /// @dev Create a new admin record
@@ -28,7 +31,8 @@ let create_admin = ((adminId, init_admin_storage): (adminId, admin_storage)): re
             id: (adminId),
             name: "",
             created_at: "",
-            updated_at: ""
+            updated_at: "",
+            deleted_at: ""
         };
     // check if the caller is the s.c owner
    if(is_owner()) {
@@ -80,40 +84,40 @@ let update_admin = ((adminId, admin): (adminId, admin)): return => {
 /// @dev Deletes an admin record
 /// It is only possible to delete an admin if the sender is admin
 /// @param adminId The id of the admin to delete
-let remove_admin = ((adminId): (adminId)): admin_storage => {
+let remove_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
 
  /* Ensure that the user deleting the admin is admin */
    if(!admin_exists(Tezos.sender)) {
        failwith("Only admin can remove admin");
    };
 
-   let _some_admin : admin = 
-        switch(Big_map.find_opt(adminId, init_admin_storage)){
-        | Some(_admin)=>
-            _admin
+    
+   let some_admin : admin_storage = 
+        switch(Big_map.find_opt(adminId, admin_storage)){
+        | Some(_)=>
+            admin_storage
         | None =>
-            (failwith("Admin doesn't exist"))
+            (failwith("Admin doesn't exist"): admin_storage)
     };
 
+
     /* Remove the admin from the storage */
+    let admin_storage = Big_map.remove(adminId, some_admin);
 
-    let admin_storage = Big_map.remove(adminId, init_admin_storage);
-
-    (admin_storage)
+    (([]: list(operation)), admin_storage)
 }
 
 
 /// @dev Retrieves an admin record
-let get_admin = ((adminId): (adminId)): (list(operation), admin) => {
+let get_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
 
     /* Get the admin from the storage */
-
-    let admin: admin = 
-        switch(Big_map.find_opt(adminId, init_admin_storage)){
-            | Some(admin)=>
-                admin
+    let admin: admin_storage = 
+        switch(Big_map.find_opt(adminId, admin_storage)){
+            | Some (_) =>
+                admin_storage 
             | None =>
-                (failwith("admin not found"): admin)
+                (failwith("admin not found"): admin_storage)
         };
 
     (([]: list(operation)), admin)
@@ -126,9 +130,12 @@ let get_admin = ((adminId): (adminId)): (list(operation), admin) => {
 //     (([]: list(operation)))
 // })
 
-let main = ((action, init_admin_storage) : (parameter, admin_storage)) : return => {
-    // (([] : list(operation)), init_admin_storage)
+
+// @dev Entrypoint for the smart contract
+let main = ((action, admin_init_storage) : (parameter, admin_storage)) : return => {
     (switch(action) {
-        | Add_Admin (adminId) => create_admin((adminId, init_admin_storage))
+        | Add_Admin (adminId) => create_admin((adminId, admin_init_storage))
+        | Get_Admin (adminId) => get_admin((adminId, admin_init_storage))
+        | Remove_Admin (adminId) => remove_admin((adminId, admin_init_storage))
     })
 }
