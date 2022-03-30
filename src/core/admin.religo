@@ -17,7 +17,7 @@ type adminId = address;
 type return =  (list(operation), admin_storage);
 
 type parameter = 
-    | Add_Admin (adminId)
+    | CreateAdmin (admin)
     | Get_Admin (adminId)
     | Remove_Admin (adminId)
 
@@ -25,15 +25,7 @@ type parameter =
 /// @dev Create a new admin record
 /// It's only the s.c owner who can create a new admin record
 /// @param adminId The address of the admin to create
-let create_admin = ((adminId, init_admin_storage): (adminId, admin_storage)): return => {
-    let admin_kind: admin =
-        {
-            id: (adminId),
-            name: "",
-            created_at: "",
-            updated_at: "",
-            deleted_at: ""
-        };
+let create_admin = ((admin, admin_storage): (admin, admin_storage)): return => {
     // check if the caller is the s.c owner
    if(is_owner()) {
         failwith("Only the s.c owner can create a new admin record");
@@ -42,7 +34,7 @@ let create_admin = ((adminId, init_admin_storage): (adminId, admin_storage)): re
     /* Insert the admin into the storage */
 
   let admin_storage = Big_map.add(
-      adminId, admin_kind, init_admin_storage);
+      admin.id, admin, admin_storage);
       
   (([]: list(operation)), admin_storage)
 };
@@ -132,10 +124,10 @@ let get_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => 
 
 
 // @dev Entrypoint for the smart contract
-let main = ((action, admin_init_storage) : (parameter, admin_storage)) : return => {
+let main = ((action, storage) : (parameter, admin_storage)) : return => {
     (switch(action) {
-        | Add_Admin (adminId) => create_admin((adminId, admin_init_storage))
-        | Get_Admin (adminId) => get_admin((adminId, admin_init_storage))
-        | Remove_Admin (adminId) => remove_admin((adminId, admin_init_storage))
+        | CreateAdmin (admin) => create_admin (admin, storage)
+        | Get_Admin (adminId) => get_admin((adminId, storage))
+        | Remove_Admin (adminId) => remove_admin((adminId, storage))
     })
 }
