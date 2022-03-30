@@ -17,20 +17,23 @@ let test =
             name: "tezz_admin",
             created_at: "2019-01-01T00:00:00Z",
             updated_at: "2019-01-01T00:00:00Z",
+            deleted_at: "2019-01-01T00:00:00Z"
         }), ]);
 
-    let (admin_add_addr, _, _) = Test.originate(create_admin, init_admin_storage, 0tez);
+    let (admin_add_addr, _, _) = Test.originate(main, init_admin_storage, 0tez);
 
-    let admin_contract = Test.to_contract (admin_add_addr);
-    let contract_address = Tezos.address (admin_contract);
+    let admin_contract = Test.to_contract(admin_add_addr);
+    let contract_address = Tezos.address(admin_contract);
 
     // TODO: Add test to check if admin exists
     // TODO: Add test to remove admin
     // TODO: Add test to get admin
     
-    /* Query a deployed contract */
+    /* Query a deployed contract and check if data is stored*/
     let admin_contract_storage = Test.get_storage (admin_add_addr);
     assert (admin_contract_storage == init_admin_storage);
+
+    // let gas_cons = Test.transfer_to_contract_exn(admin_contract, admin_exists(("tz2Lit89AC8iLEvDarnqpXxEQDPA3sqRXR1Z": address)), 1mutez)
 
 
 
