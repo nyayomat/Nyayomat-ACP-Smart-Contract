@@ -19,9 +19,19 @@ let test =
             updated_at: "2019-01-01T00:00:00Z",
         }), ]);
 
-    let (admin_contract, _, _) = Test.originate(create_admin, init_admin_storage, 0tez);
+    let (admin_add_addr, _, _) = Test.originate(create_admin, init_admin_storage, 0tez);
 
-        let pedro_taco_shop_ctr = Test.to_contract (admin_contract);
+    let admin_contract = Test.to_contract (admin_add_addr);
+    let contract_address = Tezos.address (admin_contract);
 
-    // assert (Test.get_storage(admin_contract) == init_admin_storage)
-()
+    // TODO: Add test to check if admin exists
+    
+    let check_remove_admin = switch(admin_add_addr) {
+        | Success () =>
+            let storage = Test.get_storage(admin_add_addr);
+            // assert(remove_admin(admin_add_addr, storage))
+            ()
+        | Fail (Other) => failwith ("contract failed for an unknown reason")
+    };
+
+    assert (Test.get_storage(admin_contract) == init_admin_storage);
