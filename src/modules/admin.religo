@@ -27,7 +27,7 @@ type parameter =
 /// @dev Create a new admin record
 /// It's only the s.c owner who can create a new admin record
 /// @param adminId The address of the admin to create
-let create_admin = ((admin, admin_storage): (admin, admin_storage)): return => {
+let createAdmin = ((admin, admin_storage): (admin, admin_storage)): return => {
     // check if the caller is the s.c owner
    if(is_owner()) {
         failwith("Only the s.c owner can create a new admin record");
@@ -42,7 +42,7 @@ let create_admin = ((admin, admin_storage): (admin, admin_storage)): return => {
 };
 
 /// @dev Retrieves an admin record
-let get_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
+let getAdmin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
 
     /* Get the admin from the storage */
     let admin: admin_storage = 
@@ -57,14 +57,14 @@ let get_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => 
 }
 
 /// @dev Retrieves all admin records
-let get_admins = ((storage: admin_storage): return => {
+let getAdmins = ((storage: admin_storage): return => {
     (([]: list(operation), storage))
 })
 
 
 /// @dev Helper function to check whether admin exists
 /// @param adminId The admin's id to check
-let admin_exists = ((adminId, admin_storage): (adminId, admin_storage)): bool => {
+let adminExists = ((adminId, admin_storage): (adminId, admin_storage)): bool => {
 
     /* Check whether admin exists */
 
@@ -81,10 +81,10 @@ let admin_exists = ((adminId, admin_storage): (adminId, admin_storage)): bool =>
 /// It's only possible to update admin details by admin
 /// @param adminId The admin's id
 /// @param admin The admin's new data
-let update_admin = ((admin, storage): (admin, admin_storage)): return => {
+let updateAdmin = ((admin, storage): (admin, admin_storage)): return => {
 
     /* Ensure that the user updating the admin is admin */
-   if(!admin_exists(Tezos.sender, storage)) {
+   if(!adminExists(Tezos.sender, storage)) {
        failwith("Only admin can update admin details");
    };
 
@@ -99,10 +99,10 @@ let update_admin = ((admin, storage): (admin, admin_storage)): return => {
 /// @dev Deletes an admin record
 /// It is only possible to delete an admin if the sender is admin
 /// @param adminId The id of the admin to delete
-let remove_admin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
+let removeAdmin = ((adminId, admin_storage): (adminId, admin_storage)): return => {
 
  /* Ensure that the user deleting the admin is admin */
-   if(!admin_exists(Tezos.sender, admin_storage)) {
+   if(!adminExists(Tezos.sender, admin_storage)) {
        failwith("Only admin can remove admin");
    };
 
@@ -127,10 +127,10 @@ let remove_admin = ((adminId, admin_storage): (adminId, admin_storage)): return 
 // @dev Entrypoint for the smart contract
 let main = ((action, storage) : (parameter, admin_storage)) : return => {
     (switch(action) {
-        | CreateAdmin (admin) => create_admin (admin, storage)
-        | GetAdmin (adminId) => get_admin((adminId, storage))
-        | GetAdmins => get_admins(storage)
-        | RemoveAdmin (adminId) => remove_admin((adminId, storage))
-        | UpdateAdmin (admin) => update_admin((admin, storage))
+        | CreateAdmin (admin) => createAdmin (admin, storage)
+        | GetAdmin (adminId) => getAdmin((adminId, storage))
+        | GetAdmins => getAdmins(storage)
+        | RemoveAdmin (adminId) => removeAdmin((adminId, storage))
+        | UpdateAdmin (admin) => updateAdmin((admin, storage))
     })
 }
