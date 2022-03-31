@@ -8,7 +8,7 @@ const Main = async () => {
 
   console.log(`- - -`.repeat(3));
   console.info(`Fetching inventories...`);
-  const inventories = await databaseWrapper.fetchInventory();
+  const inventories = await databaseWrapper.fetchTable('inventories');
   console.log({
     inventories,
   });
