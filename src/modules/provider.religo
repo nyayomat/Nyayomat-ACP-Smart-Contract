@@ -7,7 +7,7 @@ type id = string;
 type provider = {
     id,
     name: string,
-    shop_name: string,
+    shopName: string,
     address: option(address),
     operatingDays: string,
     status,
@@ -21,7 +21,7 @@ type storage = big_map(id, provider);
 type return = (list(operation), storage);
 
 /// @dev Create a new provider
-/// Only an existing admin can create a new admin
+/// Only an existing admin can create a new provider
 /// @param provider
 /// @returns return
 let createProvider = (provider: provider, storage: storage)

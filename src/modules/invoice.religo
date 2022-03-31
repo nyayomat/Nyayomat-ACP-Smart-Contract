@@ -21,7 +21,7 @@ type storage = big_map(id, invoice);
 type return = (list(operation), storage);
 
 /// @dev Create a new invoice
-/// Only an existing admin can create a new admin
+/// Only an existing admin can create a new invoice
 /// @param invoice
 /// @returns return
 let createInvoice = (invoice: invoice, storage: storage)

@@ -32,7 +32,7 @@ type storage = big_map(id, product);
 type return = (list(operation), storage);
 
 /// @dev Create a new product
-/// Only an existing admin can create a new admin
+/// Only an existing admin can create a new product.
 /// @param product
 /// @returns return
 let createProduct = (product: product, storage: storage)

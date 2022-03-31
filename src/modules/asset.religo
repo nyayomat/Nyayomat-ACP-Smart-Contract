@@ -7,7 +7,6 @@
 
 type id = string;
 type status = Approved | Declined | Shortlisted | Pending;
-type status = Approved | Declined | Shortlisted | Pending;
 type assetOwner = Merchant | Provider;
 
 type asset = {
