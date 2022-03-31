@@ -1,4 +1,5 @@
 import { schedule } from 'node-cron';
+import { mapInventoryToTezos } from './common/mappings';
 import { databaseWrapper } from './core';
 import { InventoryDB } from './types/inventory';
 
@@ -9,8 +10,9 @@ const Main = async () => {
 
   console.log(`- - -`.repeat(3));
   console.info(`Fetching inventories...`);
-  const inventories = await databaseWrapper.fetchInventory();
+  const inventoriesDB = await databaseWrapper.fetchInventory();
 
+  console.log(mapInventoryToTezos(inventoriesDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight
