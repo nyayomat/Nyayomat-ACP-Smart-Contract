@@ -7,6 +7,9 @@ import {
   AssetTezos,
   UserDB,
   UserTezos,
+  MerchantTxDB,
+  ProviderTxDB,
+  TransactionTezos,
 } from '../types';
 import { InvoiceDB, InvoiceTezos } from '../types/invoice';
 import { ProductDB, ProductTezos } from '../types/product';
@@ -131,12 +134,63 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
     return {
       id: user.id,
       name: user.name,
-      role: user?.point ? 'Admin' : 'Merchant',
+      shopId: user.shop_id,
+      role:
+        user.role_id == '1'
+          ? 'SuperAdmin'
+          : user.role_id == '2'
+          ? 'Admin'
+          : 'Merchant',
       description: user.description,
-      point: user.point,
+      roleId: user.role_id,
+      active: user.active,
       createdAt: user.created_at,
       updatedAt: user.updated_at,
       deletedAt: user.deleted_at,
     };
   });
+};
+
+export const mapTransactionToTezos = (
+  transactions: MerchantTxDB[] | ProviderTxDB[]
+): TransactionTezos[] => {
+  const merchant_tx = transactions.some(
+    (transaction: MerchantTxDB) => transaction.merchant_id
+  );
+  const provider_tx = transactions.some(
+    (transaction: ProviderTxDB) => transaction.asset_provider_id
+  );
+  if (merchant_tx) {
+    return transactions.map((transaction: MerchantTxDB) => {
+      return {
+        id: transaction.id,
+        merchantId: transaction.merchant_id,
+        orderId: transaction.order_id,
+        assetId: transaction.asset_id,
+        dueDate: transaction.due_date,
+        paidOn: transaction.paid_on,
+        txType: transaction.type,
+        initiator: 'Merchant',
+        amount: transaction.amount,
+        createdAt: transaction.created_at,
+        updatedAt: transaction.updated_at,
+      };
+    });
+  }
+  if (provider_tx) {
+    return transactions.map((transaction: ProviderTxDB) => {
+      return {
+        id: transaction.id,
+        assetProviderId: transaction.asset_provider_id,
+        assetId: transaction.asset_id,
+        dueDate: transaction.due_date,
+        paidOn: transaction.paid_on,
+        txType: transaction.type,
+        initiator: 'Provider',
+        amount: transaction.amount,
+        createdAt: transaction.created_at,
+        updatedAt: transaction.updated_at,
+      };
+    });
+  }
 };

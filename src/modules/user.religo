@@ -10,12 +10,13 @@ let is_admin = (user: address): bool => {
 type userType = Admin | Merchant;
 
 type user = {
-  id: address,
+  id: string,
   name: string,
   shopId: option(nat),
   role: userType,
   description: string,
-  point: option(nat),
+  roleId: string,
+  active: bool,
   createdAt: string,
   updatedAt: string,
   deletedAt: string

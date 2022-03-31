@@ -15,12 +15,12 @@ type txInitiator = Merchant | Provider;
 
 type transaction = {
   id,
-  asset_provider_id: option(id),
-  merchant_id: option(id),
-  order_id: option(id),
-  asset_id: id,
-  due_date: timestamp,
-  paid_on: timestamp,
+  assetProviderId: option(id),
+  merchantId: option(id),
+  orderId: option(id),
+  assetId: id,
+  dueDate: timestamp,
+  paidOn: timestamp,
   txType,
   initiator: txInitiator,
   amount: nat,
