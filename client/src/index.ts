@@ -1,5 +1,6 @@
 import { schedule } from 'node-cron';
 import { databaseWrapper } from './core';
+import { InventoryDB } from './types/inventory';
 
 const Main = async () => {
   console.log(`---`.repeat(10));
