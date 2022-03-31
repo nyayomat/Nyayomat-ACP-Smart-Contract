@@ -1,6 +1,13 @@
 /// @dev DB Mappings
 
-import { InventoryDB, InventoryTezos } from '../types';
+import {
+  InventoryDB,
+  InventoryTezos,
+  AssetDB,
+  AssetTezos,
+  UserDB,
+  UserTezos,
+} from '../types';
 
 export const mapInventoryToTezos = (
   invetories: InventoryDB[]
@@ -42,6 +49,32 @@ export const mapInventoryToTezos = (
       updatedAt: inventory.updated_at,
       customerPointsDiscountPercentage:
         inventory.customer_points_discount_percentage,
+    };
+  });
+};
+
+export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
+  return assets.map((asset: AssetDB) => {
+    return {
+      id: asset.id,
+      providerId: asset.asset_provider_id,
+      name: asset.asset_name,
+      groupId: asset?.group_id,
+      subGroupId: asset?.sub_group_id,
+      categoryId: asset?.category_id,
+      image: asset?.image,
+      units: asset.units,
+      unitCost: asset.unit_cost,
+      holidayProvision: asset.holiday_provision,
+      depositAmount: asset.deposit_amount,
+      installment: asset.installment,
+      totalOutstandingAmount: asset.total_outstanding_amount,
+      paymentFreq: asset.payment_frequency,
+      paymentMethod: asset.payment_method,
+      status: asset.status,
+      owner: asset?.group_id ? 'Provider' : 'Merchant',
+      createdAt: asset.created_at,
+      updatedAt: asset.updated_at,
     };
   });
 };
