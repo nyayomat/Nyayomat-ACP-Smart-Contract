@@ -1,7 +1,11 @@
 import { schedule } from 'node-cron';
-import { mapInventoryToTezos } from './common/mappings';
+import {
+  mapInventoryToTezos,
+  mapInvoiceToTezos,
+  mapProductToTezos,
+} from './common';
 import { databaseWrapper } from './core';
-import { InventoryDB } from './types/inventory';
+import { InventoryDB } from './types';
 
 const Main = async () => {
   console.log(`---`.repeat(10));
@@ -10,8 +14,13 @@ const Main = async () => {
 
   console.log(`- - -`.repeat(3));
   console.info(`Fetching inventories...`);
-  const inventoriesDB = await databaseWrapper.fetchTable('inventories');
-  console.log(mapInventoryToTezos(inventoriesDB));
+  // const inventoriesDB = await databaseWrapper.fetchTable('inventories');
+  // console.log(mapInventoryToTezos(inventoriesDB));
+  // const invoicesDB = await databaseWrapper.fetchTable('invoices');
+  // console.log(mapInvoiceToTezos(invoicesDB));
+
+  const productsDB = await databaseWrapper.fetchTable('products');
+  console.log(mapProductToTezos(productsDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight

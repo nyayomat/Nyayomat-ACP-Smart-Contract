@@ -8,6 +8,8 @@ import {
   UserDB,
   UserTezos,
 } from '../types';
+import { InvoiceDB, InvoiceTezos } from '../types/invoice';
+import { ProductDB, ProductTezos } from '../types/product';
 
 export const mapInventoryToTezos = (
   invetories: InventoryDB[]
@@ -75,6 +77,51 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       owner: asset?.group_id ? 'Provider' : 'Merchant',
       createdAt: asset.created_at,
       updatedAt: asset.updated_at,
+    };
+  });
+};
+
+export const mapInvoiceToTezos = (invoices: InvoiceDB[]): InvoiceTezos[] => {
+  return invoices.map((invoice: InvoiceDB) => {
+    return {
+      id: invoice.id,
+      userId: invoice.user_id,
+      shopId: invoice.shop_id,
+      providerId: invoice.provider_id,
+      total: invoice.total,
+      tax: invoice.tax,
+      createdAt: invoice.created_at,
+      updatedAt: invoice.updated_at,
+      deletedAt: invoice.deleted_at,
+    };
+  });
+};
+
+export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
+  return products.map((product: ProductDB) => {
+    return {
+      id: product.id,
+      shopId: product.shop_id,
+      manufacturerId: product.manufacturer_id,
+      brand: product.brand,
+      name: product.name,
+      modelNumber: product.model_number,
+      mpn: product.mpn,
+      gtin: product.gtin,
+      gtinType: product.gtin_type,
+      description: product.description,
+      minPrice: product.min_price,
+      maxPrice: product.max_price,
+      originCountry: product.origin_country,
+      hasVariant: product.has_variant,
+      requiresShipping: product.requires_shipping,
+      downloadable: product.downloadable,
+      slug: product.slug,
+      saleCount: product.sale_count,
+      active: product.active,
+      deletedAt: product.deleted_at,
+      createdAt: product.created_at,
+      updatedAt: product.updated_at,
     };
   });
 };
