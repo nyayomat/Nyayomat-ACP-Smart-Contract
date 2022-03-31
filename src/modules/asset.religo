@@ -6,23 +6,28 @@
 #include "../utils/common.religo"
 
 type id = string;
+type status = Approved | Declined | Shortlisted | Pending;
+type status = Approved | Declined | Shortlisted | Pending;
+type assetOwner = Merchant | Provider;
+
 type asset = {
     id,
     providerId: id,
     name: string,
-    groupId: id,
-    subGroupId: id,
-    categoryId: id,
-    image: string,
+    groupId: option(id),
+    subGroupId: option(id),
+    categoryId: option(id),
+    image: option(string),
     units: string,
     unit_cost: nat,
     holidayProvision: nat,
     depositAmount: nat,
     installment: nat,
-    totalOutStandingAmount: nat,
+    totalOutStandingAmount: option(nat),
     paymentFreq: string,
     paymentMethod: string,
     status: string,
+    owner: option(assetOwner),
     createdAt: timestamp,
     updatedAt: timestamp,
     deletedAt: option(timestamp)
