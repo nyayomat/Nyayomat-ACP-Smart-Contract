@@ -1,6 +1,7 @@
 /// @dev DB Mappings
 
 import { InventoryDB, InventoryTezos } from '../types';
+import { InvoiceDB, InvoiceTezos } from '../types/invoice';
 
 export const mapInventoryToTezos = (
   invetories: InventoryDB[]
@@ -42,6 +43,22 @@ export const mapInventoryToTezos = (
       updatedAt: inventory.updated_at,
       customerPointsDiscountPercentage:
         inventory.customer_points_discount_percentage,
+    };
+  });
+};
+
+export const mapInvoiceToTezos = (invoices: InvoiceDB[]): InvoiceTezos[] => {
+  return invoices.map((invoice: InvoiceDB) => {
+    return {
+      id: invoice.id,
+      userId: invoice.user_id,
+      shopId: invoice.shop_id,
+      providerId: invoice.provider_id,
+      total: invoice.total,
+      tax: invoice.tax,
+      createdAt: invoice.created_at,
+      updatedAt: invoice.updated_at,
+      deletedAt: invoice.deleted_at,
     };
   });
 };
