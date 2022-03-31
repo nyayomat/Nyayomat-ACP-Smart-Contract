@@ -12,12 +12,13 @@ type userType = Admin | Merchant;
 type user = {
   id: address,
   name: string,
-  access: userType,
+  shopId: option(nat),
+  role: userType,
   description: string,
   point: option(nat),
-  created_at: string,
-  updated_at: string,
-  deleted_at: string
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string
 };
 
 type user_storage = big_map(address, user);

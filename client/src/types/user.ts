@@ -1,7 +1,7 @@
 export interface UserDB {
   id: string;
   name: string;
-  access?: string;
+  role?: string;
   description: string;
   point?: string | null;
   created_at: string;
@@ -11,11 +11,11 @@ export interface UserDB {
 
 export interface UserTezos {
   id: string;
-  name: string;
-  access?: string;
+  name?: string;
+  role?: string;
   description: string;
   point?: string | null;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }

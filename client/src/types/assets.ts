@@ -11,7 +11,7 @@ export interface AssetDB {
   holiday_provision: number;
   deposit_amount: number;
   installment: number;
-  total_outstanding_amount: number;
+  total_out_standing_amount: number;
   payment_frequency: string;
   payment_method: string;
   status: string;

@@ -70,7 +70,7 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       holidayProvision: asset.holiday_provision,
       depositAmount: asset.deposit_amount,
       installment: asset.installment,
-      totalOutstandingAmount: asset.total_outstanding_amount,
+      totalOutstandingAmount: asset.total_out_standing_amount,
       paymentFreq: asset.payment_frequency,
       paymentMethod: asset.payment_method,
       status: asset.status,
@@ -122,6 +122,21 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
       deletedAt: product.deleted_at,
       createdAt: product.created_at,
       updatedAt: product.updated_at,
+    };
+  });
+};
+
+export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
+  return users.map((user: UserDB) => {
+    return {
+      id: user.id,
+      name: user.name,
+      role: user?.point ? 'Admin' : 'Merchant',
+      description: user.description,
+      point: user.point,
+      createdAt: user.created_at,
+      updatedAt: user.updated_at,
+      deletedAt: user.deleted_at,
     };
   });
 };

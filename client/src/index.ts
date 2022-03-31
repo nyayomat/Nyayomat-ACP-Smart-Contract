@@ -3,6 +3,7 @@ import {
   mapInventoryToTezos,
   mapInvoiceToTezos,
   mapProductToTezos,
+  mapAssetToTezos,
 } from './common';
 import { databaseWrapper } from './core';
 import { InventoryDB } from './types';
@@ -19,8 +20,10 @@ const Main = async () => {
   // const invoicesDB = await databaseWrapper.fetchTable('invoices');
   // console.log(mapInvoiceToTezos(invoicesDB));
 
-  const productsDB = await databaseWrapper.fetchTable('products');
-  console.log(mapProductToTezos(productsDB));
+  // const productsDB = await databaseWrapper.fetchTable('assets');
+  // console.log(mapProductToTezos(productsDB));
+  const assetsDB = await databaseWrapper.fetchTable('tbl_acp_assets');
+  console.log(mapAssetToTezos(assetsDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight
