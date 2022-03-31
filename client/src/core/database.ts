@@ -1,5 +1,6 @@
 import { Connection, createConnection } from 'mysql';
 import { config } from '../../config';
+import { InventoryDB } from '../types';
 
 class Database {
   con: Connection;
@@ -27,7 +28,7 @@ class Database {
     });
   }
 
-  fetchInventory = async (): Promise<any> => {
+  fetchInventory = async (): Promise<InventoryDB[]> => {
     return new Promise((resolve, reject) => {
       this.con.query('SELECT * FROM `inventories`', (err, rows) => {
         if (err) {
