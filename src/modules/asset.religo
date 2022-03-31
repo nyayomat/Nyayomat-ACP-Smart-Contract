@@ -22,7 +22,7 @@ type asset = {
   categoryId: option(id),
   image: option(string),
   units: string,
-  unit_cost: nat,
+  unitCost: nat,
   holidayProvision: nat,
   depositAmount: nat,
   installment: nat,
@@ -33,7 +33,8 @@ type asset = {
   owner: option(assetOwner),
   createdAt: timestamp,
   updatedAt: timestamp,
-  deletedAt: option(timestamp)};
+  deletedAt: option(timestamp)
+};
 
 type storage = big_map(id, asset);
 
