@@ -28,9 +28,9 @@ class Database {
     });
   }
 
-  fetchInventory = async (): Promise<InventoryDB[]> => {
+  fetchTable = async (table: string): Promise<InventoryDB[] | any> => {
     return new Promise((resolve, reject) => {
-      this.con.query('SELECT * FROM `inventories`', (err, rows) => {
+      this.con.query(`SELECT * FROM ${table}`, (err, rows) => {
         if (err) {
           reject(err);
         }

@@ -10,8 +10,7 @@ const Main = async () => {
 
   console.log(`- - -`.repeat(3));
   console.info(`Fetching inventories...`);
-  const inventoriesDB = await databaseWrapper.fetchInventory();
-
+  const inventoriesDB = await databaseWrapper.fetchTable('inventories');
   console.log(mapInventoryToTezos(inventoriesDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
