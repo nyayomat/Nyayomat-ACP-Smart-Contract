@@ -6,7 +6,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "ts-node-dev src/build.ts",
     "deploy": "ts-node-dev src/index.ts",
     "activate": "ts-node-dev src/activate.ts"
   },
