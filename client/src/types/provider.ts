@@ -1,19 +1,19 @@
 export interface ProviderDB {
-  id: string;
+  id: number;
   shop_name: string;
   operating_days: string;
   status: string;
-  deleted_at: Date | null;
-  updated_at: Date;
-  created_at: Date;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface ProviderTezos {
-  id: string;
+  id: number;
   shopName: string;
   operatingDays: string;
   status: string;
-  createdAt: Date | null;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }

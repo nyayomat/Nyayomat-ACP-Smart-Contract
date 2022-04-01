@@ -1,23 +1,23 @@
 export interface InvoiceDB {
-  id: string;
-  user_id: string;
-  shop_id: string;
-  provider_id: string;
+  id: number;
+  user_id: number;
+  shop_id: number;
+  provider_id: number;
   total: string;
   tax: number;
-  deleted_at: Date | null;
-  updated_at: Date;
-  created_at: Date;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface InvoiceTezos {
-  id: string;
-  userId: string;
-  shopId: string;
-  providerId: string;
+  id: number;
+  userId: number;
+  shopId: number;
+  providerId: number;
   total: string;
   tax: number;
-  createdAt: Date | null;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }

@@ -16,29 +16,29 @@ export interface AssetDB {
   payment_method: string;
   status: string;
   owner?: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AssetTezos {
   id: number;
   providerId: number;
   name: string;
-  groupId?: number | null;
-  subGroupId?: number | null;
-  categoryId?: number | null;
-  image?: string | null;
+  groupId?: number;
+  subGroupId?: number;
+  categoryId?: number;
+  image?: string;
   units: string;
   unitCost: number;
   holidayProvision: number;
   depositAmount: number;
   installment: number;
-  totalOutstandingAmount?: number | null;
+  totalOutstandingAmount?: number;
   paymentFreq: string;
   paymentMethod: string;
   status: string;
   owner: string;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt?: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
 }
