@@ -2,9 +2,9 @@ export interface AssetDB {
   id: number;
   asset_provider_id: number;
   asset_name: string;
-  group_id?: number;
-  sub_group_id?: number;
-  category_id?: number;
+  group_id?: string;
+  sub_group_id?: string;
+  category_id?: string;
   image?: string;
   units: string;
   unit_cost: number;
@@ -24,9 +24,9 @@ export interface AssetTezos {
   id: number;
   providerId: number;
   name: string;
-  groupId?: number;
-  subGroupId?: number;
-  categoryId?: number;
+  groupId?: string;
+  subGroupId?: string;
+  categoryId?: string;
   image?: string;
   units: string;
   unitCost: number;

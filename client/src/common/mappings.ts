@@ -67,10 +67,10 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       id: asset.id,
       providerId: asset.asset_provider_id,
       name: asset.asset_name,
-      groupId: asset?.group_id,
-      subGroupId: asset?.sub_group_id,
-      categoryId: asset?.category_id,
-      image: asset?.image,
+      groupId: asset.group_id ? asset.group_id : "",
+      subGroupId: asset.sub_group_id ? asset.sub_group_id : "",
+      categoryId: asset.category_id ? asset.sub_group_id : "",
+      image: asset.image ? asset.image : "",
       units: asset.units,
       unitCost: asset.unit_cost,
       holidayProvision: asset.holiday_provision,
@@ -81,8 +81,8 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       paymentMethod: asset.payment_method,
       status: asset.status,
       owner: asset?.group_id ? "Provider" : "Merchant",
-      createdAt: asset.created_at,
-      updatedAt: asset.updated_at,
+      createdAt: new Date(asset.created_at).getTime().toString(),
+      updatedAt: new Date(asset.updated_at).getTime().toString(),
     };
   });
 };
@@ -189,9 +189,9 @@ export const mapProviderToTezos = (
       shopName: provider.shop_name,
       operatingDays: provider.operating_days,
       status: provider.status,
-      createdAt: provider.created_at,
-      updatedAt: provider.updated_at,
-      deletedAt: provider.deleted_at,
+      createdAt: new Date(provider.created_at).getTime().toString(),
+      updatedAt: new Date(provider.updated_at).getTime().toString(),
+      deletedAt: new Date(provider.deleted_at).getTime().toString(),
     };
   });
 };
