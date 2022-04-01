@@ -4,7 +4,7 @@ let is_owner = (()): bool => {
 };
 
 let is_admin = (user: address): bool => {
-  user == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" : address)
+  user == ("tz1KqTpEZ7Yob7QbPE4Hy4Wo8fHG8LhKxZSx" : address)
 };
 
 type id = string;
