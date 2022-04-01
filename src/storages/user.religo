@@ -1,4 +1,4 @@
-let use_storage = 
+let storage = 
 
   Big_map.literal([(("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN"
          : address),

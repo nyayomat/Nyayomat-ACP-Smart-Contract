@@ -1,4 +1,4 @@
- let transactions_storage = 
+ let storage = 
 
   Big_map.literal([("1",
        {
