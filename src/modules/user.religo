@@ -7,16 +7,14 @@ let is_admin = (user: address): bool => {
   user == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" : address)
 };
 
-type userType = Admin | Merchant;
-
-type userId = address;
+type userId = string;
 
 type user = {
   id: string,
-  onChainId: userId,
+  onChainId: string,
   name: string,
   shopId: int,
-  role: userType,
+  role: string,
   description: string,
   roleId: string,
   active: bool,
@@ -25,7 +23,7 @@ type user = {
   deletedAt: string
 };
 
-type user_storage = big_map(address, user);
+type user_storage = big_map(string, user);
 
 let init_user_storage: user_storage = Big_map.empty;
 
@@ -46,7 +44,7 @@ let createUser = ((user, user_storage): (user, user_storage))
     failwith("Only the s.c owner can create a new user record")
   };
   let user_storage = 
-    Big_map.add(user.onChainId, user, user_storage);
+    Big_map.add(user.id, user, user_storage);
   (([] : list(operation)), user_storage)
 };
 
@@ -79,10 +77,7 @@ let updateUser = ((user, storage): (user, user_storage))
     failwith("Only Admin can update user details")
   };
   let (_, user_storage) = 
-
-    Big_map.get_and_update(user.onChainId,
-       Some (user),
-       storage);
+    Big_map.get_and_update(user.id, Some (user), storage);
   (([] : list(operation)), user_storage)
 };
 
