@@ -9,9 +9,13 @@ import {
   UserTezos,
   TransactionDB,
   TransactionTezos,
+  ProviderDB,
+  ProviderTezos,
+  InvoiceDB,
+  InvoiceTezos,
+  ProductDB,
+  ProductTezos,
 } from "../types";
-import { InvoiceDB, InvoiceTezos } from "../types/invoice";
-import { ProductDB, ProductTezos } from "../types/product";
 
 export const mapInventoryToTezos = (
   invetories: InventoryDB[]
@@ -173,6 +177,21 @@ export const mapTransactionToTezos = (
       assetProviderId: transaction?.asset_provider_id
         ? transaction.asset_provider_id?.toString()
         : "",
+    };
+  });
+};
+export const mapProviderToTezos = (
+  providers: ProviderDB[]
+): ProviderTezos[] => {
+  return providers.map((provider: ProviderDB) => {
+    return {
+      id: provider.id,
+      shopName: provider.shop_name,
+      operatingDays: provider.operating_days,
+      status: provider.status,
+      createdAt: provider.created_at,
+      updatedAt: provider.updated_at,
+      deletedAt: provider.deleted_at,
     };
   });
 };

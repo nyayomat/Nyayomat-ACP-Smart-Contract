@@ -13,9 +13,7 @@ type id = string;
 
 type provider = {
   id,
-  name: string,
   shopName: string,
-  address: option(address),
   operatingDays: string,
   status,
   createdAt: timestamp,
@@ -51,7 +49,7 @@ let updateProvider = (provider: provider, storage: storage)
 
 let removeProvider = (id: id, storage: storage): return => {
   if(! is_admin(Tezos.sender)) {
-    failwith("Only admin can update provider")
+    failwith("Only admin can remove provider")
   };
   (([] : list(operation)), Big_map.remove(id, storage))
 };
