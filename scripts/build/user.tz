@@ -2,25 +2,22 @@
     (or (or (or (pair %createUser
                    (pair (pair (pair (bool %active) (string %createdAt))
                                (pair (string %deletedAt) (string %description)))
-                         (pair (pair (string %id) (string %name))
-                               (pair (address %onChainId) (or %role (unit %admin) (unit %merchant)))))
-                   (pair (pair (string %roleId) (option %shopId nat)) (string %updatedAt)))
-                (address %getUser))
-            (or (unit %getUsers) (address %removeUser)))
+                         (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
+                   (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))
+                (string %getUser))
+            (or (unit %getUsers) (string %removeUser)))
         (pair %updateUser
            (pair (pair (pair (bool %active) (string %createdAt))
                        (pair (string %deletedAt) (string %description)))
-                 (pair (pair (string %id) (string %name))
-                       (pair (address %onChainId) (or %role (unit %admin) (unit %merchant)))))
-           (pair (pair (string %roleId) (option %shopId nat)) (string %updatedAt)))) ;
+                 (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
+           (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))) ;
   storage
     (big_map
-       address
+       string
        (pair (pair (pair (pair (bool %active) (string %createdAt))
                          (pair (string %deletedAt) (string %description)))
-                   (pair (pair (string %id) (string %name))
-                         (pair (address %onChainId) (or %role (unit %admin) (unit %merchant)))))
-             (pair (pair (string %roleId) (option %shopId nat)) (string %updatedAt)))) ;
+                   (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
+             (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -41,7 +38,7 @@
                      DUP ;
                      CAR ;
                      CDR ;
-                     CDR ;
+                     CAR ;
                      CAR ;
                      SWAP ;
                      SOME ;
@@ -55,10 +52,10 @@
                      IF_NONE
                        { DROP ; PUSH string "user not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
-                           address
+                           string
                            (pair (pair (pair (pair bool string) (pair string string))
-                                       (pair (pair string string) (pair address (or unit unit))))
-                                 (pair (pair string (option nat)) string)) ;
+                                       (pair (pair string string) (pair string string)))
+                                 (pair (pair string int) string)) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -87,8 +84,8 @@
                        { DROP ; SWAP } ;
                      SWAP ;
                      NONE (pair (pair (pair (pair bool string) (pair string string))
-                                      (pair (pair string string) (pair address (or unit unit))))
-                                (pair (pair string (option nat)) string)) ;
+                                      (pair (pair string string) (pair string string)))
+                                (pair (pair string int) string)) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;
@@ -105,7 +102,7 @@
              DIG 2 ;
              CAR ;
              CDR ;
-             CDR ;
+             CAR ;
              CAR ;
              GET_AND_UPDATE ;
              DROP ;

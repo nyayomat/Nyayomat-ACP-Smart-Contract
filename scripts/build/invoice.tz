@@ -1,22 +1,22 @@
 { parameter
     (or (or (or (pair %createInvoice
-                   (pair (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+                   (pair (pair (pair (string %createdAt) (string %deletedAt))
                                (pair (string %id) (string %providerId)))
-                         (pair (pair (string %shopId) (int %tax)) (pair (int %total) (timestamp %updatedAt))))
+                         (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
                    (string %userId))
                 (string %getInvoice))
             (or (unit %getInvoices) (string %removeInvoice)))
         (pair %updateInvoice
-           (pair (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+           (pair (pair (pair (string %createdAt) (string %deletedAt))
                        (pair (string %id) (string %providerId)))
-                 (pair (pair (string %shopId) (int %tax)) (pair (int %total) (timestamp %updatedAt))))
+                 (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
            (string %userId))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+       (pair (pair (pair (pair (string %createdAt) (string %deletedAt))
                          (pair (string %id) (string %providerId)))
-                   (pair (pair (string %shopId) (int %tax)) (pair (int %total) (timestamp %updatedAt))))
+                   (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
              (string %userId))) ;
   code { LAMBDA
            address
@@ -53,8 +53,8 @@
                        { DROP ; PUSH string "Invoice not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair (pair timestamp (option timestamp)) (pair string string))
-                                       (pair (pair string int) (pair int timestamp)))
+                           (pair (pair (pair (pair string string) (pair string string))
+                                       (pair (pair string int) (pair int string)))
                                  string) ;
                          SWAP ;
                          DIG 2 ;
@@ -72,8 +72,8 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can update invoice" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair (pair timestamp (option timestamp)) (pair string string))
-                                      (pair (pair string int) (pair int timestamp)))
+                     NONE (pair (pair (pair (pair string string) (pair string string))
+                                      (pair (pair string int) (pair int string)))
                                 string) ;
                      SWAP ;
                      UPDATE ;

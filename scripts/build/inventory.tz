@@ -1,59 +1,59 @@
 { parameter
     (or (or (or (pair %createInventory
-                   (pair (pair (pair (pair (bool %active) (option %availableFrom timestamp))
-                                     (pair (option %condition string) (option %conditionNote string)))
-                               (pair (pair (timestamp %createdAt) (option %customerPointsDiscountPercentage nat))
-                                     (pair (option %damagedQauntity nat) (option %deletedAt timestamp))))
-                         (pair (pair (pair (option %description string) (option %freeShipping bool))
-                                     (pair (string %id) (option %keyFeatures string)))
-                               (pair (pair (option %linkedItems (list string)) (option %metaDescription string))
-                                     (pair (option %metaTitle string) (option %minOrderQuantity nat)))))
-                   (pair (pair (pair (pair (option %offerEndDate timestamp) (option %offerPrice nat))
-                                     (pair (option %offerStartDate timestamp) (string %productId)))
-                               (pair (pair (option %purchasePrice nat) (nat %salePrice))
-                                     (pair (option %shippingWeight nat) (string %shopId))))
+                   (pair (pair (pair (pair (bool %active) (string %availableFrom))
+                                     (pair (string %condition) (string %conditionNote)))
+                               (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
+                                     (pair (int %damagedQauntity) (string %deletedAt))))
+                         (pair (pair (pair (string %description) (bool %freeShipping))
+                                     (pair (string %id) (string %keyFeatures)))
+                               (pair (pair (string %linkedItems) (string %metaDescription))
+                                     (pair (string %metaTitle) (int %minOrderQuantity)))))
+                   (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
+                                     (pair (string %offerStartDate) (string %productId)))
+                               (pair (pair (int %purchasePrice) (int %salePrice))
+                                     (pair (int %shippingWeight) (string %shopId))))
                          (pair (pair (pair (string %sku) (string %slug))
-                                     (pair (nat %stockQuantity) (option %stuffPick string)))
-                               (pair (pair (string %title) (timestamp %updatedAt))
-                                     (pair (string %userId) (option %warehouseId string))))))
+                                     (pair (int %stockQuantity) (string %stuffPick)))
+                               (pair (pair (string %title) (string %updatedAt))
+                                     (pair (string %userId) (string %warehouseId))))))
                 (string %getInventory))
             (or (unit %getInventorys) (string %removeInventory)))
         (pair %updateInventory
-           (pair (pair (pair (pair (bool %active) (option %availableFrom timestamp))
-                             (pair (option %condition string) (option %conditionNote string)))
-                       (pair (pair (timestamp %createdAt) (option %customerPointsDiscountPercentage nat))
-                             (pair (option %damagedQauntity nat) (option %deletedAt timestamp))))
-                 (pair (pair (pair (option %description string) (option %freeShipping bool))
-                             (pair (string %id) (option %keyFeatures string)))
-                       (pair (pair (option %linkedItems (list string)) (option %metaDescription string))
-                             (pair (option %metaTitle string) (option %minOrderQuantity nat)))))
-           (pair (pair (pair (pair (option %offerEndDate timestamp) (option %offerPrice nat))
-                             (pair (option %offerStartDate timestamp) (string %productId)))
-                       (pair (pair (option %purchasePrice nat) (nat %salePrice))
-                             (pair (option %shippingWeight nat) (string %shopId))))
+           (pair (pair (pair (pair (bool %active) (string %availableFrom))
+                             (pair (string %condition) (string %conditionNote)))
+                       (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
+                             (pair (int %damagedQauntity) (string %deletedAt))))
+                 (pair (pair (pair (string %description) (bool %freeShipping))
+                             (pair (string %id) (string %keyFeatures)))
+                       (pair (pair (string %linkedItems) (string %metaDescription))
+                             (pair (string %metaTitle) (int %minOrderQuantity)))))
+           (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
+                             (pair (string %offerStartDate) (string %productId)))
+                       (pair (pair (int %purchasePrice) (int %salePrice))
+                             (pair (int %shippingWeight) (string %shopId))))
                  (pair (pair (pair (string %sku) (string %slug))
-                             (pair (nat %stockQuantity) (option %stuffPick string)))
-                       (pair (pair (string %title) (timestamp %updatedAt))
-                             (pair (string %userId) (option %warehouseId string))))))) ;
+                             (pair (int %stockQuantity) (string %stuffPick)))
+                       (pair (pair (string %title) (string %updatedAt))
+                             (pair (string %userId) (string %warehouseId))))))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (pair (pair (bool %active) (option %availableFrom timestamp))
-                               (pair (option %condition string) (option %conditionNote string)))
-                         (pair (pair (timestamp %createdAt) (option %customerPointsDiscountPercentage nat))
-                               (pair (option %damagedQauntity nat) (option %deletedAt timestamp))))
-                   (pair (pair (pair (option %description string) (option %freeShipping bool))
-                               (pair (string %id) (option %keyFeatures string)))
-                         (pair (pair (option %linkedItems (list string)) (option %metaDescription string))
-                               (pair (option %metaTitle string) (option %minOrderQuantity nat)))))
-             (pair (pair (pair (pair (option %offerEndDate timestamp) (option %offerPrice nat))
-                               (pair (option %offerStartDate timestamp) (string %productId)))
-                         (pair (pair (option %purchasePrice nat) (nat %salePrice))
-                               (pair (option %shippingWeight nat) (string %shopId))))
+       (pair (pair (pair (pair (pair (bool %active) (string %availableFrom))
+                               (pair (string %condition) (string %conditionNote)))
+                         (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
+                               (pair (int %damagedQauntity) (string %deletedAt))))
+                   (pair (pair (pair (string %description) (bool %freeShipping))
+                               (pair (string %id) (string %keyFeatures)))
+                         (pair (pair (string %linkedItems) (string %metaDescription))
+                               (pair (string %metaTitle) (int %minOrderQuantity)))))
+             (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
+                               (pair (string %offerStartDate) (string %productId)))
+                         (pair (pair (int %purchasePrice) (int %salePrice))
+                               (pair (int %shippingWeight) (string %shopId))))
                    (pair (pair (pair (string %sku) (string %slug))
-                               (pair (nat %stockQuantity) (option %stuffPick string)))
-                         (pair (pair (string %title) (timestamp %updatedAt))
-                               (pair (string %userId) (option %warehouseId string))))))) ;
+                               (pair (int %stockQuantity) (string %stuffPick)))
+                         (pair (pair (string %title) (string %updatedAt))
+                               (pair (string %userId) (string %warehouseId))))))) ;
   code { LAMBDA
            address
            bool
@@ -90,14 +90,13 @@
                        { DROP ; PUSH string "Inventory not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair (pair (pair bool (option timestamp)) (pair (option string) (option string)))
-                                             (pair (pair timestamp (option nat)) (pair (option nat) (option timestamp))))
-                                       (pair (pair (pair (option string) (option bool)) (pair string (option string)))
-                                             (pair (pair (option (list string)) (option string)) (pair (option string) (option nat)))))
-                                 (pair (pair (pair (pair (option timestamp) (option nat)) (pair (option timestamp) string))
-                                             (pair (pair (option nat) nat) (pair (option nat) string)))
-                                       (pair (pair (pair string string) (pair nat (option string)))
-                                             (pair (pair string timestamp) (pair string (option string)))))) ;
+                           (pair (pair (pair (pair (pair bool string) (pair string string))
+                                             (pair (pair string int) (pair int string)))
+                                       (pair (pair (pair string bool) (pair string string))
+                                             (pair (pair string string) (pair string int))))
+                                 (pair (pair (pair (pair string int) (pair string string)) (pair (pair int int) (pair int string)))
+                                       (pair (pair (pair string string) (pair int string))
+                                             (pair (pair string string) (pair string string))))) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -114,14 +113,13 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can update inventory" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair (pair (pair bool (option timestamp)) (pair (option string) (option string)))
-                                            (pair (pair timestamp (option nat)) (pair (option nat) (option timestamp))))
-                                      (pair (pair (pair (option string) (option bool)) (pair string (option string)))
-                                            (pair (pair (option (list string)) (option string)) (pair (option string) (option nat)))))
-                                (pair (pair (pair (pair (option timestamp) (option nat)) (pair (option timestamp) string))
-                                            (pair (pair (option nat) nat) (pair (option nat) string)))
-                                      (pair (pair (pair string string) (pair nat (option string)))
-                                            (pair (pair string timestamp) (pair string (option string)))))) ;
+                     NONE (pair (pair (pair (pair (pair bool string) (pair string string))
+                                            (pair (pair string int) (pair int string)))
+                                      (pair (pair (pair string bool) (pair string string))
+                                            (pair (pair string string) (pair string int))))
+                                (pair (pair (pair (pair string int) (pair string string)) (pair (pair int int) (pair int string)))
+                                      (pair (pair (pair string string) (pair int string))
+                                            (pair (pair string string) (pair string string))))) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;

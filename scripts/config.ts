@@ -3,7 +3,6 @@ export const config = {
   TEST_MODE: true,
   //   TEST_MODE: false,
 
-  RPC_TESTNET_URL:
-    `https://rpc.tzkt.io/ithacanet` || `https://ithacanet.smartpy.io/`,
+  RPC_TESTNET_URL: `https://rpc.tzkt.io/ithacanet`,
   RPC_MAINNET_URL: "https://mainnet.smartpy.io/",
 };

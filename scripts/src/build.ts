@@ -21,6 +21,21 @@ const Main = async () => {
     );
     console.log(`---`.repeat(10));
   }
+
+  const storagesPath = "../../src/storages";
+  const storages = readdirSync(resolve(__dirname, storagesPath));
+
+  /// @dev Write the compiled module to scripts/modules
+  for (const storage of storages) {
+    console.info(`Compiling storage ${storage}...`);
+    const file_name = storage.split(".")[0];
+    await compileAndSaveBuild(
+      resolve(resolve(__dirname, storagesPath), `${storage}`),
+      resolve(resolve(__dirname, outPath), `${file_name}_storage.tz`),
+      true
+    );
+    console.log(`---`.repeat(10));
+  }
 };
 
 Main();

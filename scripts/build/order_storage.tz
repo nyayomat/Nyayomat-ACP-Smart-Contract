@@ -1,0 +1,6 @@
+{ Elt "0"
+      (Pair (Pair (Pair (Pair "assetId" "assetProviderId") "createdAt" 0) (Pair 0 "0") 0 "merchantId")
+            (Pair (Pair "paymentFreq" "paymentMethod") "status" 0)
+            (Pair 0 0)
+            "updatedAt") }
+

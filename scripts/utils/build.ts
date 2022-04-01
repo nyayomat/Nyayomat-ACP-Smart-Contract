@@ -1,12 +1,15 @@
 import { exec } from "child_process";
-import { writeFileSync } from "fs";
+import { saveToFile } from "./common";
 
 export const compileAndSaveBuild = async (
   modulePath: string,
-  outPath: string
+  outPath: string,
+  storage: boolean = false
 ) => {
   exec(
-    `ligo compile contract ${modulePath} --entry-point main`,
+    storage
+      ? `ligo compile expression reasonligo --init-file ${modulePath} storage`
+      : `ligo compile contract ${modulePath} --entry-point main`,
     (err: any, stdout: any, stderr: any) => {
       if (err) {
         //some err occurred
@@ -21,8 +24,4 @@ export const compileAndSaveBuild = async (
       }
     }
   );
-};
-
-const saveToFile = async (content: string, file: string) => {
-  writeFileSync(file, content);
 };

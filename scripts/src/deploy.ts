@@ -5,6 +5,11 @@ import Account from "./../ithacanet.json";
 import { readFileSync } from "fs";
 import path from "path";
 
+import Contracts from "../../scripts/utils/contracts.json";
+import { resolve } from "path";
+
+import { saveToFile } from "../utils/common";
+
 class Deployer {
   //declaring private tezos modifier of TezosToolkit type
   private tezos: TezosToolkit;
@@ -17,7 +22,7 @@ class Deployer {
     this.tezos = new TezosToolkit(rpcUrl);
   }
 
-  deploy = async (file_name: string, storage: string = `0`) => {
+  deploy = async (contract_name: string) => {
     await importKey(
       this.tezos,
       Account.email, //mail
@@ -27,17 +32,17 @@ class Deployer {
     );
 
     try {
-      console.log({
-        storage,
-      });
       const op = await this.tezos.contract.originate({
         //smart contract code
         code: readFileSync(
-          path.resolve(__dirname, `../build/${file_name}`),
+          path.resolve(__dirname, `../build/${contract_name}.tz`),
           "utf8"
         ),
         //storage state
-        init: storage,
+        init: readFileSync(
+          path.resolve(__dirname, `../build/${contract_name}_storage.tz`),
+          "utf8"
+        ),
       });
 
       //beginning to deploy
@@ -46,25 +51,48 @@ class Deployer {
       //deployment report: amount of used gas, storage state
       console.log("Gas Used", op.consumedGas);
       console.log("Contract Address", contract.address);
-      console.log("Storage", await contract.storage());
+      // console.log("Storage", await contract.storage());
       //operation hash one can use to find the contract in the explorer
       console.log("Operation hash:", op.hash);
       console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      /// @dev save address to contracts.json
+      // console.log(typeof addToContracts);
+      // addToContracts(
+      //   JSON.parse(
+      //     JSON.stringify(`{
+      //   ${contract_name}: contract.address,
+      // }`)
+      //   )
+      // );
+
+      let contracts = JSON.stringify({
+        ...Contracts,
+        ...JSON.parse(
+          JSON.stringify(`{
+        ${contract_name}: contract.address,
+      }`)
+        ),
+      });
+
+      const contractsPath = resolve(__dirname, "contracts.json");
+      await saveToFile(contracts, contractsPath);
     } catch (ex) {
       console.error(ex);
     }
   };
 
   //declaring the method getBalance with input param address
-  getBalance(address?: string): void {
+  getBalance = async (address?: string) => {
     address = address || Account.pkh;
     console.info(`Getting balance for ${address}...`);
     //Taquito sends a request for balance to the node. If the node executed the request, the script displays the value in the console, otherwise it says “Address not found”
-    this.tezos.rpc
+    await this.tezos.rpc
       .getBalance(address)
-      .then((balance) => console.log(balance.toString()))
+      .then((balance) =>
+        console.log(`Balance:`, balance.shiftedBy(-6).toString())
+      )
       .catch((e) => console.log("Address not found"));
-  }
+  };
 }
 
 export const deployerWrapper = new Deployer();

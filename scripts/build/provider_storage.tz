@@ -1,0 +1,5 @@
+{ Elt "0"
+      (Pair (Pair (Pair "createdAt" "deletedAt") "0" "operatingDays")
+            (Pair "shopName" "status")
+            "updatedAt") }
+

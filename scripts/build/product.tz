@@ -1,44 +1,41 @@
 { parameter
     (or (or (or (pair %createProduct
-                   (pair (pair (pair (pair (bool %active) (option %brand string))
-                                     (pair (timestamp %createdAt) (option %deletedAt timestamp)))
-                               (pair (pair (option %description string) (option %downloadable string))
-                                     (pair (option %gtin string) (option %gtinType string))))
+                   (pair (pair (pair (pair (bool %active) (string %brand))
+                                     (pair (string %createdAt) (string %deletedAt)))
+                               (pair (pair (string %description) (string %downloadable))
+                                     (pair (string %gtin) (string %gtinType))))
                          (pair (pair (pair (bool %hasVariant) (string %id))
-                                     (pair (option %manufacturerId string) (option %maxPrice nat)))
-                               (pair (pair (nat %minPrice) (option %modelNumber string))
-                                     (pair (option %mpn string) (string %name)))))
+                                     (pair (string %manufacturerId) (int %maxPrice)))
+                               (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
                    (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                               (pair (nat %salesCount) (string %shopId)))
-                         (pair (string %slug) (timestamp %updatedAt))))
+                               (pair (int %salesCount) (string %shopId)))
+                         (pair (string %slug) (string %updatedAt))))
                 (string %getProduct))
             (or (unit %getProducts) (string %removeProduct)))
         (pair %updateProduct
-           (pair (pair (pair (pair (bool %active) (option %brand string))
-                             (pair (timestamp %createdAt) (option %deletedAt timestamp)))
-                       (pair (pair (option %description string) (option %downloadable string))
-                             (pair (option %gtin string) (option %gtinType string))))
+           (pair (pair (pair (pair (bool %active) (string %brand))
+                             (pair (string %createdAt) (string %deletedAt)))
+                       (pair (pair (string %description) (string %downloadable))
+                             (pair (string %gtin) (string %gtinType))))
                  (pair (pair (pair (bool %hasVariant) (string %id))
-                             (pair (option %manufacturerId string) (option %maxPrice nat)))
-                       (pair (pair (nat %minPrice) (option %modelNumber string))
-                             (pair (option %mpn string) (string %name)))))
+                             (pair (string %manufacturerId) (int %maxPrice)))
+                       (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
            (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                       (pair (nat %salesCount) (string %shopId)))
-                 (pair (string %slug) (timestamp %updatedAt))))) ;
+                       (pair (int %salesCount) (string %shopId)))
+                 (pair (string %slug) (string %updatedAt))))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (pair (pair (bool %active) (option %brand string))
-                               (pair (timestamp %createdAt) (option %deletedAt timestamp)))
-                         (pair (pair (option %description string) (option %downloadable string))
-                               (pair (option %gtin string) (option %gtinType string))))
+       (pair (pair (pair (pair (pair (bool %active) (string %brand))
+                               (pair (string %createdAt) (string %deletedAt)))
+                         (pair (pair (string %description) (string %downloadable))
+                               (pair (string %gtin) (string %gtinType))))
                    (pair (pair (pair (bool %hasVariant) (string %id))
-                               (pair (option %manufacturerId string) (option %maxPrice nat)))
-                         (pair (pair (nat %minPrice) (option %modelNumber string))
-                               (pair (option %mpn string) (string %name)))))
+                               (pair (string %manufacturerId) (int %maxPrice)))
+                         (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
              (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                         (pair (nat %salesCount) (string %shopId)))
-                   (pair (string %slug) (timestamp %updatedAt))))) ;
+                         (pair (int %salesCount) (string %shopId)))
+                   (pair (string %slug) (string %updatedAt))))) ;
   code { LAMBDA
            address
            bool
@@ -75,11 +72,11 @@
                        { DROP ; PUSH string "Product not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair (pair (pair bool (option string)) (pair timestamp (option timestamp)))
-                                             (pair (pair (option string) (option string)) (pair (option string) (option string))))
-                                       (pair (pair (pair bool string) (pair (option string) (option nat)))
-                                             (pair (pair nat (option string)) (pair (option string) string))))
-                                 (pair (pair (pair string bool) (pair nat string)) (pair string timestamp))) ;
+                           (pair (pair (pair (pair (pair bool string) (pair string string))
+                                             (pair (pair string string) (pair string string)))
+                                       (pair (pair (pair bool string) (pair string int))
+                                             (pair (pair int string) (pair string string))))
+                                 (pair (pair (pair string bool) (pair int string)) (pair string string))) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -96,11 +93,11 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can update product" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair (pair (pair bool (option string)) (pair timestamp (option timestamp)))
-                                            (pair (pair (option string) (option string)) (pair (option string) (option string))))
-                                      (pair (pair (pair bool string) (pair (option string) (option nat)))
-                                            (pair (pair nat (option string)) (pair (option string) string))))
-                                (pair (pair (pair string bool) (pair nat string)) (pair string timestamp))) ;
+                     NONE (pair (pair (pair (pair (pair bool string) (pair string string))
+                                            (pair (pair string string) (pair string string)))
+                                      (pair (pair (pair bool string) (pair string int))
+                                            (pair (pair int string) (pair string string))))
+                                (pair (pair (pair string bool) (pair int string)) (pair string string))) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;

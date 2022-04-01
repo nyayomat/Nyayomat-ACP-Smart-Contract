@@ -6,7 +6,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "ts-node-dev src/build.ts",
+    "clean": "rm -rf build ;  mkdir build",
+    "build": "yarn clean; ts-node-dev src/build.ts",
     "deploy": "ts-node-dev src/index.ts",
     "activate": "ts-node-dev src/activate.ts"
   },

@@ -1,41 +1,41 @@
 { parameter
     (or (or (or (pair %createAsset
-                   (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
-                                     (pair (option %deletedAt timestamp) (nat %depositAmount)))
-                               (pair (pair (option %groupId string) (nat %holidayProvision))
-                                     (pair (string %id) (option %image string))))
-                         (pair (pair (pair (nat %installment) (string %name))
-                                     (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+                   (pair (pair (pair (pair (string %categoryId) (string %createdAt))
+                                     (pair (string %deletedAt) (int %depositAmount)))
+                               (pair (pair (string %groupId) (int %holidayProvision))
+                                     (pair (string %id) (string %image))))
+                         (pair (pair (pair (int %installment) (string %name))
+                                     (pair (string %owner) (string %paymentFreq)))
                                (pair (pair (string %paymentMethod) (string %providerId))
-                                     (pair (string %status) (option %subGroupId string)))))
-                   (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
-                         (pair (string %units) (timestamp %updatedAt))))
+                                     (pair (string %status) (string %subGroupId)))))
+                   (pair (pair (int %totalOutStandingAmount) (int %unitCost))
+                         (pair (string %units) (string %updatedAt))))
                 (string %getAsset))
             (or (unit %getAssets) (string %removeAsset)))
         (pair %updateAsset
-           (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
-                             (pair (option %deletedAt timestamp) (nat %depositAmount)))
-                       (pair (pair (option %groupId string) (nat %holidayProvision))
-                             (pair (string %id) (option %image string))))
-                 (pair (pair (pair (nat %installment) (string %name))
-                             (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+           (pair (pair (pair (pair (string %categoryId) (string %createdAt))
+                             (pair (string %deletedAt) (int %depositAmount)))
+                       (pair (pair (string %groupId) (int %holidayProvision))
+                             (pair (string %id) (string %image))))
+                 (pair (pair (pair (int %installment) (string %name))
+                             (pair (string %owner) (string %paymentFreq)))
                        (pair (pair (string %paymentMethod) (string %providerId))
-                             (pair (string %status) (option %subGroupId string)))))
-           (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
-                 (pair (string %units) (timestamp %updatedAt))))) ;
+                             (pair (string %status) (string %subGroupId)))))
+           (pair (pair (int %totalOutStandingAmount) (int %unitCost))
+                 (pair (string %units) (string %updatedAt))))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
-                               (pair (option %deletedAt timestamp) (nat %depositAmount)))
-                         (pair (pair (option %groupId string) (nat %holidayProvision))
-                               (pair (string %id) (option %image string))))
-                   (pair (pair (pair (nat %installment) (string %name))
-                               (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+       (pair (pair (pair (pair (pair (string %categoryId) (string %createdAt))
+                               (pair (string %deletedAt) (int %depositAmount)))
+                         (pair (pair (string %groupId) (int %holidayProvision))
+                               (pair (string %id) (string %image))))
+                   (pair (pair (pair (int %installment) (string %name))
+                               (pair (string %owner) (string %paymentFreq)))
                          (pair (pair (string %paymentMethod) (string %providerId))
-                               (pair (string %status) (option %subGroupId string)))))
-             (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
-                   (pair (string %units) (timestamp %updatedAt))))) ;
+                               (pair (string %status) (string %subGroupId)))))
+             (pair (pair (int %totalOutStandingAmount) (int %unitCost))
+                   (pair (string %units) (string %updatedAt))))) ;
   code { LAMBDA
            address
            bool
@@ -72,11 +72,11 @@
                        { DROP ; PUSH string "Asset not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair (pair (pair (option string) timestamp) (pair (option timestamp) nat))
-                                             (pair (pair (option string) nat) (pair string (option string))))
-                                       (pair (pair (pair nat string) (pair (option (or unit unit)) string))
-                                             (pair (pair string string) (pair string (option string)))))
-                                 (pair (pair (option nat) nat) (pair string timestamp))) ;
+                           (pair (pair (pair (pair (pair string string) (pair string int))
+                                             (pair (pair string int) (pair string string)))
+                                       (pair (pair (pair int string) (pair string string))
+                                             (pair (pair string string) (pair string string))))
+                                 (pair (pair int int) (pair string string))) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -93,11 +93,11 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can update asset" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair (pair (pair (option string) timestamp) (pair (option timestamp) nat))
-                                            (pair (pair (option string) nat) (pair string (option string))))
-                                      (pair (pair (pair nat string) (pair (option (or unit unit)) string))
-                                            (pair (pair string string) (pair string (option string)))))
-                                (pair (pair (option nat) nat) (pair string timestamp))) ;
+                     NONE (pair (pair (pair (pair (pair string string) (pair string int))
+                                            (pair (pair string int) (pair string string)))
+                                      (pair (pair (pair int string) (pair string string))
+                                            (pair (pair string string) (pair string string))))
+                                (pair (pair int int) (pair string string))) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;

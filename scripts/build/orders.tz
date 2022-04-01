@@ -1,38 +1,32 @@
 { parameter
     (or (or (or (pair %createOrder
                    (pair (pair (pair (string %assetId) (string %assetProviderId))
-                               (pair (timestamp %createdAt) (nat %depositAmount)))
-                         (pair (pair (nat %holidayProvision) (string %id))
-                               (pair (nat %installmentAmount) (option %merchantId string))))
+                               (pair (string %createdAt) (int %depositAmount)))
+                         (pair (pair (int %holidayProvision) (string %id))
+                               (pair (int %installmentAmount) (string %merchantId))))
                    (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                               (pair (option %status
-                                        (or (or (unit %approved) (unit %declined)) (or (unit %pending) (unit %shortlisted))))
-                                     (nat %totalOutStandingAmount)))
-                         (pair (pair (nat %unitCost) (nat %units)) (timestamp %updatedAt))))
+                               (pair (string %status) (int %totalOutStandingAmount)))
+                         (pair (pair (int %unitCost) (int %units)) (string %updatedAt))))
                 (string %getOrder))
             (or (unit %getOrders) (string %removeOrder)))
         (pair %updateOrder
            (pair (pair (pair (string %assetId) (string %assetProviderId))
-                       (pair (timestamp %createdAt) (nat %depositAmount)))
-                 (pair (pair (nat %holidayProvision) (string %id))
-                       (pair (nat %installmentAmount) (option %merchantId string))))
+                       (pair (string %createdAt) (int %depositAmount)))
+                 (pair (pair (int %holidayProvision) (string %id))
+                       (pair (int %installmentAmount) (string %merchantId))))
            (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                       (pair (option %status
-                                (or (or (unit %approved) (unit %declined)) (or (unit %pending) (unit %shortlisted))))
-                             (nat %totalOutStandingAmount)))
-                 (pair (pair (nat %unitCost) (nat %units)) (timestamp %updatedAt))))) ;
+                       (pair (string %status) (int %totalOutStandingAmount)))
+                 (pair (pair (int %unitCost) (int %units)) (string %updatedAt))))) ;
   storage
     (big_map
        string
        (pair (pair (pair (pair (string %assetId) (string %assetProviderId))
-                         (pair (timestamp %createdAt) (nat %depositAmount)))
-                   (pair (pair (nat %holidayProvision) (string %id))
-                         (pair (nat %installmentAmount) (option %merchantId string))))
+                         (pair (string %createdAt) (int %depositAmount)))
+                   (pair (pair (int %holidayProvision) (string %id))
+                         (pair (int %installmentAmount) (string %merchantId))))
              (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                         (pair (option %status
-                                  (or (or (unit %approved) (unit %declined)) (or (unit %pending) (unit %shortlisted))))
-                               (nat %totalOutStandingAmount)))
-                   (pair (pair (nat %unitCost) (nat %units)) (timestamp %updatedAt))))) ;
+                         (pair (string %status) (int %totalOutStandingAmount)))
+                   (pair (pair (int %unitCost) (int %units)) (string %updatedAt))))) ;
   code { LAMBDA
            address
            bool
@@ -68,10 +62,9 @@
                        { DROP ; PUSH string "order not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair (pair string string) (pair timestamp nat))
-                                       (pair (pair nat string) (pair nat (option string))))
-                                 (pair (pair (pair string string) (pair (option (or (or unit unit) (or unit unit))) nat))
-                                       (pair (pair nat nat) timestamp))) ;
+                           (pair (pair (pair (pair string string) (pair string int))
+                                       (pair (pair int string) (pair int string)))
+                                 (pair (pair (pair string string) (pair string int)) (pair (pair int int) string))) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -88,10 +81,9 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can update order" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair (pair string string) (pair timestamp nat))
-                                      (pair (pair nat string) (pair nat (option string))))
-                                (pair (pair (pair string string) (pair (option (or (or unit unit) (or unit unit))) nat))
-                                      (pair (pair nat nat) timestamp))) ;
+                     NONE (pair (pair (pair (pair string string) (pair string int))
+                                      (pair (pair int string) (pair int string)))
+                                (pair (pair (pair string string) (pair string int)) (pair (pair int int) string))) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;

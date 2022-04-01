@@ -1,0 +1,10 @@
+{ Elt "0"
+      (Pair (Pair (Pair (Pair (Pair "categoryId" "createdAt") "deletedAt" 0) (Pair "groupId" 0) "id" "image")
+                  (Pair (Pair 0 "name") "owner" "paymentFreq")
+                  (Pair "paymentMethod" "providerId")
+                  "status"
+                  "subGroupId")
+            (Pair 0 0)
+            "units"
+            "updatedAt") }
+

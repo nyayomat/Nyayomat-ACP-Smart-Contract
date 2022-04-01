@@ -5,13 +5,11 @@ const Main = async () => {
   console.info(`Starting...`);
   console.info(`- - - -`.repeat(10));
 
+  await deployerWrapper.getBalance();
   console.info(`- - - -`.repeat(10));
-  let contract_file_name = "transactions.tz";
-  let storage =
-    '{ Elt "98" (Pair (Pair (Pair (Pair 130 "19") "" "1645345483000") (Pair "1645822800000" "98") "Merchant" "3") (Pair "12" "") "installment" "1645345483000") }';
-  console.info(`Deploying contract ${contract_file_name}...`);
-  deployerWrapper.getBalance();
-  deployerWrapper.deploy(contract_file_name, storage.toString());
+  let contract_name = "transaction";
+  console.info(`Deploying contract ${contract_name}...`);
+  deployerWrapper.deploy(contract_name);
   console.info(`- - - -`.repeat(10));
 };
 

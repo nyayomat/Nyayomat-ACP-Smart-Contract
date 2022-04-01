@@ -1,32 +1,20 @@
 { parameter
     (or (or (or (pair %createProvider
-                   (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+                   (pair (pair (string %createdAt) (string %deletedAt))
                          (pair (string %id) (string %operatingDays)))
-                   (pair (pair (string %shopName)
-                               (or %status
-                                  (or (unit %approved) (unit %declined))
-                                  (or (unit %pending) (unit %shortlisted))))
-                         (timestamp %updatedAt)))
+                   (pair (pair (string %shopName) (string %status)) (string %updatedAt)))
                 (string %getProvider))
             (or (unit %getProviders) (string %removeProvider)))
         (pair %updateProvider
-           (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+           (pair (pair (string %createdAt) (string %deletedAt))
                  (pair (string %id) (string %operatingDays)))
-           (pair (pair (string %shopName)
-                       (or %status
-                          (or (unit %approved) (unit %declined))
-                          (or (unit %pending) (unit %shortlisted))))
-                 (timestamp %updatedAt)))) ;
+           (pair (pair (string %shopName) (string %status)) (string %updatedAt)))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (timestamp %createdAt) (option %deletedAt timestamp))
+       (pair (pair (pair (string %createdAt) (string %deletedAt))
                    (pair (string %id) (string %operatingDays)))
-             (pair (pair (string %shopName)
-                         (or %status
-                            (or (unit %approved) (unit %declined))
-                            (or (unit %pending) (unit %shortlisted))))
-                   (timestamp %updatedAt)))) ;
+             (pair (pair (string %shopName) (string %status)) (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -61,8 +49,7 @@
                        { DROP ; PUSH string "Provider not found" ; FAILWITH }
                        { EMPTY_BIG_MAP
                            string
-                           (pair (pair (pair timestamp (option timestamp)) (pair string string))
-                                 (pair (pair string (or (or unit unit) (or unit unit))) timestamp)) ;
+                           (pair (pair (pair string string) (pair string string)) (pair (pair string string) string)) ;
                          SWAP ;
                          DIG 2 ;
                          SWAP ;
@@ -79,8 +66,7 @@
                      EXEC ;
                      NOT ;
                      IF { PUSH string "Only admin can remove provider" ; FAILWITH } {} ;
-                     NONE (pair (pair (pair timestamp (option timestamp)) (pair string string))
-                                (pair (pair string (or (or unit unit) (or unit unit))) timestamp)) ;
+                     NONE (pair (pair (pair string string) (pair string string)) (pair (pair string string) string)) ;
                      SWAP ;
                      UPDATE ;
                      NIL operation ;
