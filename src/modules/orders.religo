@@ -18,19 +18,19 @@ type status = Approved | Declined | Shortlisted | Pending;
 type order = {
   id,
   assetProviderId: id,
-  merchantId: option(id),
+  merchantId: id,
   assetId: id,
-  units: nat,
-  unitCost: nat,
-  holidayProvision: nat,
-  depositAmount: nat,
-  installmentAmount: nat,
-  totalOutStandingAmount: nat,
+  units: int,
+  unitCost: int,
+  holidayProvision: int,
+  depositAmount: int,
+  installmentAmount: int,
+  totalOutStandingAmount: int,
   paymentFreq: string,
   paymentMethod: string,
-  status: option(status),
-  createdAt: timestamp,
-  updatedAt: timestamp
+  status: string,
+  createdAt: string,
+  updatedAt: string
 };
 
 type storage = big_map(id, order);
