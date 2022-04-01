@@ -1,0 +1,124 @@
+{ parameter
+    (or (or (or (pair %createAsset
+                   (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
+                                     (pair (option %deletedAt timestamp) (nat %depositAmount)))
+                               (pair (pair (option %groupId string) (nat %holidayProvision))
+                                     (pair (string %id) (option %image string))))
+                         (pair (pair (pair (nat %installment) (string %name))
+                                     (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+                               (pair (pair (string %paymentMethod) (string %providerId))
+                                     (pair (string %status) (option %subGroupId string)))))
+                   (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
+                         (pair (string %units) (timestamp %updatedAt))))
+                (string %getAsset))
+            (or (unit %getAssets) (string %removeAsset)))
+        (pair %updateAsset
+           (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
+                             (pair (option %deletedAt timestamp) (nat %depositAmount)))
+                       (pair (pair (option %groupId string) (nat %holidayProvision))
+                             (pair (string %id) (option %image string))))
+                 (pair (pair (pair (nat %installment) (string %name))
+                             (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+                       (pair (pair (string %paymentMethod) (string %providerId))
+                             (pair (string %status) (option %subGroupId string)))))
+           (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
+                 (pair (string %units) (timestamp %updatedAt))))) ;
+  storage
+    (big_map
+       string
+       (pair (pair (pair (pair (pair (option %categoryId string) (timestamp %createdAt))
+                               (pair (option %deletedAt timestamp) (nat %depositAmount)))
+                         (pair (pair (option %groupId string) (nat %holidayProvision))
+                               (pair (string %id) (option %image string))))
+                   (pair (pair (pair (nat %installment) (string %name))
+                               (pair (option %owner (or (unit %merchant) (unit %provider))) (string %paymentFreq)))
+                         (pair (pair (string %paymentMethod) (string %providerId))
+                               (pair (string %status) (option %subGroupId string)))))
+             (pair (pair (option %totalOutStandingAmount nat) (nat %unitCost))
+                   (pair (string %units) (timestamp %updatedAt))))) ;
+  code { LAMBDA
+           address
+           bool
+           { PUSH address "tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" ; SWAP ; COMPARE ; EQ } ;
+         SWAP ;
+         UNPAIR ;
+         IF_LEFT
+           { IF_LEFT
+               { IF_LEFT
+                   { SENDER ;
+                     DIG 3 ;
+                     SWAP ;
+                     EXEC ;
+                     NOT ;
+                     IF { PUSH string "Only an admin can create a new asset" ; FAILWITH } {} ;
+                     DUP ;
+                     CAR ;
+                     CAR ;
+                     CDR ;
+                     CDR ;
+                     CAR ;
+                     SWAP ;
+                     SOME ;
+                     SWAP ;
+                     UPDATE ;
+                     NIL operation ;
+                     PAIR }
+                   { DIG 2 ;
+                     DROP ;
+                     DUP ;
+                     DUG 2 ;
+                     GET ;
+                     IF_NONE
+                       { DROP ; PUSH string "Asset not found" ; FAILWITH }
+                       { EMPTY_BIG_MAP
+                           string
+                           (pair (pair (pair (pair (pair (option string) timestamp) (pair (option timestamp) nat))
+                                             (pair (pair (option string) nat) (pair string (option string))))
+                                       (pair (pair (pair nat string) (pair (option (or unit unit)) string))
+                                             (pair (pair string string) (pair string (option string)))))
+                                 (pair (pair (option nat) nat) (pair string timestamp))) ;
+                         SWAP ;
+                         DIG 2 ;
+                         SWAP ;
+                         SOME ;
+                         SWAP ;
+                         UPDATE } ;
+                     NIL operation ;
+                     PAIR } }
+               { IF_LEFT
+                   { DIG 2 ; DROP 2 ; NIL operation ; PAIR }
+                   { SENDER ;
+                     DIG 3 ;
+                     SWAP ;
+                     EXEC ;
+                     NOT ;
+                     IF { PUSH string "Only admin can update asset" ; FAILWITH } {} ;
+                     NONE (pair (pair (pair (pair (pair (option string) timestamp) (pair (option timestamp) nat))
+                                            (pair (pair (option string) nat) (pair string (option string))))
+                                      (pair (pair (pair nat string) (pair (option (or unit unit)) string))
+                                            (pair (pair string string) (pair string (option string)))))
+                                (pair (pair (option nat) nat) (pair string timestamp))) ;
+                     SWAP ;
+                     UPDATE ;
+                     NIL operation ;
+                     PAIR } } }
+           { SENDER ;
+             DIG 3 ;
+             SWAP ;
+             EXEC ;
+             NOT ;
+             IF { PUSH string "Only admin can update asset details" ; FAILWITH } {} ;
+             DUP ;
+             DUG 2 ;
+             SOME ;
+             DIG 2 ;
+             CAR ;
+             CAR ;
+             CDR ;
+             CDR ;
+             CAR ;
+             GET_AND_UPDATE ;
+             DROP ;
+             NIL operation ;
+             PAIR } } }
+
