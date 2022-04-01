@@ -7,8 +7,7 @@ import {
   AssetTezos,
   UserDB,
   UserTezos,
-  MerchantTxDB,
-  ProviderTxDB,
+  TransactionDB,
   TransactionTezos,
 } from '../types';
 import { InvoiceDB, InvoiceTezos } from '../types/invoice';
@@ -152,45 +151,31 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
 };
 
 export const mapTransactionToTezos = (
-  transactions: MerchantTxDB[] | ProviderTxDB[]
+  transactions: TransactionDB[]
 ): TransactionTezos[] => {
-  const merchant_tx = transactions.some(
-    (transaction: MerchantTxDB) => transaction.merchant_id
-  );
-  const provider_tx = transactions.some(
-    (transaction: ProviderTxDB) => transaction.asset_provider_id
-  );
-  if (merchant_tx) {
-    return transactions.map((transaction: MerchantTxDB) => {
-      return {
-        id: transaction.id,
-        merchantId: transaction.merchant_id,
-        orderId: transaction.order_id,
-        assetId: transaction.asset_id,
-        dueDate: transaction.due_date,
-        paidOn: transaction.paid_on,
-        txType: transaction.type,
-        initiator: 'Merchant',
-        amount: transaction.amount,
-        createdAt: transaction.created_at,
-        updatedAt: transaction.updated_at,
-      };
-    });
-  }
-  if (provider_tx) {
-    return transactions.map((transaction: ProviderTxDB) => {
-      return {
-        id: transaction.id,
-        assetProviderId: transaction.asset_provider_id,
-        assetId: transaction.asset_id,
-        dueDate: transaction.due_date,
-        paidOn: transaction.paid_on,
-        txType: transaction.type,
-        initiator: 'Provider',
-        amount: transaction.amount,
-        createdAt: transaction.created_at,
-        updatedAt: transaction.updated_at,
-      };
-    });
-  }
+  return transactions.map((transaction: TransactionDB) => {
+    let shared = {
+      id: transaction.id,
+      assetId: transaction.asset_id,
+      dueDate: transaction.due_date,
+      paidOn: transaction.paid_on,
+      txType: transaction.type,
+      initiator: transaction?.merchant_id ? 'Merchant' : 'Provider',
+      amount: transaction.amount,
+      createdAt: transaction.created_at,
+      updatedAt: transaction.updated_at,
+    };
+    let unique = transaction.merchant_id
+      ? {
+          orderId: transaction?.order_id,
+          merchantId: transaction?.merchant_id,
+        }
+      : {
+          assetProviderId: transaction?.asset_provider_id,
+        };
+    return {
+      ...shared,
+      ...unique,
+    };
+  });
 };

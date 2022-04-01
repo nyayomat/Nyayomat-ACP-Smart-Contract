@@ -1,20 +1,9 @@
-export interface MerchantTxDB {
+export interface TransactionDB {
   id: string;
   order_id?: string;
   asset_id: string;
   merchant_id?: string;
-  due_date: Date;
-  paid_on: Date;
-  type: string;
-  amount: number;
-  created_at: Date;
-  updated_at: Date;
-}
-
-export interface ProviderTxDB {
-  id: string;
   asset_provider_id?: string;
-  asset_id: string;
   due_date: Date;
   paid_on: Date;
   type: string;
