@@ -12,26 +12,27 @@ type id = string;
 type product = {
   id,
   shopId: id,
-  manufacturerId: option(string),
-  brand: option(string),
+  manufacturerId: string,
+  brand: string,
   name: string,
-  modelNumber: option(string),
-  mpn: option(string),
-  gtin: option(string),
-  gtinType: option(string),
-  description: option(string),
-  minPrice: nat,
-  maxPrice: option(nat),
+  modelNumber: string,
+  mpn: string,
+  gtin: string,
+  gtinType: string,
+  description: string,
+  minPrice: int,
+  maxPrice: int,
   originCountry: string,
   hasVariant: bool,
   requiresShipping: bool,
-  downloadable: option(string),
+  downloadable: string,
   slug: string,
-  salesCount: nat,
+  salesCount: int,
   active: bool,
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  deletedAt: option(timestamp)};
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string
+};
 
 type storage = big_map(id, product);
 

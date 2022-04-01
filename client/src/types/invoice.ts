@@ -3,11 +3,11 @@ export interface InvoiceDB {
   user_id: string;
   shop_id: string;
   provider_id: string;
-  total: string;
+  total: number;
   tax: number;
-  deleted_at: Date | null;
-  updated_at: Date;
-  created_at: Date;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface InvoiceTezos {
@@ -15,9 +15,9 @@ export interface InvoiceTezos {
   userId: string;
   shopId: string;
   providerId: string;
-  total: string;
+  total: number;
   tax: number;
-  createdAt: Date | null;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }

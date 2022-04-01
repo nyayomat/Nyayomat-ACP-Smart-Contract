@@ -3,9 +3,9 @@ export interface ProviderDB {
   shop_name: string;
   operating_days: string;
   status: string;
-  deleted_at: Date | null;
-  updated_at: Date;
-  created_at: Date;
+  deleted_at: string;
+  updated_at: string;
+  created_at: string;
 }
 
 export interface ProviderTezos {
@@ -13,7 +13,7 @@ export interface ProviderTezos {
   shopName: string;
   operatingDays: string;
   status: string;
-  createdAt: Date | null;
-  updatedAt: Date;
-  deletedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt: string;
 }
