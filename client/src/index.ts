@@ -1,4 +1,4 @@
-import { schedule } from 'node-cron';
+import { schedule } from "node-cron";
 import {
   mapInventoryToTezos,
   mapInvoiceToTezos,
@@ -6,9 +6,10 @@ import {
   mapAssetToTezos,
   mapUserToTezos,
   mapTransactionToTezos,
-} from './common';
-import { databaseWrapper } from './core';
-import { InventoryDB } from './types';
+  mapProviderToTezos,
+} from "./common";
+import { databaseWrapper } from "./core";
+import { InventoryDB } from "./types";
 
 const Main = async () => {
   console.log(`---`.repeat(10));
@@ -16,7 +17,7 @@ const Main = async () => {
   console.log(`---`.repeat(10));
 
   console.log(`- - -`.repeat(3));
-  console.info(`Fetching inventories...`);
+  console.info(`Fetching providers...`);
   // const inventoriesDB = await databaseWrapper.fetchTable('inventories');
   // console.log(mapInventoryToTezos(inventoriesDB));
   // const invoicesDB = await databaseWrapper.fetchTable('invoices');
@@ -35,20 +36,32 @@ const Main = async () => {
   // );
   // console.log(mapTransactionToTezos(providerTxDB));
   const merchantTxDB = await databaseWrapper.fetchTable(
-    'tbl_acp_merchant_transaction'
+    "tbl_acp_merchant_transaction"
   );
   console.log(mapTransactionToTezos(merchantTxDB));
+  // const productsDB = await databaseWrapper.fetchTable('products');
+
+  // console.log(mapProductToTezos(productsDB));
+
+  const providersDB = await databaseWrapper.fetchTable(
+    "tbl_acp_asset_providers"
+  );
+
+  console.log({
+    providersDB,
+  });
+  console.log(mapProviderToTezos(providersDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight
   schedule(
-    '0 0 * * *',
+    "0 0 * * *",
     async () => {
-      console.log('Running task every day at midnight');
+      console.log("Running task every day at midnight");
     },
     {
       scheduled: true,
-      timeZone: 'Africa/Nairobi',
+      timeZone: "Africa/Nairobi",
     }
   );
   console.log(`---`.repeat(3));

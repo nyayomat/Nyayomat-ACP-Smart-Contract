@@ -21,7 +21,7 @@ type product = {
   gtinType: option(string),
   description: option(string),
   minPrice: nat,
-  maxPrice: nat,
+  maxPrice: option(nat),
   originCountry: string,
   hasVariant: bool,
   requiresShipping: bool,
