@@ -15,7 +15,7 @@ type user = {
   id: string,
   onChainId: userId,
   name: string,
-  shopId: option(nat),
+  shopId: int,
   role: userType,
   description: string,
   roleId: string,

@@ -1,6 +1,6 @@
 export interface AssetDB {
-  id: number;
-  asset_provider_id: number;
+  id: string;
+  asset_provider_id: string;
   asset_name: string;
   group_id?: string;
   sub_group_id?: string;
@@ -21,8 +21,8 @@ export interface AssetDB {
 }
 
 export interface AssetTezos {
-  id: number;
-  providerId: number;
+  id: string;
+  providerId: string;
   name: string;
   groupId?: string;
   subGroupId?: string;

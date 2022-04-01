@@ -7,18 +7,17 @@ let is_admin = (user: address): bool => {
   user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
 
-type status = Approved | Declined | Shortlisted | Pending;
-
 type id = string;
 
 type provider = {
   id,
   shopName: string,
   operatingDays: string,
-  status,
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  deletedAt: option(timestamp)};
+  status: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string
+};
 
 type storage = big_map(id, provider);
 

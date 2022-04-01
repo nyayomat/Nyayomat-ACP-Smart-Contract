@@ -1,5 +1,5 @@
 export interface ProviderDB {
-  id: number;
+  id: string;
   shop_name: string;
   operating_days: string;
   status: string;
@@ -9,7 +9,7 @@ export interface ProviderDB {
 }
 
 export interface ProviderTezos {
-  id: number;
+  id: string;
   shopName: string;
   operatingDays: string;
   status: string;

@@ -1,5 +1,5 @@
 export interface UserDB {
-  id: number;
+  id: string;
   name: string;
   shop_id?: string;
   role?: string;
@@ -12,7 +12,7 @@ export interface UserDB {
 }
 
 export interface UserTezos {
-  id: number;
+  id: string;
   name?: string;
   shopId?: string;
   role?: string;

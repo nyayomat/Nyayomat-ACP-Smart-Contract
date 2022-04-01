@@ -1,9 +1,9 @@
 export interface InventoryDB {
-  id: number;
-  shop_id: number;
+  id: string;
+  shop_id: string;
   title: string;
   warehouse_id: string;
-  product_id: number;
+  product_id: string;
   brand: string;
   supplier_id: string;
   sku: string;
@@ -13,7 +13,7 @@ export interface InventoryDB {
   key_features: string;
   stock_quantity: number;
   damaged_quantity: string;
-  user_id: number;
+  user_id: string;
   purchase_price: string;
   sale_price: number;
   offer_price: number;
@@ -28,7 +28,7 @@ export interface InventoryDB {
   meta_title: string;
   meta_description: string;
   stuff_pick: string;
-  active: number;
+  active: string;
   deleted_at: string;
   created_at: string;
   updated_at: string;
@@ -36,11 +36,11 @@ export interface InventoryDB {
 }
 
 export interface InventoryTezos {
-  id: number;
-  shopID: number;
+  id: string;
+  shopID: string;
   title: string;
   warehouseID: string;
-  productID: number;
+  productID: string;
   brand: string;
   supplierID: string;
   sku: string;
@@ -50,7 +50,7 @@ export interface InventoryTezos {
   keyFeatures: string;
   stockQuantity: number;
   damagedQuantity: string;
-  userID: number;
+  userID: string;
   purchasePrice: string;
   salePrice: number;
   offerPrice: number;
@@ -65,7 +65,7 @@ export interface InventoryTezos {
   metaTitle: string;
   metaDescription: string;
   stuffPick: string;
-  active: number;
+  active: string;
   deletedAt: string;
   createdAt: string;
   updatedAt: string;

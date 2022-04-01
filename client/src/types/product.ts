@@ -1,7 +1,7 @@
 export interface ProductDB {
-  id: number;
-  shop_id: number;
-  manufacturer_id: number;
+  id: string;
+  shop_id: string;
+  manufacturer_id: string;
   brand: string;
   name: string;
   model_number: string;
@@ -24,9 +24,9 @@ export interface ProductDB {
 }
 
 export interface ProductTezos {
-  id: number;
-  shopId: number;
-  manufacturerId: number;
+  id: string;
+  shopId: string;
+  manufacturerId: string;
   brand: string;
   name: string;
   modelNumber: string;

@@ -7,8 +7,6 @@ let is_admin = (user: address): bool => {
   user == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" : address)
 };
 
-type status = Approved | Declined | Shortlisted | Pending;
-
 type id = string;
 
 type invoice = {
@@ -18,9 +16,10 @@ type invoice = {
   providerId: id,
   total: int,
   tax: int,
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  deletedAt: option(timestamp)};
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string
+};
 
 type storage = big_map(id, invoice);
 

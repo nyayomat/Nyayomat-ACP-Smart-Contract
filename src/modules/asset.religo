@@ -9,31 +9,27 @@ let is_admin = (user: address): bool => {
 
 type id = string;
 
-type status = Approved | Declined | Shortlisted | Pending;
-
-type assetOwner = Merchant | Provider;
-
 type asset = {
   id,
   providerId: id,
   name: string,
-  groupId: option(id),
-  subGroupId: option(id),
-  categoryId: option(id),
-  image: option(string),
+  groupId: id,
+  subGroupId: id,
+  categoryId: id,
+  image: string,
   units: string,
-  unitCost: nat,
-  holidayProvision: nat,
-  depositAmount: nat,
-  installment: nat,
-  totalOutStandingAmount: option(nat),
+  unitCost: int,
+  holidayProvision: int,
+  depositAmount: int,
+  installment: int,
+  totalOutStandingAmount: int,
   paymentFreq: string,
   paymentMethod: string,
   status: string,
-  owner: option(assetOwner),
-  createdAt: timestamp,
-  updatedAt: timestamp,
-  deletedAt: option(timestamp)
+  owner: string,
+  createdAt: string,
+  updatedAt: string,
+  deletedAt: string
 };
 
 type storage = big_map(id, asset);
