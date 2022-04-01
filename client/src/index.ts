@@ -30,14 +30,14 @@ const Main = async () => {
   // const usersDB = await databaseWrapper.fetchTable('users');
   // console.log(mapUserToTezos(usersDB));
 
-  const providerTxDB = await databaseWrapper.fetchTable(
-    'tbl_acp_asset_provider_transaction'
-  );
-  console.log(mapTransactionToTezos(providerTxDB));
-  // const merchantTxDB = await databaseWrapper.fetchTable(
-  //   'tbl_acp_merchant_transaction'
+  // const providerTxDB = await databaseWrapper.fetchTable(
+  //   'tbl_acp_asset_provider_transaction'
   // );
-  // console.log(mapTransactionToTezos(merchantTxDB));
+  // console.log(mapTransactionToTezos(providerTxDB));
+  const merchantTxDB = await databaseWrapper.fetchTable(
+    'tbl_acp_merchant_transaction'
+  );
+  console.log(mapTransactionToTezos(merchantTxDB));
   console.log(`- - -`.repeat(3));
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight

@@ -9,23 +9,19 @@ let is_admin = (user: address): bool => {
 
 type id = string;
 
-type txType = Deposit | Installment;
-
-type txInitiator = Merchant | Provider;
-
 type tx = {
   id,
-  assetProviderId: option(id),
-  merchantId: option(id),
-  orderId: option(id),
+  assetProviderId: id,
+  merchantId: id,
+  orderId: id,
   assetId: id,
-  dueDate: timestamp,
-  paidOn: timestamp,
-  txType,
-  initiator: txInitiator,
-  amount: nat,
-  createdAt: timestamp,
-  updatedAt: timestamp
+  dueDate: string,
+  paidOn: string,
+  txType: string,
+  initiator: string,
+  amount: int,
+  createdAt: string,
+  updatedAt: string
 };
 
 type storage = big_map(id, tx);

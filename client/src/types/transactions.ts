@@ -4,12 +4,12 @@ export interface TransactionDB {
   asset_id: string;
   merchant_id?: string;
   asset_provider_id?: string;
-  due_date: Date;
-  paid_on: Date;
+  due_date: string;
+  paid_on: string;
   type: string;
   amount: number;
-  created_at: Date;
-  updated_at: Date;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface TransactionTezos {
@@ -18,11 +18,11 @@ export interface TransactionTezos {
   merchantId?: string;
   orderId?: string;
   assetId: string;
-  dueDate: Date;
-  paidOn: Date;
+  dueDate: string;
+  paidOn: string;
   txType: string;
   initiator: string;
   amount: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
 }

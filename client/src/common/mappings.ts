@@ -9,9 +9,9 @@ import {
   UserTezos,
   TransactionDB,
   TransactionTezos,
-} from '../types';
-import { InvoiceDB, InvoiceTezos } from '../types/invoice';
-import { ProductDB, ProductTezos } from '../types/product';
+} from "../types";
+import { InvoiceDB, InvoiceTezos } from "../types/invoice";
+import { ProductDB, ProductTezos } from "../types/product";
 
 export const mapInventoryToTezos = (
   invetories: InventoryDB[]
@@ -76,7 +76,7 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       paymentFreq: asset.payment_frequency,
       paymentMethod: asset.payment_method,
       status: asset.status,
-      owner: asset?.group_id ? 'Provider' : 'Merchant',
+      owner: asset?.group_id ? "Provider" : "Merchant",
       createdAt: asset.created_at,
       updatedAt: asset.updated_at,
     };
@@ -135,11 +135,11 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
       name: user.name,
       shopId: user.shop_id,
       role:
-        user.role_id == '1'
-          ? 'SuperAdmin'
-          : user.role_id == '2'
-          ? 'Admin'
-          : 'Merchant',
+        user.role_id == "1"
+          ? "SuperAdmin"
+          : user.role_id == "2"
+          ? "Admin"
+          : "Merchant",
       description: user.description,
       roleId: user.role_id,
       active: user.active,
@@ -154,28 +154,25 @@ export const mapTransactionToTezos = (
   transactions: TransactionDB[]
 ): TransactionTezos[] => {
   return transactions.map((transaction: TransactionDB) => {
-    let shared = {
-      id: transaction.id,
-      assetId: transaction.asset_id,
-      dueDate: transaction.due_date,
-      paidOn: transaction.paid_on,
-      txType: transaction.type,
-      initiator: transaction?.merchant_id ? 'Merchant' : 'Provider',
-      amount: transaction.amount,
-      createdAt: transaction.created_at,
-      updatedAt: transaction.updated_at,
-    };
-    let unique = transaction.merchant_id
-      ? {
-          orderId: transaction?.order_id,
-          merchantId: transaction?.merchant_id,
-        }
-      : {
-          assetProviderId: transaction?.asset_provider_id,
-        };
     return {
-      ...shared,
-      ...unique,
+      id: transaction.id?.toString(),
+      assetId: transaction.asset_id?.toString(),
+      dueDate: new Date(transaction.due_date).getTime().toString(),
+      paidOn: transaction.paid_on
+        ? new Date(transaction.paid_on).getTime().toString()
+        : "",
+      txType: transaction.type,
+      initiator: transaction?.merchant_id ? "Merchant" : "Provider",
+      amount: transaction.amount,
+      createdAt: new Date(transaction.created_at).getTime().toString(),
+      updatedAt: new Date(transaction.updated_at).getTime().toString(),
+      orderId: transaction?.order_id ? transaction.order_id?.toString() : "",
+      merchantId: transaction?.merchant_id
+        ? transaction.merchant_id?.toString()
+        : "",
+      assetProviderId: transaction?.asset_provider_id
+        ? transaction.asset_provider_id?.toString()
+        : "",
     };
   });
 };
