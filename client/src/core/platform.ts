@@ -1,4 +1,4 @@
-import { TezosToolkit } from "@taquito/taquito";
+import { TezosToolkit, MichelsonMap } from "@taquito/taquito";
 import { InMemorySigner } from "@taquito/signer";
 import Account from "../../ithacanet.json";
 import { config } from "../../config";
@@ -38,21 +38,50 @@ class Platform {
     this.tezos.contract
       .at(contract) //call the contract to get its entry points
       .then((contract) => {
-        // console.log(`Adding ${data} to storage...`);
-        // //calling the create function
-        // return contract.methods.default(data).send();
-        let methods = contract.parameterSchema.ExtractSignatures();
-        console.log(JSON.stringify(methods, null, 2));
+        console.log(
+          `List all contract methods: ${Object.keys(contract.methods)}\n`
+        );
+        console.log(
+          `Inspect the signature of the 'createAsset' contract method: ${JSON.stringify(
+            contract.methodsObject.createAsset().getSignature(),
+            null,
+            2
+          )}`
+        );
+
+        return contract.methodsObject
+          .createAsset({
+            categoryId: "0",
+            createdAt: new Date().getTime().toString(),
+            deletedAt: new Date().getTime().toString(),
+            depositAmount: 0,
+            groupId: "9",
+            holidayProvision: 30,
+            id: "1232",
+            image: "strinew2ew2eg",
+            installment: 900,
+            name: "stringdwdw",
+            owner: "string24324",
+            paymentFreq: "string321313",
+            paymentMethod: "stringr3rr",
+            providerId: "string24324",
+            status: "stringe2e2",
+            subGroupId: "243",
+            totalOutStandingAmount: 40,
+            unitCost: 90,
+            units: 2,
+            updatedAt: new Date().getTime().toString(),
+          })
+          .send();
       })
-      // .then(async (op) => {
-      //   console.log(`Awaiting for ${op.hash} to be confirmed...`);
-      //   await op.confirmation(1);
-      //   return op.hash; //waiting for 1 confirmation to get the results faster
-      // })
-      .then((hash) => console.log(`Call done}`)) //call is successful
-      .catch((error) =>
-        console.log(`Error: ${JSON.stringify(error, null, 2)}`)
-      );
+      .then((op) => {
+        console.log(`Awaiting for ${op.hash} to be confirmed...`);
+        return op.confirmation().then(() => op.hash);
+      })
+      .then((hash) =>
+        console.log(`Operation injected: https://ithaca.tzstats.com/${hash}`)
+      )
+      .catch((err: any) => console.log(err));
   };
 }
 

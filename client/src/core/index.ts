@@ -1,2 +1,2 @@
-export * from './contractCalls';
-export * from './database';
+export * from "./platform";
+export * from "./database";

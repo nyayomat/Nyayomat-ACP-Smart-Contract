@@ -18,6 +18,7 @@ export interface AssetDB {
   owner?: string;
   created_at: string;
   updated_at: string;
+  deleted_at?: string;
 }
 
 export interface AssetTezos {

@@ -83,6 +83,7 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       owner: asset?.group_id ? "Provider" : "Merchant",
       createdAt: new Date(asset.created_at).getTime().toString(),
       updatedAt: new Date(asset.updated_at).getTime().toString(),
+      deletedAt: new Date(asset.deleted_at || 0).getTime().toString(),
     };
   });
 };
