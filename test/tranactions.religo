@@ -1,5 +1,5 @@
 let is_owner = (()): bool => {
-  Tezos.sender == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN"
+  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
        : address)
 };
 
@@ -21,8 +21,7 @@ type tx = {
   initiator: string,
   amount: int,
   createdAt: string,
-  updatedAt: string
-};
+  updatedAt: string};
 
 type storage = big_map(id, tx);
 
@@ -115,8 +114,7 @@ let test =
            updatedAt: "1645345483000",
            orderId: "12",
            merchantId: "3",
-           assetProviderId: ""
-         })]);
+           assetProviderId: ""})]);
   let (admin_add_addr, _, _) = 
     Test.originate(main, init_admin_storage, 0mutez);
   let admin_contract = Test.to_contract(admin_add_addr);

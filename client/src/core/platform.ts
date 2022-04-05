@@ -35,43 +35,26 @@ class Platform {
    */
 
   create = async (data: any, contract: string, action: string) => {
-    this.tezos.contract
+    await this.tezos.contract
       .at(contract) //call the contract to get its entry points
-      .then((contract) => {
+      .then(async (contract) => {
         console.log(
           `List all contract methods: ${Object.keys(contract.methods)}\n`
         );
         console.log(
-          `Inspect the signature of the 'createAsset' contract method: ${JSON.stringify(
-            contract.methodsObject.createAsset().getSignature(),
+          `Inspect the signature of the 'createProvider' contract method: ${JSON.stringify(
+            contract.methodsObject.createProvider().getSignature(),
             null,
             2
           )}`
         );
 
+        // const storage: any = await contract.storage();
+
+        // console.log(storage);
+
         return contract.methodsObject
-          .createAsset({
-            categoryId: "0",
-            createdAt: new Date().getTime().toString(),
-            deletedAt: new Date().getTime().toString(),
-            depositAmount: 0,
-            groupId: "9",
-            holidayProvision: 30,
-            id: "1232",
-            image: "strinew2ew2eg",
-            installment: 900,
-            name: "stringdwdw",
-            owner: "string24324",
-            paymentFreq: "string321313",
-            paymentMethod: "stringr3rr",
-            providerId: "string24324",
-            status: "stringe2e2",
-            subGroupId: "243",
-            totalOutStandingAmount: 40,
-            unitCost: 90,
-            units: 2,
-            updatedAt: new Date().getTime().toString(),
-          })
+          .createProvider(data) //call the 'createProvider' entry point
           .send();
       })
       .then((op) => {
@@ -82,6 +65,9 @@ class Platform {
         console.log(`Operation injected: https://ithaca.tzstats.com/${hash}`)
       )
       .catch((err: any) => console.log(err));
+    // const contract2 = await this.tezos.contract.at(contract);
+    // const storage: any = await contract2.storage();
+    // console.log({ storage: storage.schema.root });
   };
 }
 

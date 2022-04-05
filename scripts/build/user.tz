@@ -21,7 +21,7 @@
   code { LAMBDA
            address
            bool
-           { PUSH address "tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" ; SWAP ; COMPARE ; EQ } ;
+           { PUSH address "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" ; SWAP ; COMPARE ; EQ } ;
          SWAP ;
          UNPAIR ;
          IF_LEFT
@@ -29,7 +29,7 @@
                { DIG 2 ;
                  DROP ;
                  IF_LEFT
-                   { PUSH address "tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" ;
+                   { PUSH address "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" ;
                      SENDER ;
                      COMPARE ;
                      EQ ;

@@ -1,5 +1,6 @@
 import { exec } from "child_process";
-import { saveToFile } from "./common";
+import { writeFileSync } from "fs";
+import Account from "../ithacanet.json";
 
 export const compileAndSaveBuild = async (
   modulePath: string,
@@ -16,7 +17,9 @@ export const compileAndSaveBuild = async (
         console.error(err);
       } else {
         if (stdout) {
-          saveToFile(stdout, outPath);
+          /// @dev Replace all hardcoded owner addresses with the actual owner addresses
+          stdout = stdout.replace(/"tz1[a-zA-Z0-9]{33}"/g, `"${Account.pkh}"`);
+          writeFileSync(outPath, stdout);
         }
         if (stderr) {
           console.log(`stderr: ${stderr}`);

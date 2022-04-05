@@ -1,10 +1,10 @@
 let is_owner = (()): bool => {
-  Tezos.sender == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN"
+  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
        : address)
 };
 
 let is_admin = (user: address): bool => {
-  user == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN" : address)
+  user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
 
 type id = string;
@@ -30,8 +30,7 @@ type order = {
   paymentMethod: string,
   status: string,
   createdAt: string,
-  updatedAt: string
-};
+  updatedAt: string};
 
 type storage = big_map(id, order);
 

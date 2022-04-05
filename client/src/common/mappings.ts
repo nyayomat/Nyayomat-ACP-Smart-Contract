@@ -186,7 +186,7 @@ export const mapProviderToTezos = (
 ): ProviderTezos[] => {
   return providers.map((provider: ProviderDB) => {
     return {
-      id: provider.id,
+      id: provider.id.toString(),
       shopName: provider.shop_name,
       operatingDays: provider.operating_days,
       status: provider.status,

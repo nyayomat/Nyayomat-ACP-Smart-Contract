@@ -1,10 +1,9 @@
 
-let is_owner = (): bool => {
-    /// TODO : Check if the user is the owner of the s.c
-    Tezos.sender == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN": address)
-}
+let is_owner = (()): bool => {
+  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
+       : address)
+};
 
-/// @dev Check if the user is an admin
 let is_admin = (user: address): bool => {
-    user == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN": address)
-}
+  user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
+};

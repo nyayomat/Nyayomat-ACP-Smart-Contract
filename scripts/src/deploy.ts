@@ -2,13 +2,10 @@ import { importKey } from "@taquito/signer";
 import { TezosToolkit } from "@taquito/taquito";
 import { config } from "../config";
 import Account from "./../ithacanet.json";
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import path from "path";
 
 import Contracts from "../../scripts/utils/contracts.json";
-import { resolve } from "path";
-
-import { saveToFile } from "../utils/common";
 
 class Deployer {
   //declaring private tezos modifier of TezosToolkit type
@@ -32,12 +29,15 @@ class Deployer {
     );
 
     try {
+      let code = readFileSync(
+        path.resolve(__dirname, `../build/${contract_name}.tz`),
+        "utf8"
+      );
+      /// @dev Replace all hardcoded owner addresses with the actual owner addresses
+      code = code.replace(/"tz1[a-zA-Z0-9]{33}"/g, `"${Account.pkh}"`);
       const op = await this.tezos.contract.originate({
         //smart contract code
-        code: readFileSync(
-          path.resolve(__dirname, `../build/${contract_name}.tz`),
-          "utf8"
-        ),
+        code,
         //storage state
         init: readFileSync(
           path.resolve(__dirname, `../build/${contract_name}_storage.tz`),
@@ -54,28 +54,18 @@ class Deployer {
       // console.log("Storage", await contract.storage());
       //operation hash one can use to find the contract in the explorer
       console.log("Operation hash:", op.hash);
-      console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      console.log(`Operation injected: https://ithacanet.tzkt.io/${op.hash}`);
+
       /// @dev save address to contracts.json
-      // console.log(typeof addToContracts);
-      // addToContracts(
-      //   JSON.parse(
-      //     JSON.stringify(`{
-      //   ${contract_name}: contract.address,
-      // }`)
-      //   )
-      // );
-
-      let contracts = JSON.stringify({
+      let contracts = {
         ...Contracts,
-        ...JSON.parse(
-          JSON.stringify(`{
-        ${contract_name}: contract.address,
-      }`)
-        ),
-      });
+        [contract_name]: contract.address,
+      };
 
-      const contractsPath = resolve(__dirname, "contracts.json");
-      await saveToFile(contracts, contractsPath);
+      writeFileSync(
+        path.join(__dirname, "../utils/contracts.json"),
+        JSON.stringify(contracts, null, 2)
+      );
     } catch (ex) {
       console.error(ex);
     }

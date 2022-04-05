@@ -1,5 +1,5 @@
 let is_owner = (()): bool => {
-  Tezos.sender == ("tz1gjaF81ZRRvdzjobyfVNsAeSC6PScjfQwN"
+  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
        : address)
 };
 
@@ -21,8 +21,7 @@ type tx = {
   initiator: string,
   amount: int,
   createdAt: string,
-  updatedAt: string
-};
+  updatedAt: string};
 
 type storage = big_map(id, tx);
 

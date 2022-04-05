@@ -43,24 +43,26 @@ const Main = async () => {
 
   // console.log(mapProductToTezos(productsDB));
 
-  // const providersDB = await databaseWrapper.fetchTable(
-  //   "tbl_acp_asset_providers"
-  // );
+  const providersDB = await databaseWrapper.fetchTable(
+    "tbl_acp_asset_providers"
+  );
+
+  const providers = mapProviderToTezos(providersDB);
 
   // console.log({
   //   providersDB,
   // });
-  const assets = mapAssetToTezos(assetsDB);
-  console.log({
-    assets,
-  });
+  // const assets = mapAssetToTezos(assetsDB);
+  // console.log({
+  //   assets,KT1FAKGdez6NZM9XvgY7xECMU1v8t6kvHShH
+  // });
   console.log(`- - -`.repeat(3));
 
-  console.log(assets[assets.length - 1]);
+  console.log(providers[providers.length - 2]);
   await platformWrapper.create(
-    assets[assets.length - 1],
-    "KT1XHv7tGmjUY3VENQnL1LH8t8MgengysHMP",
-    "Create"
+    providers[providers.length - 2],
+    "KT1FAKGdez6NZM9XvgY7xECMU1v8t6kvHShH",
+    "CreateProvider"
   );
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight
