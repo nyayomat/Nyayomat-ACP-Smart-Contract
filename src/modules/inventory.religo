@@ -1,8 +1,3 @@
-let is_owner = (()): bool => {
-  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-       : address)
-};
-
 let is_admin = (user: address): bool => {
   user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
@@ -10,7 +5,7 @@ let is_admin = (user: address): bool => {
 type id = string;
 
 type inventory = {
-  id,
+  id: string,
   shopId: id,
   title: string,
   warehouseId: id,
@@ -47,65 +42,40 @@ type storage = big_map(id, inventory);
 
 type return = (list(operation), storage);
 
-let createInventory = (inventory: inventory,
-   storage: storage): return => {
+let create = (inventory: inventory, storage: storage)
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new inventory")
   };
-  let storage: storage = 
-    Big_map.add(inventory.id, inventory, storage);
-  (([] : list(operation)), storage)
+  Big_map.add(inventory.id, inventory, storage)
 };
 
-let updateInventory = (inventory: inventory,
-   storage: storage): return => {
+let update = (inventory: inventory, storage: storage)
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update inventory details")
   };
-  let (_old_storage, storage) = 
-
-    Big_map.get_and_update(inventory.id,
-       Some (inventory),
-       storage);
-  (([] : list(operation)), storage)
+  Big_map.update(inventory.id, Some (inventory), storage)
 };
 
-let removeInventory = (id: id, storage: storage): return => {
+let remove = (id: id, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update inventory")
   };
-  (([] : list(operation)), Big_map.remove(id, storage))
-};
-
-let getInventory = (id: id, storage: storage): return => {
-  let storage: storage = 
-    switch (Big_map.find_opt(id, storage)) {
-    | Some(inventory) => Big_map.literal([(id, inventory)])
-    | None => (failwith("Inventory not found") : storage)
-    };
-  (([] : list(operation)), storage)
-};
-
-let getInventorys = (storage: storage): return => {
-  (([] : list(operation)), storage)
+  Big_map.remove(id, storage)
 };
 
 type parameter = 
-  CreateInventory(inventory)
-| UpdateInventory(inventory)
-| RemoveInventory(id)
-| GetInventory(id)
-| GetInventorys;
+  Create(inventory)
+| Update(inventory)
+| Remove(id);
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
-  (switch (action) {
-   | CreateInventory(inventory) =>
-       createInventory((inventory, storage))
-   | UpdateInventory(inventory) =>
-       updateInventory((inventory, storage))
-   | RemoveInventory(id) => removeInventory((id, storage))
-   | GetInventory(id) => getInventory((id, storage))
-   | GetInventorys => getInventorys(storage)
-   })
+  (([] : list(operation)),
+    (switch (action) {
+     | Create(inventory) => create((inventory, storage))
+     | Update(inventory) => update((inventory, storage))
+     | Remove(id) => remove((id, storage))
+     }))
 };
