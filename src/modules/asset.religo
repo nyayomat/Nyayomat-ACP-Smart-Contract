@@ -1,8 +1,3 @@
-let is_owner = (()): bool => {
-  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-       : address)
-};
-
 let is_admin = (user: address): bool => {
   user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
@@ -10,7 +5,7 @@ let is_admin = (user: address): bool => {
 type id = string;
 
 type asset = {
-  id,
+  id: string,
   providerId: id,
   name: string,
   groupId: id,
@@ -35,58 +30,35 @@ type storage = big_map(id, asset);
 
 type return = (list(operation), storage);
 
-let createAsset = (asset: asset, storage: storage): return => {
+type parameter = Create(asset) | Update(asset) | Remove(id);
+
+let create = (asset: asset, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
   };
-  let storage: storage = 
-    Big_map.add(asset.id, asset, storage);
-  (([] : list(operation)), storage)
+  Big_map.add(asset.id, asset, storage)
 };
 
-let updateAsset = (asset: asset, storage: storage): return => {
+let update = (asset: asset, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update asset details")
   };
-  let (_old_storage, storage) = 
-    Big_map.get_and_update(asset.id, Some (asset), storage);
-  (([] : list(operation)), storage)
+  Big_map.update(asset.id, Some (asset), storage)
 };
 
-let removeAsset = (id: id, storage: storage): return => {
+let remove = (id: id, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update asset")
   };
-  (([] : list(operation)), Big_map.remove(id, storage))
+  Big_map.remove(id, storage)
 };
-
-let getAsset = (id: id, storage: storage): return => {
-  let storage: storage = 
-    switch (Big_map.find_opt(id, storage)) {
-    | Some(asset) => Big_map.literal([(id, asset)])
-    | None => (failwith("Asset not found") : storage)
-    };
-  (([] : list(operation)), storage)
-};
-
-let getAssets = (storage: storage): return => {
-  (([] : list(operation)), storage)
-};
-
-type parameter = 
-  CreateAsset(asset)
-| UpdateAsset(asset)
-| RemoveAsset(id)
-| GetAsset(id)
-| GetAssets;
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
-  (switch (action) {
-   | CreateAsset(asset) => createAsset((asset, storage))
-   | UpdateAsset(asset) => updateAsset((asset, storage))
-   | RemoveAsset(id) => removeAsset((id, storage))
-   | GetAsset(id) => getAsset((id, storage))
-   | GetAssets => getAssets(storage)
-   })
+  (([] : list(operation)),
+    (switch (action) {
+     | Create(asset) => create((asset, storage))
+     | Update(asset) => update((asset, storage))
+     | Remove(id) => remove((id, storage))
+     }))
 };
