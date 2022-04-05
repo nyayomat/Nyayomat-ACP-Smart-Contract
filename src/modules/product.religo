@@ -1,8 +1,3 @@
-let is_owner = (()): bool => {
-  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-       : address)
-};
-
 let is_admin = (user: address): bool => {
   user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
@@ -10,7 +5,7 @@ let is_admin = (user: address): bool => {
 type id = string;
 
 type product = {
-  id,
+  id: string,
   shopId: id,
   manufacturerId: string,
   brand: string,
@@ -37,65 +32,38 @@ type storage = big_map(id, product);
 
 type return = (list(operation), storage);
 
-let createProduct = (product: product, storage: storage)
-: return => {
+type parameter = 
+  Create(product)
+| Update(product)
+| Remove(id);
+
+let create = (product: product, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new product")
   };
-  let storage: storage = 
-    Big_map.add(product.id, product, storage);
-  (([] : list(operation)), storage)
+  Big_map.add(product.id, product, storage)
 };
 
-let updateProduct = (product: product, storage: storage)
-: return => {
+let update = (product: product, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update product details")
   };
-  let (_old_storage, storage) = 
-
-    Big_map.get_and_update(product.id,
-       Some (product),
-       storage);
-  (([] : list(operation)), storage)
+  Big_map.update(product.id, Some (product), storage)
 };
 
-let removeProduct = (id: id, storage: storage): return => {
+let remove = (id: id, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update product")
   };
-  (([] : list(operation)), Big_map.remove(id, storage))
+  Big_map.remove(id, storage)
 };
-
-let getProduct = (id: id, storage: storage): return => {
-  let storage: storage = 
-    switch (Big_map.find_opt(id, storage)) {
-    | Some(product) => Big_map.literal([(id, product)])
-    | None => (failwith("Product not found") : storage)
-    };
-  (([] : list(operation)), storage)
-};
-
-let getProducts = (storage: storage): return => {
-  (([] : list(operation)), storage)
-};
-
-type parameter = 
-  CreateProduct(product)
-| UpdateProduct(product)
-| RemoveProduct(id)
-| GetProduct(id)
-| GetProducts;
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
-  (switch (action) {
-   | CreateProduct(product) =>
-       createProduct((product, storage))
-   | UpdateProduct(product) =>
-       updateProduct((product, storage))
-   | RemoveProduct(id) => removeProduct((id, storage))
-   | GetProduct(id) => getProduct((id, storage))
-   | GetProducts => getProducts(storage)
-   })
+  (([] : list(operation)),
+    (switch (action) {
+     | Create(product) => create((product, storage))
+     | Update(product) => update((product, storage))
+     | Remove(id) => remove((id, storage))
+     }))
 };
