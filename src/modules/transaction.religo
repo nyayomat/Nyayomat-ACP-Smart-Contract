@@ -10,7 +10,7 @@ let is_admin = (user: address): bool => {
 type id = string;
 
 type tx = {
-  id,
+  id: string,
   assetProviderId: id,
   merchantId: id,
   orderId: id,
@@ -27,61 +27,38 @@ type storage = big_map(id, tx);
 
 type return = (list(operation), storage);
 
-let createTransaction = ((tx, storage): (tx, storage))
-: return => {
+let create = ((tx, storage): (tx, storage)): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
   };
-  let storage: storage = Big_map.add(tx.id, tx, storage);
-  (([] : list(operation)), storage)
+  Big_map.add(tx.id, tx, storage)
 };
 
-let updateTransaction = (tx: tx, storage: storage): return => {
+let update = (tx: tx, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update tx details")
   };
-  let (_old_storage, storage) = 
-    Big_map.get_and_update(tx.id, Some (tx), storage);
-  (([] : list(operation)), storage)
+  Big_map.update(tx.id, Some (tx), storage)
 };
 
-let removeTransaction = (id: id, storage: storage): return => {
+let remove = (id: id, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update tx")
   };
-  (([] : list(operation)), Big_map.remove(id, storage))
-};
-
-let getTransaction = (id: id, storage: storage): return => {
-  let storage: storage = 
-    switch (Big_map.find_opt(id, storage)) {
-    | Some(tx) => Big_map.literal([(id, tx)])
-    | None => (failwith("tx not found") : storage)
-    };
-  (([] : list(operation)), storage)
-};
-
-let getTransactions = (storage: storage): return => {
-  (([] : list(operation)), storage)
+  Big_map.remove(id, storage)
 };
 
 type parameter = 
   CreateTransaction(tx)
 | UpdateTransaction(tx)
-| RemoveTransaction(id)
-| GetTransaction(id)
-| GetTransactions;
+| RemoveTransaction(id);
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
-  (switch (action) {
-   | CreateTransaction(tx) =>
-       createTransaction((tx, storage))
-   | UpdateTransaction(tx) =>
-       updateTransaction((tx, storage))
-   | RemoveTransaction(id) =>
-       removeTransaction((id, storage))
-   | GetTransaction(id) => getTransaction((id, storage))
-   | GetTransactions => getTransactions(storage)
-   })
+  (([] : list(operation)),
+    (switch (action) {
+     | CreateTransaction(tx) => create((tx, storage))
+     | UpdateTransaction(tx) => update((tx, storage))
+     | RemoveTransaction(id) => remove((id, storage))
+     }))
 };
