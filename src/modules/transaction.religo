@@ -1,8 +1,3 @@
-let is_owner = (()): bool => {
-  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-       : address)
-};
-
 let is_admin = (user: address): bool => {
   user == ("tz1KqTpEZ7Yob7QbPE4Hy4Wo8fHG8LhKxZSx" : address)
 };
@@ -27,6 +22,8 @@ type storage = big_map(id, tx);
 
 type return = (list(operation), storage);
 
+type parameter = Create(tx) | Update(tx) | Remove(id);
+
 let create = ((tx, storage): (tx, storage)): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
@@ -48,17 +45,12 @@ let remove = (id: id, storage: storage): storage => {
   Big_map.remove(id, storage)
 };
 
-type parameter = 
-  CreateTransaction(tx)
-| UpdateTransaction(tx)
-| RemoveTransaction(id);
-
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
   (([] : list(operation)),
     (switch (action) {
-     | CreateTransaction(tx) => create((tx, storage))
-     | UpdateTransaction(tx) => update((tx, storage))
-     | RemoveTransaction(id) => remove((id, storage))
+     | Create(tx) => create((tx, storage))
+     | Update(tx) => update((tx, storage))
+     | Remove(id) => remove((id, storage))
      }))
 };

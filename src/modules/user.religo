@@ -1,18 +1,12 @@
-let is_owner = (()): bool => {
-  Tezos.sender == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-       : address)
-};
-
 let is_admin = (user: address): bool => {
   user == ("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" : address)
 };
 
-type userId = string;
+type id = string;
 
 type user = {
   id: string,
   onChainId: string,
-  name: string,
   shopId: int,
   role: string,
   description: string,
@@ -22,86 +16,45 @@ type user = {
   updatedAt: string,
   deletedAt: string};
 
-type user_storage = big_map(string, user);
+type storage = big_map(string, user);
 
-let init_user_storage: user_storage = Big_map.empty;
+type return = (list(operation), storage);
 
-type return = (list(operation), user_storage);
+type parameter = Create(user) | Update(user) | Remove(id);
 
-type parameter = 
-  CreateUser(user)
-| GetUser(userId)
-| GetUsers
-| RemoveUser(userId)
-| UpdateUser(user);
-
-let createUser = ((user, user_storage): (user, user_storage))
-: return => {
-  if(is_owner()) {
-
-
-    failwith("Only the s.c owner can create a new user record")
+let create = ((user, storage): (user, storage)): storage => {
+  if(! is_admin(Tezos.sender)) {
+    failwith("Only Admin can create user")
   };
-  let user_storage = 
-    Big_map.add(user.id, user, user_storage);
-  (([] : list(operation)), user_storage)
+  Big_map.add(user.id, user, storage)
 };
 
-let getUser = ((userId, user_storage): (userId, user_storage))
-: return => {
-  let user: user_storage = 
-    switch (Big_map.find_opt(userId, user_storage)) {
-    | Some(user) => Big_map.literal([(userId, user)])
-    | None => (failwith("user not found") : user_storage)
-    };
-  (([] : list(operation)), user)
-};
-
-let getUsers = 
-  ((storage: user_storage): return => {
-     (([] : list(operation), storage))
-   });
-
-let userExists = ((userId, user_storage): (userId,
-   user_storage)): bool => {
-  switch (Big_map.find_opt(userId, user_storage)) {
+let userExists = ((id, storage): (id, storage)): bool => {
+  switch (Big_map.find_opt(id, storage)) {
   | Some(_user) => true
   | None => false
   }
 };
 
-let updateUser = ((user, storage): (user, user_storage))
-: return => {
+let update = ((user, storage): (user, storage)): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only Admin can update user details")
   };
-  let (_, user_storage) = 
-    Big_map.get_and_update(user.id, Some (user), storage);
-  (([] : list(operation)), user_storage)
+  Big_map.update(user.id, Some (user), storage)
 };
 
-let removeUser = ((userId, user_storage): (userId,
-   user_storage)): return => {
+let remove = ((id, storage): (id, storage)): storage => {
   if(! is_admin(Tezos.sender)) {
-    failwith("Only Admin can update user details")
+    failwith("Only Admin can remove user")
   };
-  let some_user: user_storage = 
-    switch (Big_map.find_opt(userId, user_storage)) {
-    | Some(_) => user_storage
-    | None =>
-        (failwith("user doesn't exist") : user_storage)
-    };
-  let user_storage = Big_map.remove(userId, some_user);
-  (([] : list(operation)), user_storage)
+  Big_map.remove(id, storage)
 };
 
-let main = ((action, storage): (parameter, user_storage))
-: return => {
-  (switch (action) {
-   | CreateUser(user) => createUser(user, storage)
-   | GetUser(userId) => getUser((userId, storage))
-   | GetUsers => getUsers(storage)
-   | RemoveUser(userId) => removeUser((userId, storage))
-   | UpdateUser(user) => updateUser((user, storage))
-   })
+let main = ((action, storage): (parameter, storage)): return => {
+  (([] : list(operation)),
+    (switch (action) {
+     | Create(user) => create(user, storage)
+     | Update(user) => update((user, storage))
+     | Remove(id) => remove((id, storage))
+     }))
 };

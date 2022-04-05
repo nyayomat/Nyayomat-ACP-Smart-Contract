@@ -16,6 +16,11 @@ type storage = big_map(id, provider);
 
 type return = (list(operation), storage);
 
+type parameter = 
+  Create(provider)
+| Update(provider)
+| Remove(id);
+
 let create = (provider: provider, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new provider")
@@ -37,16 +42,11 @@ let remove = (id: id, storage: storage): storage => {
   Big_map.remove(id, storage)
 };
 
-type parameter = 
-  CreateProvider(provider)
-| UpdateProvider(provider)
-| RemoveProvider(id);
-
 let main = ((action, storage): (parameter, storage)): return => {
   (([] : list(operation)),
     (switch (action) {
-     | CreateProvider(params) => create((params, storage))
-     | UpdateProvider(params) => update((params, storage))
-     | RemoveProvider(id) => remove((id, storage))
+     | Create(params) => create((params, storage))
+     | Update(params) => update((params, storage))
+     | Remove(id) => remove((id, storage))
      }))
 };
