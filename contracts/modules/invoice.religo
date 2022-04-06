@@ -20,22 +20,32 @@ type storage = big_map(id, invoice);
 type return = (list(operation), storage);
 
 type parameter = 
-  Create(invoice)
-| Update(invoice)
+  Create(list(invoice))
+| Update(list(invoice))
 | Remove(id);
 
-let create = (invoice: invoice, storage: storage): storage => {
+let create = (invoices: list(invoice), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new invoice")
   };
-  Big_map.add(invoice.id, invoice, storage)
+    let _add = (invoice: invoice): unit => {
+      let _ = Big_map.add(invoice.id, invoice, storage);
+      ()
+    };
+    List.iter(_add, invoices);
+    storage
 };
 
-let update = (invoice: invoice, storage: storage): storage => {
+let update = (invoices: list(invoice), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update invoice details")
   };
-  Big_map.update(invoice.id, Some (invoice), storage)
+    let _update = (invoice: invoice): unit => {
+      let _ = Big_map.update(invoice.id, Some (invoice), storage);
+      ()
+    };
+    List.iter(_update, invoices);
+    storage
 };
 
 let remove = (id: id, storage: storage): storage => {

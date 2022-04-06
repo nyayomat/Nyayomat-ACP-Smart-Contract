@@ -59,8 +59,8 @@ let remove = (id: id, storage: storage): storage => {
 let main = ((action, storage): (parameter, storage)): return => {
   (([] : list(operation)),
     (switch (action) {
-     | Create(params) => create((params, storage))
-     | Update(params) => update((params, storage))
+     | Create(provider) => create((provider, storage))
+     | Update(provider) => update((provider, storage))
      | Remove(id) => remove((id, storage))
      }))
 };
