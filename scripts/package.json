@@ -7,14 +7,16 @@
   "private": true,
   "scripts": {
     "clean": "rm -rf build ;  mkdir build",
-    "build": "yarn clean; ts-node-dev src/build.ts",
-    "deploy": "ts-node-dev src/index.ts",
-    "activate": "ts-node-dev src/activate.ts"
+    "prebuild": "yarn clean",
+    "build": "ts-node src/build.ts",
+    "deploy:testnet": "yarn build;ts-node src/deploy.ts",
+    "deploy:mainnet": "yarn build;ts-node src/deploy.ts",
+    "activate:account": "ts-node src/activate.ts"
   },
   "dependencies": {
     "@taquito/signer": "^12.0.0",
     "@taquito/taquito": "^12.0.0",
-    "ts-node-dev": "^1.1.8",
+    "ts-node": "^10.7.0",
     "typescript": "^4.6.3"
   }
 }

@@ -1,23 +1,22 @@
 { parameter
-    (or (or (or (pair %createUser
-                   (pair (pair (pair (bool %active) (string %createdAt))
-                               (pair (string %deletedAt) (string %description)))
-                         (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
-                   (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))
-                (string %getUser))
-            (or (unit %getUsers) (string %removeUser)))
-        (pair %updateUser
+    (or (or (pair %create
+               (pair (pair (pair (bool %active) (string %createdAt))
+                           (pair (string %deletedAt) (string %description)))
+                     (pair (pair (string %id) (string %onChainId)) (pair (string %role) (string %roleId))))
+               (pair (string %shopId) (string %updatedAt)))
+            (string %remove))
+        (pair %update
            (pair (pair (pair (bool %active) (string %createdAt))
                        (pair (string %deletedAt) (string %description)))
-                 (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
-           (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))) ;
+                 (pair (pair (string %id) (string %onChainId)) (pair (string %role) (string %roleId))))
+           (pair (string %shopId) (string %updatedAt)))) ;
   storage
     (big_map
        string
        (pair (pair (pair (pair (bool %active) (string %createdAt))
                          (pair (string %deletedAt) (string %description)))
-                   (pair (pair (string %id) (string %name)) (pair (string %onChainId) (string %role))))
-             (pair (pair (string %roleId) (int %shopId)) (string %updatedAt)))) ;
+                   (pair (pair (string %id) (string %onChainId)) (pair (string %role) (string %roleId))))
+             (pair (string %shopId) (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -26,70 +25,32 @@
          UNPAIR ;
          IF_LEFT
            { IF_LEFT
-               { DIG 2 ;
-                 DROP ;
-                 IF_LEFT
-                   { PUSH address "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" ;
-                     SENDER ;
-                     COMPARE ;
-                     EQ ;
-                     IF { PUSH string "Only the s.c owner can create a new user record" ; FAILWITH }
-                        {} ;
-                     DUP ;
-                     CAR ;
-                     CDR ;
-                     CAR ;
-                     CAR ;
-                     SWAP ;
-                     SOME ;
-                     SWAP ;
-                     UPDATE ;
-                     NIL operation ;
-                     PAIR }
-                   { DUP ;
-                     DUG 2 ;
-                     GET ;
-                     IF_NONE
-                       { DROP ; PUSH string "user not found" ; FAILWITH }
-                       { EMPTY_BIG_MAP
-                           string
-                           (pair (pair (pair (pair bool string) (pair string string))
-                                       (pair (pair string string) (pair string string)))
-                                 (pair (pair string int) string)) ;
-                         SWAP ;
-                         DIG 2 ;
-                         SWAP ;
-                         SOME ;
-                         SWAP ;
-                         UPDATE } ;
-                     NIL operation ;
-                     PAIR } }
-               { IF_LEFT
-                   { DIG 2 ; DROP 2 ; NIL operation ; PAIR }
-                   { SENDER ;
-                     DIG 3 ;
-                     SWAP ;
-                     EXEC ;
-                     NOT ;
-                     IF { PUSH string "Only Admin can update user details" ; FAILWITH } {} ;
-                     SWAP ;
-                     DUP ;
-                     DUG 2 ;
-                     SWAP ;
-                     DUP ;
-                     DUG 2 ;
-                     GET ;
-                     IF_NONE
-                       { SWAP ; DROP ; PUSH string "user doesn't exist" ; FAILWITH }
-                       { DROP ; SWAP } ;
-                     SWAP ;
-                     NONE (pair (pair (pair (pair bool string) (pair string string))
-                                      (pair (pair string string) (pair string string)))
-                                (pair (pair string int) string)) ;
-                     SWAP ;
-                     UPDATE ;
-                     NIL operation ;
-                     PAIR } } }
+               { SENDER ;
+                 DIG 3 ;
+                 SWAP ;
+                 EXEC ;
+                 NOT ;
+                 IF { PUSH string "Only Admin can create user" ; FAILWITH } {} ;
+                 DUP ;
+                 CAR ;
+                 CDR ;
+                 CAR ;
+                 CAR ;
+                 SWAP ;
+                 SOME ;
+                 SWAP ;
+                 UPDATE }
+               { SENDER ;
+                 DIG 3 ;
+                 SWAP ;
+                 EXEC ;
+                 NOT ;
+                 IF { PUSH string "Only Admin can remove user" ; FAILWITH } {} ;
+                 NONE (pair (pair (pair (pair bool string) (pair string string))
+                                  (pair (pair string string) (pair string string)))
+                            (pair string string)) ;
+                 SWAP ;
+                 UPDATE } }
            { SENDER ;
              DIG 3 ;
              SWAP ;
@@ -104,8 +65,7 @@
              CDR ;
              CAR ;
              CAR ;
-             GET_AND_UPDATE ;
-             DROP ;
-             NIL operation ;
-             PAIR } } }
+             UPDATE } ;
+         NIL operation ;
+         PAIR } }
 

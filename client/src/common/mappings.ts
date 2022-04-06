@@ -64,19 +64,19 @@ export const mapInventoryToTezos = (
 export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
   return assets.map((asset: AssetDB) => {
     return {
-      id: asset.id,
-      providerId: asset.asset_provider_id,
+      id: asset.id?.toString() || "",
+      providerId: asset?.asset_provider_id?.toString() || "",
       name: asset.asset_name,
-      groupId: asset.group_id ? asset.group_id : "",
-      subGroupId: asset.sub_group_id ? asset.sub_group_id : "",
-      categoryId: asset.category_id ? asset.sub_group_id : "",
+      groupId: asset?.group_id?.toString() || "",
+      subGroupId: asset?.sub_group_id?.toString() || "",
+      categoryId: asset?.category_id?.toString() || "",
       image: asset.image ? asset.image : "",
       units: asset.units,
       unitCost: asset.unit_cost,
       holidayProvision: asset.holiday_provision,
       depositAmount: asset.deposit_amount,
       installment: asset.installment,
-      totalOutstandingAmount: asset.total_out_standing_amount,
+      totalOutStandingAmount: asset.total_out_standing_amount,
       paymentFreq: asset.payment_frequency,
       paymentMethod: asset.payment_method,
       status: asset.status,
@@ -136,21 +136,21 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
 export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
   return users.map((user: UserDB) => {
     return {
-      id: user.id,
-      name: user.name,
-      shopId: user.shop_id,
+      id: user.id.toString(),
+      onChainId: user?.onChainId || "",
+      shopId: user?.shop_id?.toString() || "",
       role:
         user.role_id == "1"
           ? "SuperAdmin"
           : user.role_id == "2"
           ? "Admin"
           : "Merchant",
-      description: user.description,
-      roleId: user.role_id,
-      active: user.active,
-      createdAt: user.created_at,
-      updatedAt: user.updated_at,
-      deletedAt: user.deleted_at,
+      description: user?.description || "",
+      roleId: user?.role_id.toString() || "",
+      active: user.active == 1 ? true : false,
+      createdAt: new Date(user.created_at).getTime().toString(),
+      updatedAt: new Date(user.updated_at).getTime().toString(),
+      deletedAt: new Date(user.deleted_at).getTime().toString(),
     };
   });
 };

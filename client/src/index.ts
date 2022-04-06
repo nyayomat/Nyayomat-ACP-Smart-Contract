@@ -1,4 +1,6 @@
+import { readFileSync } from "fs";
 import { schedule } from "node-cron";
+import { resolve } from "path";
 import {
   mapInventoryToTezos,
   mapInvoiceToTezos,
@@ -9,61 +11,80 @@ import {
   mapProviderToTezos,
 } from "./common";
 import { databaseWrapper, platformWrapper } from "./core";
-import { InventoryDB } from "./types";
 
 const Main = async () => {
   console.log(`---`.repeat(10));
   console.log(`Starting...`);
   console.log(`---`.repeat(10));
 
-  console.log(`- - -`.repeat(3));
+  /// STEP 1: Fetch data from database
   console.info(`Fetching providers...`);
-  // const inventoriesDB = await databaseWrapper.fetchTable('inventories');
-  // console.log(mapInventoryToTezos(inventoriesDB));
-  // const invoicesDB = await databaseWrapper.fetchTable('invoices');
-  // console.log(mapInvoiceToTezos(invoicesDB));
-
-  // const productsDB = await databaseWrapper.fetchTable('assets');
-  // console.log(mapProductToTezos(productsDB));
+  const inventoriesDB = await databaseWrapper.fetchTable("inventories");
+  const invoicesDB = await databaseWrapper.fetchTable("invoices");
   const assetsDB = await databaseWrapper.fetchTable("tbl_acp_assets");
-  console.log(mapAssetToTezos(assetsDB));
-
-  // const usersDB = await databaseWrapper.fetchTable('users');
-  // console.log(mapUserToTezos(usersDB));
-
-  // const providerTxDB = await databaseWrapper.fetchTable(
-  //   'tbl_acp_asset_provider_transaction'
-  // );
-  // console.log(mapTransactionToTezos(providerTxDB));
-  // const merchantTxDB = await databaseWrapper.fetchTable(
-  //   "tbl_acp_merchant_transaction"
-  // );
-  // console.log(mapTransactionToTezos(merchantTxDB));
-  // const productsDB = await databaseWrapper.fetchTable('products');
-
-  // console.log(mapProductToTezos(productsDB));
+  const usersDB = await databaseWrapper.fetchTable("users");
+  const providerTxDB = await databaseWrapper.fetchTable(
+    "tbl_acp_asset_provider_transaction"
+  );
+  const merchantTxDB = await databaseWrapper.fetchTable(
+    "tbl_acp_merchant_transaction"
+  );
+  const productsDB = await databaseWrapper.fetchTable("products");
 
   const providersDB = await databaseWrapper.fetchTable(
     "tbl_acp_asset_providers"
   );
 
+  /// STEP 2: Map data to Tezos format
+  const inventories = mapInventoryToTezos(inventoriesDB);
+  const products = mapProductToTezos(productsDB);
+  const invoices = mapInvoiceToTezos(invoicesDB);
+  const assets = mapAssetToTezos(assetsDB);
   const providers = mapProviderToTezos(providersDB);
+  const users = mapUserToTezos(usersDB);
+  const providerTxs = mapTransactionToTezos(providerTxDB);
+  const merchantsTxs = mapTransactionToTezos(merchantTxDB);
 
-  // console.log({
-  //   providersDB,
-  // });
-  // const assets = mapAssetToTezos(assetsDB);
-  // console.log({
-  //   assets,KT1FAKGdez6NZM9XvgY7xECMU1v8t6kvHShH
-  // });
-  console.log(`- - -`.repeat(3));
+  /// STEP 3: Add new records to onchain storage
 
-  console.log(providers[providers.length - 2]);
-  await platformWrapper.create(
-    providers[providers.length - 2],
-    "KT1FAKGdez6NZM9XvgY7xECMU1v8t6kvHShH",
-    "CreateProvider"
+  const newRecords = {
+    // inventory: inventories.slice(0, 2),
+    // product: products.slice(0, 2),
+    // invoice: invoices.slice(0, 2),
+    // asset: assets.slice(0, 2),
+    provider: providers.slice(0, 2), // DONE
+    // transaction: [...providerTxs, ...merchantsTxs].slice(0, 2), // DONE
+    // user: users.slice(0, 5), // DONE
+  };
+
+  /// Get Contract addresses from contracts.json
+  const contracts = JSON.parse(
+    readFileSync(
+      resolve(__dirname, "../../scripts/utils/contracts.json"),
+      "utf8"
+    )
   );
+  Object.entries(newRecords).forEach(async ([contractName, records]) => {
+    /// SKIP if no records to add
+    if (!records.length) {
+      console.info(`No new records to add for ${contractName}`);
+      return;
+    }
+    console.info(`Adding ${records.length} new records to ${contractName}...`);
+    /// Get smart contract address from contracts.json
+    const contractAddress = contracts[contractName];
+    if (!contractAddress) {
+      console.error(`Contract address not found for ${contractName}`);
+      return;
+    }
+
+    /// @dev for now we are adding each record individually
+    /// @dev TODO: Add batch insert
+    for (const record of records) {
+      await platformWrapper.create(record, contractAddress);
+    }
+  });
+
   console.info(`Scheduling...`);
   /// @dev Run task every day at midnight
   schedule(

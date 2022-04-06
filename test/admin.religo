@@ -1,4 +1,4 @@
-#include "../src/core/admin.religo"
+#include "../contracts/core/admin.religo"
 
 let assert_string_failure = ((res,expected) : (test_exec_result, string)) : unit => {
   let expected = Test.eval (expected) ;

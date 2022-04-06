@@ -7,7 +7,7 @@ type id = string;
 type user = {
   id: string,
   onChainId: string,
-  shopId: int,
+  shopId: id,
   role: string,
   description: string,
   roleId: string,

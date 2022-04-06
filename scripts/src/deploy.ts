@@ -2,10 +2,8 @@ import { importKey } from "@taquito/signer";
 import { TezosToolkit } from "@taquito/taquito";
 import { config } from "../config";
 import Account from "./../ithacanet.json";
-import { readFileSync, writeFileSync } from "fs";
-import path from "path";
-
-import Contracts from "../../scripts/utils/contracts.json";
+import { readFileSync, writeFileSync, readdirSync } from "fs";
+import { resolve, join } from "path";
 
 class Deployer {
   //declaring private tezos modifier of TezosToolkit type
@@ -30,7 +28,7 @@ class Deployer {
 
     try {
       let code = readFileSync(
-        path.resolve(__dirname, `../build/${contract_name}.tz`),
+        resolve(__dirname, `../build/${contract_name}.tz`),
         "utf8"
       );
       /// @dev Replace all hardcoded owner addresses with the actual owner addresses
@@ -40,30 +38,30 @@ class Deployer {
         code,
         //storage state
         init: readFileSync(
-          path.resolve(__dirname, `../build/${contract_name}_storage.tz`),
+          resolve(__dirname, `../build/${contract_name}_storage.tz`),
           "utf8"
         ),
       });
 
-      //beginning to deploy
-      console.log("Awaiting confirmation...");
-      const contract = await op.contract();
+      const contract = await op.contract(1);
       //deployment report: amount of used gas, storage state
       console.log("Gas Used", op.consumedGas);
+      console.info(`---`);
       console.log("Contract Address", contract.address);
-      // console.log("Storage", await contract.storage());
       //operation hash one can use to find the contract in the explorer
-      console.log("Operation hash:", op.hash);
+      console.info(`---`);
       console.log(`Operation injected: https://ithacanet.tzkt.io/${op.hash}`);
 
       /// @dev save address to contracts.json
       let contracts = {
-        ...Contracts,
+        ...JSON.parse(
+          readFileSync(join(__dirname, "../utils/contracts.json"), "utf8")
+        ),
         [contract_name]: contract.address,
       };
 
       writeFileSync(
-        path.join(__dirname, "../utils/contracts.json"),
+        join(__dirname, "../utils/contracts.json"),
         JSON.stringify(contracts, null, 2)
       );
     } catch (ex) {
@@ -79,10 +77,45 @@ class Deployer {
     await this.tezos.rpc
       .getBalance(address)
       .then((balance) =>
-        console.log(`Balance:`, balance.shiftedBy(-6).toString())
+        console.log(`\nBalance:`, balance.shiftedBy(-6).toString())
       )
       .catch((e) => console.log("Address not found"));
   };
 }
 
-export const deployerWrapper = new Deployer();
+const Main = async () => {
+  console.info(`- - - -`.repeat(10));
+  console.info(`Starting...`);
+  console.info(`- - - -`.repeat(10));
+
+  const deployerWrapper = new Deployer();
+
+  await deployerWrapper.getBalance();
+  console.info(`- - - -`.repeat(10));
+  let contracts = readdirSync(resolve(__dirname, `../build`), "utf8");
+
+  // filter out non-contract files
+  contracts = contracts.filter((contract) => !contract.endsWith("_storage.tz"));
+
+  /// Exclude contracts that are already deployed ?
+  // contracts = contracts.filter((contract) => !Contracts[contract.split(".")[0]]);
+
+  /// Filter out some contracts
+  contracts = contracts.filter(
+    (contract) => !["invoice.tz", "inventory.tz", "order.tz"].includes(contract)
+  );
+  /// Deploy specific contracts
+  // contracts = contracts.filter((contract) => !["user.tz"].includes(contract));
+
+  const count = contracts.length;
+
+  for (let i = 0; i < contracts.length; i++) {
+    const contract = contracts[i];
+    const contract_name = contract.split(".")[0];
+    console.info(`${i + 1}/${count}.Deploying ${contract_name} contract...`);
+    await deployerWrapper.deploy(contract_name);
+    console.info(`- - - -`.repeat(3));
+  }
+};
+
+Main();

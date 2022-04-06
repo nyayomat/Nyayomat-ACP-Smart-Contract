@@ -1,0 +1,39 @@
+{
+  "name": "nyayomat",
+  "version": "1.0.0",
+  "description": "Nyayomat Platform",
+  "main": "index.js",
+  "private": true,
+  "author": {
+    "name": "Ngeni IO",
+    "email": "info@ngeni.io"
+  },
+  "contributors": [
+    {
+      "name": "George G",
+      "email": "george@ngeni.io"
+    },
+    {
+      "name": "Dennoh Peter",
+      "email": "dennoh@ngeni.io"
+    }
+  ],
+  "license": "Apache-2.0",
+  "scripts": {
+    "start": "yarn workspace client start",
+    "build": "yarn workspace scripts build",
+    "deploy:testnet": "yarn workspace scripts deploy:testnet",
+    "deploy:mainnet": "yarn workspace scripts deploy:mainnet",
+    "activate:account": "yarn workspace scripts activate:account"
+  },
+  "workspaces": {
+    "packages": [
+      "client",
+      "scripts"
+    ],
+    "nohoist": [
+      "client/*",
+      "scripts/*"
+    ]
+  }
+}

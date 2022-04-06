@@ -13,5 +13,4 @@
          updatedAt: "1645345483000",
          orderId: "12",
          merchantId: "3",
-         assetProviderId: ""
-       })]);
+         assetProviderId: ""})]);

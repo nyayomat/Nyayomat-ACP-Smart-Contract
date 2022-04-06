@@ -34,7 +34,7 @@ class Platform {
    * @param contract  Contract address
    */
 
-  create = async (data: any, contract: string, action: string) => {
+  create = async (data: Record<string, any>, contract: string) => {
     await this.tezos.contract
       .at(contract) //call the contract to get its entry points
       .then(async (contract) => {
@@ -42,8 +42,8 @@ class Platform {
           `List all contract methods: ${Object.keys(contract.methods)}\n`
         );
         console.log(
-          `Inspect the signature of the 'createProvider' contract method: ${JSON.stringify(
-            contract.methodsObject.createProvider().getSignature(),
+          `Inspect the signature of the 'create' contract method: ${JSON.stringify(
+            contract.methodsObject.create().getSignature(),
             null,
             2
           )}`
@@ -51,15 +51,16 @@ class Platform {
 
         // const storage: any = await contract.storage();
 
-        // console.log(storage);
+        console.log(data);
 
         return contract.methodsObject
-          .createProvider(data) //call the 'createProvider' entry point
+          .create(data) //call the 'create' entry point
           .send();
       })
-      .then((op) => {
+      .then(async (op) => {
         console.log(`Awaiting for ${op.hash} to be confirmed...`);
-        return op.confirmation().then(() => op.hash);
+        await op.confirmation();
+        return op.hash;
       })
       .then((hash) =>
         console.log(`Operation injected: https://ithaca.tzstats.com/${hash}`)

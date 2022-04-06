@@ -5,8 +5,7 @@ let storage =
        {
          id: "0",
          onChainId: "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU",
-         name: "name",
-         shopId: 0,
+         shopId: "0",
          role: "init_owner",
          description: "description",
          roleId: "0",
