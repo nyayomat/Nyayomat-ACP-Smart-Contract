@@ -22,20 +22,31 @@ type storage = big_map(id, tx);
 
 type return = (list(operation), storage);
 
-type parameter = Create(tx) | Update(tx) | Remove(id);
+type parameter = Create(list(tx)) | Update(list(tx)) | Remove(id);
 
-let create = ((tx, storage): (tx, storage)): storage => {
+let create = ((txs, storage): (list(tx), storage)): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
   };
-  Big_map.add(tx.id, tx, storage)
+   let _add = (tx: tx): unit => {
+      let _ = Big_map.add(tx.id, tx, storage);
+    ()
+  };
+  List.iter(_add, txs);
+  storage
 };
 
-let update = (tx: tx, storage: storage): storage => {
+let update = (txs: list(tx), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update tx details")
   };
-  Big_map.update(tx.id, Some (tx), storage)
+    let _update = (tx: tx): unit => {
+      let _ = Big_map.update(tx.id, Some (tx), storage);
+      ()
+    };
+
+  List.iter(_update, txs);
+  storage
 };
 
 let remove = (id: id, storage: storage): storage => {
