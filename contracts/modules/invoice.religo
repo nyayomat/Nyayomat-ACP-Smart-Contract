@@ -44,7 +44,7 @@ let update = (invoices: list(invoice), storage: storage): storage => {
       let _ = Big_map.update(invoice.id, Some (invoice), storage);
       ()
     };
-      List.iter(_update, invoices);
+    List.iter(_update, invoices);
     storage
 };
 
