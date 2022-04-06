@@ -42,20 +42,30 @@ type storage = big_map(id, inventory);
 
 type return = (list(operation), storage);
 
-let create = (inventory: inventory, storage: storage)
+let create = (inventories: list(inventory), storage: storage)
 : storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new inventory")
   };
-  Big_map.add(inventory.id, inventory, storage)
+    let _add = (inventory: inventory): unit => {
+        let _ = Big_map.add(inventory.id, inventory, storage);
+        ()
+    };
+    List.iter(_add, inventories);
+    storage
 };
 
-let update = (inventory: inventory, storage: storage)
+let update = (inventories: list(inventory), storage: storage)
 : storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update inventory details")
   };
-  Big_map.update(inventory.id, Some (inventory), storage)
+    let _update = (inventory: inventory): unit => {
+        let _ = Big_map.update(inventory.id, Some (inventory), storage);
+        ()
+    };
+    List.iter(_update, inventories);
+    storage
 };
 
 let remove = (id: id, storage: storage): storage => {
@@ -66,8 +76,8 @@ let remove = (id: id, storage: storage): storage => {
 };
 
 type parameter = 
-  Create(inventory)
-| Update(inventory)
+  Create(list(inventory))
+| Update(list(inventory))
 | Remove(id);
 
 let main = ((action, storage): (parameter, storage))
