@@ -21,7 +21,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "yarn workspace client start",
-    "build": "yarn workspace scripts build",
+    "compile": "yarn workspace scripts compile",
     "deploy:testnet": "yarn workspace scripts deploy:testnet",
     "deploy:mainnet": "yarn workspace scripts deploy:mainnet",
     "activate:account": "yarn workspace scripts activate:account"

@@ -8,7 +8,7 @@
   "scripts": {
     "clean": "rm -rf build ;  mkdir build",
     "prebuild": "yarn clean",
-    "build": "ts-node src/build.ts",
+    "compile": "ts-node src/build.ts",
     "deploy:testnet": "yarn build;ts-node src/deploy.ts",
     "deploy:mainnet": "yarn build;ts-node src/deploy.ts",
     "activate:account": "ts-node src/activate.ts"

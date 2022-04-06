@@ -17,22 +17,36 @@ type storage = big_map(id, provider);
 type return = (list(operation), storage);
 
 type parameter = 
-  Create(provider)
-| Update(provider)
+  Create(list(provider))
+| Update(list(provider))
 | Remove(id);
 
-let create = (provider: provider, storage: storage): storage => {
+let create = (providers: list(provider), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new provider")
   };
-  Big_map.add(provider.id, provider, storage)
+
+  let _add = (provider: provider): unit => {
+    let _ = Big_map.add(provider.id, provider, storage);
+    ()
+  };
+  List.iter(_add, providers);
+  storage
 };
 
-let update = (provider: provider, storage: storage): storage => {
+
+let update = (providers: list(provider), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update provider details")
   };
-  Big_map.update(provider.id, Some (provider), storage)
+    let _update = (provider: provider): unit => {
+      let _ = Big_map.update(provider.id, Some (provider), storage);
+      ()
+    };
+
+   List.iter(_update, providers);
+  storage
+  
 };
 
 let remove = (id: id, storage: storage): storage => {
