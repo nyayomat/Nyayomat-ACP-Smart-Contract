@@ -3,16 +3,16 @@
                (pair (pair (pair (pair (int %amount) (string %assetId))
                                  (pair (string %assetProviderId) (string %createdAt)))
                            (pair (pair (string %dueDate) (string %id))
-                                 (pair (string %initiator) (string %merchantId))))
-                     (pair (pair (string %orderId) (string %paidOn))
+                                 (pair (string %merchantId) (string %orderId))))
+                     (pair (pair (string %owner) (string %paidOn))
                            (pair (string %txType) (string %updatedAt)))))
             (string %remove))
         (list %update
            (pair (pair (pair (pair (int %amount) (string %assetId))
                              (pair (string %assetProviderId) (string %createdAt)))
                        (pair (pair (string %dueDate) (string %id))
-                             (pair (string %initiator) (string %merchantId))))
-                 (pair (pair (string %orderId) (string %paidOn))
+                             (pair (string %merchantId) (string %orderId))))
+                 (pair (pair (string %owner) (string %paidOn))
                        (pair (string %txType) (string %updatedAt)))))) ;
   storage
     (big_map
@@ -20,8 +20,8 @@
        (pair (pair (pair (pair (int %amount) (string %assetId))
                          (pair (string %assetProviderId) (string %createdAt)))
                    (pair (pair (string %dueDate) (string %id))
-                         (pair (string %initiator) (string %merchantId))))
-             (pair (pair (string %orderId) (string %paidOn))
+                         (pair (string %merchantId) (string %orderId))))
+             (pair (pair (string %owner) (string %paidOn))
                    (pair (string %txType) (string %updatedAt))))) ;
   code { LAMBDA
            address

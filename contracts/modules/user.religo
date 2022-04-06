@@ -20,14 +20,17 @@ type storage = big_map(string, user);
 
 type return = (list(operation), storage);
 
-type parameter = Create(list(user)) | Update(list(user)) | Remove(id);
+type parameter = 
+  Create(list(user))
+| Update(list(user))
+| Remove(id);
 
-let create = (users: list(user), storage:storage): storage => {
+let create = (users: list(user), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only Admin can create user")
   };
-   let _add = (user: user): unit => {
-      let _ = Big_map.add(user.id, user, storage);
+  let _add = (user: user): unit => {
+    let _ = Big_map.add(user.id, user, storage);
     ()
   };
   List.iter(_add, users);
@@ -45,11 +48,10 @@ let update = (users: list(user), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only Admin can update user details")
   };
-      let _update = (user: user): unit => {
-      let _  = Big_map.update(user.id, Some (user), storage);
-      ()
-    };
-
+  let _update = (user: user): unit => {
+    let _ = Big_map.update(user.id, Some (user), storage);
+    ()
+  };
   List.iter(_update, users);
   storage
 };
