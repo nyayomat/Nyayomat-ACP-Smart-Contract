@@ -38,7 +38,8 @@ type parameter =
 | Update(product)
 | Remove(id);
 
-let create = (products: product, storage: storage): storage => {
+let create = (products: list(product), storage: storage)
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new product")
   };
@@ -50,7 +51,8 @@ let create = (products: product, storage: storage): storage => {
   storage
 };
 
-let update = (products: product, storage: storage): storage => {
+let update = (products: list(product), storage: storage)
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update product details")
   };

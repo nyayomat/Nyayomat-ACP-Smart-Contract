@@ -32,7 +32,7 @@ type storage = big_map(id, order);
 
 type return = (list(operation), storage);
 
-let createOrder = ((order, storage): (order, storage))
+let create = ((orders, storage): (list(order), storage))
 : return => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
@@ -45,7 +45,7 @@ let createOrder = ((order, storage): (order, storage))
   storage
 };
 
-let updateOrder = (orders: order, storage: storage): return => {
+let update = (orders: list(order), storage: storage): return => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update order details")
   };
@@ -65,15 +65,15 @@ let removeOrder = (id: id, storage: storage): return => {
 };
 
 type parameter = 
-  CreateOrder(order)
-| UpdateOrder(order)
-| RemoveOrder(id);
+  Create(list(order))
+| Update(list(order))
+| Remove(id);
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
   (switch (action) {
-   | CreateOrder(order) => createOrder((order, storage))
-   | UpdateOrder(order) => updateOrder((order, storage))
-   | RemoveOrder(id) => removeOrder((id, storage))
+   | Create(order) => create((order, storage))
+   | Update(order) => update((order, storage))
+   | Remove(id) => removeOrder((id, storage))
    })
 };
