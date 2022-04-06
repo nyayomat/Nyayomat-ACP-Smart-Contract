@@ -26,7 +26,8 @@ type product = {
   active: bool,
   createdAt: string,
   updatedAt: string,
-  deletedAt: string};
+  deletedAt: string
+};
 
 type storage = big_map(id, product);
 
@@ -37,18 +38,29 @@ type parameter =
 | Update(product)
 | Remove(id);
 
-let create = (product: product, storage: storage): storage => {
+let create = (products: product, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new product")
   };
-  Big_map.add(product.id, product, storage)
+  let _add = (product: product): unit => {
+    let _ = Big_map.add(product.id, product, storage);
+    ()
+  };
+  List.iter(_add, products);
+  storage
 };
 
-let update = (product: product, storage: storage): storage => {
+let update = (products: product, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update product details")
   };
-  Big_map.update(product.id, Some (product), storage)
+  let _update = (product: product): unit => {
+    let _ = 
+      Big_map.update(product.id, Some (product), storage);
+    ()
+  };
+  List.iter(_update, products);
+  storage
 };
 
 let remove = (id: id, storage: storage): storage => {
