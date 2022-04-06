@@ -1,15 +1,15 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (pair (string %createdAt) (string %deletedAt))
-                           (pair (string %id) (string %providerId)))
-                     (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
-               (string %userId))
+    (or (or (list %create
+               (pair (pair (pair (pair (string %createdAt) (string %deletedAt))
+                                 (pair (string %id) (string %providerId)))
+                           (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
+                     (string %userId)))
             (string %remove))
-        (pair %update
-           (pair (pair (pair (string %createdAt) (string %deletedAt))
-                       (pair (string %id) (string %providerId)))
-                 (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
-           (string %userId))) ;
+        (list %update
+           (pair (pair (pair (pair (string %createdAt) (string %deletedAt))
+                             (pair (string %id) (string %providerId)))
+                       (pair (pair (string %shopId) (int %tax)) (pair (int %total) (string %updatedAt))))
+                 (string %userId)))) ;
   storage
     (big_map
        string
@@ -31,15 +31,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new invoice" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -57,15 +49,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update invoice details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CAR ;
-             CDR ;
-             CAR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

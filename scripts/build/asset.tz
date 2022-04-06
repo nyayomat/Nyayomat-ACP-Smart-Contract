@@ -1,27 +1,27 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (pair (pair (string %categoryId) (string %createdAt))
-                                 (pair (string %deletedAt) (int %depositAmount)))
-                           (pair (pair (string %groupId) (int %holidayProvision))
-                                 (pair (string %id) (string %image))))
-                     (pair (pair (pair (int %installment) (string %name))
-                                 (pair (string %owner) (string %paymentFreq)))
-                           (pair (pair (string %paymentMethod) (string %providerId))
-                                 (pair (string %status) (string %subGroupId)))))
-               (pair (pair (int %totalOutStandingAmount) (int %unitCost))
-                     (pair (string %units) (string %updatedAt))))
+    (or (or (list %create
+               (pair (pair (pair (pair (pair (string %categoryId) (string %createdAt))
+                                       (pair (string %deletedAt) (int %depositAmount)))
+                                 (pair (pair (string %groupId) (int %holidayProvision))
+                                       (pair (string %id) (string %image))))
+                           (pair (pair (pair (int %installment) (string %name))
+                                       (pair (string %owner) (string %paymentFreq)))
+                                 (pair (pair (string %paymentMethod) (string %providerId))
+                                       (pair (string %status) (string %subGroupId)))))
+                     (pair (pair (int %totalOutStandingAmount) (int %unitCost))
+                           (pair (string %units) (string %updatedAt)))))
             (string %remove))
-        (pair %update
-           (pair (pair (pair (pair (string %categoryId) (string %createdAt))
-                             (pair (string %deletedAt) (int %depositAmount)))
-                       (pair (pair (string %groupId) (int %holidayProvision))
-                             (pair (string %id) (string %image))))
-                 (pair (pair (pair (int %installment) (string %name))
-                             (pair (string %owner) (string %paymentFreq)))
-                       (pair (pair (string %paymentMethod) (string %providerId))
-                             (pair (string %status) (string %subGroupId)))))
-           (pair (pair (int %totalOutStandingAmount) (int %unitCost))
-                 (pair (string %units) (string %updatedAt))))) ;
+        (list %update
+           (pair (pair (pair (pair (pair (string %categoryId) (string %createdAt))
+                                   (pair (string %deletedAt) (int %depositAmount)))
+                             (pair (pair (string %groupId) (int %holidayProvision))
+                                   (pair (string %id) (string %image))))
+                       (pair (pair (pair (int %installment) (string %name))
+                                   (pair (string %owner) (string %paymentFreq)))
+                             (pair (pair (string %paymentMethod) (string %providerId))
+                                   (pair (string %status) (string %subGroupId)))))
+                 (pair (pair (int %totalOutStandingAmount) (int %unitCost))
+                       (pair (string %units) (string %updatedAt)))))) ;
   storage
     (big_map
        string
@@ -49,16 +49,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new asset" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CAR ;
-                 CDR ;
-                 CDR ;
-                 CAR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -78,16 +69,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update asset details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CAR ;
-             CDR ;
-             CDR ;
-             CAR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

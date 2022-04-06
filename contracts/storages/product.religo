@@ -23,5 +23,4 @@ let storage =
          active: true,
          createdAt: "createdAt",
          updatedAt: "updatedAt",
-         deletedAt: "deletedAt"
-       })]);
+         deletedAt: "deletedAt"})]);

@@ -1,13 +1,13 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (string %createdAt) (string %deletedAt))
-                     (pair (string %id) (string %operatingDays)))
-               (pair (string %status) (string %updatedAt)))
+    (or (or (list %create
+               (pair (pair (pair (string %createdAt) (string %deletedAt))
+                           (pair (string %id) (string %operatingDays)))
+                     (pair (string %status) (string %updatedAt))))
             (string %remove))
-        (pair %update
-           (pair (pair (string %createdAt) (string %deletedAt))
-                 (pair (string %id) (string %operatingDays)))
-           (pair (string %status) (string %updatedAt)))) ;
+        (list %update
+           (pair (pair (pair (string %createdAt) (string %deletedAt))
+                       (pair (string %id) (string %operatingDays)))
+                 (pair (string %status) (string %updatedAt))))) ;
   storage
     (big_map
        string
@@ -28,14 +28,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new provider" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -51,14 +44,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update provider details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CDR ;
-             CAR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

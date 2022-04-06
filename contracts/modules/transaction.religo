@@ -13,7 +13,7 @@ type tx = {
   dueDate: string,
   paidOn: string,
   txType: string,
-  initiator: string,
+  owner: string,
   amount: int,
   createdAt: string,
   updatedAt: string};
@@ -22,14 +22,17 @@ type storage = big_map(id, tx);
 
 type return = (list(operation), storage);
 
-type parameter = Create(list(tx)) | Update(list(tx)) | Remove(id);
+type parameter = 
+  Create(list(tx))
+| Update(list(tx))
+| Remove(id);
 
 let create = ((txs, storage): (list(tx), storage)): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
   };
-   let _add = (tx: tx): unit => {
-      let _ = Big_map.add(tx.id, tx, storage);
+  let _add = (tx: tx): unit => {
+    let _ = Big_map.add(tx.id, tx, storage);
     ()
   };
   List.iter(_add, txs);
@@ -40,11 +43,10 @@ let update = (txs: list(tx), storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update tx details")
   };
-    let _update = (tx: tx): unit => {
-      let _ = Big_map.update(tx.id, Some (tx), storage);
-      ()
-    };
-
+  let _update = (tx: tx): unit => {
+    let _ = Big_map.update(tx.id, Some (tx), storage);
+    ()
+  };
   List.iter(_update, txs);
   storage
 };

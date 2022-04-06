@@ -21,5 +21,4 @@ let storage =
          owner: "owner",
          createdAt: "createdAt",
          updatedAt: "updatedAt",
-         deletedAt: "deletedAt"
-       })]);
+         deletedAt: "deletedAt"})]);

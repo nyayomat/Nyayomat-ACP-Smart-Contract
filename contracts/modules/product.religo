@@ -26,8 +26,7 @@ type product = {
   active: bool,
   createdAt: string,
   updatedAt: string,
-  deletedAt: string
-};
+  deletedAt: string};
 
 type storage = big_map(id, product);
 

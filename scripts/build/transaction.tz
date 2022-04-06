@@ -1,27 +1,27 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (pair (int %amount) (string %assetId))
-                           (pair (string %assetProviderId) (string %createdAt)))
-                     (pair (pair (string %dueDate) (string %id))
-                           (pair (string %initiator) (string %merchantId))))
-               (pair (pair (string %orderId) (string %paidOn))
-                     (pair (string %txType) (string %updatedAt))))
+    (or (or (list %create
+               (pair (pair (pair (pair (int %amount) (string %assetId))
+                                 (pair (string %assetProviderId) (string %createdAt)))
+                           (pair (pair (string %dueDate) (string %id))
+                                 (pair (string %merchantId) (string %orderId))))
+                     (pair (pair (string %owner) (string %paidOn))
+                           (pair (string %txType) (string %updatedAt)))))
             (string %remove))
-        (pair %update
-           (pair (pair (pair (int %amount) (string %assetId))
-                       (pair (string %assetProviderId) (string %createdAt)))
-                 (pair (pair (string %dueDate) (string %id))
-                       (pair (string %initiator) (string %merchantId))))
-           (pair (pair (string %orderId) (string %paidOn))
-                 (pair (string %txType) (string %updatedAt))))) ;
+        (list %update
+           (pair (pair (pair (pair (int %amount) (string %assetId))
+                             (pair (string %assetProviderId) (string %createdAt)))
+                       (pair (pair (string %dueDate) (string %id))
+                             (pair (string %merchantId) (string %orderId))))
+                 (pair (pair (string %owner) (string %paidOn))
+                       (pair (string %txType) (string %updatedAt)))))) ;
   storage
     (big_map
        string
        (pair (pair (pair (pair (int %amount) (string %assetId))
                          (pair (string %assetProviderId) (string %createdAt)))
                    (pair (pair (string %dueDate) (string %id))
-                         (pair (string %initiator) (string %merchantId))))
-             (pair (pair (string %orderId) (string %paidOn))
+                         (pair (string %merchantId) (string %orderId))))
+             (pair (pair (string %owner) (string %paidOn))
                    (pair (string %txType) (string %updatedAt))))) ;
   code { LAMBDA
            address
@@ -37,15 +37,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new asset" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 CDR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -63,15 +55,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update tx details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CDR ;
-             CAR ;
-             CDR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

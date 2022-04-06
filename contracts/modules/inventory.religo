@@ -47,12 +47,12 @@ let create = (inventories: list(inventory), storage: storage)
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new inventory")
   };
-    let _add = (inventory: inventory): unit => {
-        let _ = Big_map.add(inventory.id, inventory, storage);
-        ()
-    };
-    List.iter(_add, inventories);
-    storage
+  let _add = (inventory: inventory): unit => {
+    let _ = Big_map.add(inventory.id, inventory, storage);
+    ()
+  };
+  List.iter(_add, inventories);
+  storage
 };
 
 let update = (inventories: list(inventory), storage: storage)
@@ -60,12 +60,14 @@ let update = (inventories: list(inventory), storage: storage)
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update inventory details")
   };
-    let _update = (inventory: inventory): unit => {
-        let _ = Big_map.update(inventory.id, Some (inventory), storage);
-        ()
-    };
-    List.iter(_update, inventories);
-    storage
+  let _update = (inventory: inventory): unit => {
+    let _ = 
+
+      Big_map.update(inventory.id, Some (inventory), storage);
+    ()
+  };
+  List.iter(_update, inventories);
+  storage
 };
 
 let remove = (id: id, storage: storage): storage => {

@@ -16,5 +16,4 @@ let storage =
          paymentMethod: "paymentMethod",
          status: "status",
          createdAt: "createdAt",
-         updatedAt: "updatedAt"
-       })]);
+         updatedAt: "updatedAt"})]);
