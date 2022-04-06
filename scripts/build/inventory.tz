@@ -1,39 +1,39 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (pair (pair (bool %active) (string %availableFrom))
-                                 (pair (string %condition) (string %conditionNote)))
-                           (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
-                                 (pair (int %damagedQauntity) (string %deletedAt))))
-                     (pair (pair (pair (string %description) (bool %freeShipping))
-                                 (pair (string %id) (string %keyFeatures)))
-                           (pair (pair (string %linkedItems) (string %metaDescription))
-                                 (pair (string %metaTitle) (int %minOrderQuantity)))))
-               (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
-                                 (pair (string %offerStartDate) (string %productId)))
-                           (pair (pair (int %purchasePrice) (int %salePrice))
-                                 (pair (int %shippingWeight) (string %shopId))))
-                     (pair (pair (pair (string %sku) (string %slug))
-                                 (pair (int %stockQuantity) (string %stuffPick)))
-                           (pair (pair (string %title) (string %updatedAt))
-                                 (pair (string %userId) (string %warehouseId))))))
+    (or (or (list %create
+               (pair (pair (pair (pair (pair (bool %active) (string %availableFrom))
+                                       (pair (string %condition) (string %conditionNote)))
+                                 (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
+                                       (pair (int %damagedQauntity) (string %deletedAt))))
+                           (pair (pair (pair (string %description) (bool %freeShipping))
+                                       (pair (string %id) (string %keyFeatures)))
+                                 (pair (pair (string %linkedItems) (string %metaDescription))
+                                       (pair (string %metaTitle) (int %minOrderQuantity)))))
+                     (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
+                                       (pair (string %offerStartDate) (string %productId)))
+                                 (pair (pair (int %purchasePrice) (int %salePrice))
+                                       (pair (int %shippingWeight) (string %shopId))))
+                           (pair (pair (pair (string %sku) (string %slug))
+                                       (pair (int %stockQuantity) (string %stuffPick)))
+                                 (pair (pair (string %title) (string %updatedAt))
+                                       (pair (string %userId) (string %warehouseId)))))))
             (string %remove))
-        (pair %update
-           (pair (pair (pair (pair (bool %active) (string %availableFrom))
-                             (pair (string %condition) (string %conditionNote)))
-                       (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
-                             (pair (int %damagedQauntity) (string %deletedAt))))
-                 (pair (pair (pair (string %description) (bool %freeShipping))
-                             (pair (string %id) (string %keyFeatures)))
-                       (pair (pair (string %linkedItems) (string %metaDescription))
-                             (pair (string %metaTitle) (int %minOrderQuantity)))))
-           (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
-                             (pair (string %offerStartDate) (string %productId)))
-                       (pair (pair (int %purchasePrice) (int %salePrice))
-                             (pair (int %shippingWeight) (string %shopId))))
-                 (pair (pair (pair (string %sku) (string %slug))
-                             (pair (int %stockQuantity) (string %stuffPick)))
-                       (pair (pair (string %title) (string %updatedAt))
-                             (pair (string %userId) (string %warehouseId))))))) ;
+        (list %update
+           (pair (pair (pair (pair (pair (bool %active) (string %availableFrom))
+                                   (pair (string %condition) (string %conditionNote)))
+                             (pair (pair (string %createdAt) (int %customerPointsDiscountPercentage))
+                                   (pair (int %damagedQauntity) (string %deletedAt))))
+                       (pair (pair (pair (string %description) (bool %freeShipping))
+                                   (pair (string %id) (string %keyFeatures)))
+                             (pair (pair (string %linkedItems) (string %metaDescription))
+                                   (pair (string %metaTitle) (int %minOrderQuantity)))))
+                 (pair (pair (pair (pair (string %offerEndDate) (int %offerPrice))
+                                   (pair (string %offerStartDate) (string %productId)))
+                             (pair (pair (int %purchasePrice) (int %salePrice))
+                                   (pair (int %shippingWeight) (string %shopId))))
+                       (pair (pair (pair (string %sku) (string %slug))
+                                   (pair (int %stockQuantity) (string %stuffPick)))
+                             (pair (pair (string %title) (string %updatedAt))
+                                   (pair (string %userId) (string %warehouseId)))))))) ;
   storage
     (big_map
        string
@@ -67,16 +67,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new inventory" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -98,16 +89,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update inventory details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CDR ;
-             CAR ;
-             CDR ;
-             CAR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

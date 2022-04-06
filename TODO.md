@@ -1,6 +1,6 @@
 #### TODOS
 
-- Batch Insert
-- Get new records to add
-- Get existing records to update
-- Scheduler
+- Batch Insert // DONE
+- Get new records to add // TODO
+- Get existing records to update // TODO
+- Scheduler // TODO
