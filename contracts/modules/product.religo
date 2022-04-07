@@ -33,8 +33,8 @@ type storage = big_map(id, product);
 type return = (list(operation), storage);
 
 type parameter = 
-  Create(product)
-| Update(product)
+  Create(list(product))
+| Update(list(product))
 | Remove(id);
 
 let create = (products: list(product), storage: storage)

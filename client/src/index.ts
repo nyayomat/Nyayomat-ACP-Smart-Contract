@@ -40,17 +40,7 @@ const Main = async () => {
         "tbl_acp_asset_providers"
       );
 
-      /// STEP 2: Map data to Tezos format
-      const inventories = mapInventoryToTezos(inventoriesDB);
-      const products = mapProductToTezos(productsDB);
-      const invoices = mapInvoiceToTezos(invoicesDB);
-      const assets = mapAssetToTezos(assetsDB);
-      const providers = mapProviderToTezos(providersDB);
-      const users = mapUserToTezos(usersDB);
-      const providerTxs = mapTransactionToTezos(providerTxDB);
-      const merchantsTxs = mapTransactionToTezos(merchantTxDB);
-
-      /// STEP 3: Add new records to onchain storage
+      /// STEP 2: Get new records to add to onchain storage and the records to update
 
       const newRecords = {
         // inventory: inventories.slice(0, 2),
@@ -61,6 +51,18 @@ const Main = async () => {
         transaction: [...providerTxs, ...merchantsTxs].slice(0, 2), // DONE
         // user: users.slice(0, 5), // DONE
       };
+
+      /// STEP 3: Map data to Tezos format
+      const inventories = mapInventoryToTezos(inventoriesDB);
+      const products = mapProductToTezos(productsDB);
+      const invoices = mapInvoiceToTezos(invoicesDB);
+      const assets = mapAssetToTezos(assetsDB);
+      const providers = mapProviderToTezos(providersDB);
+      const users = mapUserToTezos(usersDB);
+      const providerTxs = mapTransactionToTezos(providerTxDB);
+      const merchantsTxs = mapTransactionToTezos(merchantTxDB);
+
+      /// STEP 3: Add new records to onchain storage
 
       /// Get Contract addresses from contracts.json
       const contracts = JSON.parse(

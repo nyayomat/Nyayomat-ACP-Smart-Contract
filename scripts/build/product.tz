@@ -1,27 +1,27 @@
 { parameter
-    (or (or (pair %create
-               (pair (pair (pair (pair (bool %active) (string %brand))
-                                 (pair (string %createdAt) (string %deletedAt)))
-                           (pair (pair (string %description) (string %downloadable))
-                                 (pair (string %gtin) (string %gtinType))))
-                     (pair (pair (pair (bool %hasVariant) (string %id))
-                                 (pair (string %manufacturerId) (int %maxPrice)))
-                           (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
-               (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                           (pair (int %salesCount) (string %shopId)))
-                     (pair (string %slug) (string %updatedAt))))
+    (or (or (list %create
+               (pair (pair (pair (pair (pair (bool %active) (string %brand))
+                                       (pair (string %createdAt) (string %deletedAt)))
+                                 (pair (pair (string %description) (string %downloadable))
+                                       (pair (string %gtin) (string %gtinType))))
+                           (pair (pair (pair (bool %hasVariant) (string %id))
+                                       (pair (string %manufacturerId) (int %maxPrice)))
+                                 (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
+                     (pair (pair (pair (string %originCountry) (bool %requiresShipping))
+                                 (pair (int %salesCount) (string %shopId)))
+                           (pair (string %slug) (string %updatedAt)))))
             (string %remove))
-        (pair %update
-           (pair (pair (pair (pair (bool %active) (string %brand))
-                             (pair (string %createdAt) (string %deletedAt)))
-                       (pair (pair (string %description) (string %downloadable))
-                             (pair (string %gtin) (string %gtinType))))
-                 (pair (pair (pair (bool %hasVariant) (string %id))
-                             (pair (string %manufacturerId) (int %maxPrice)))
-                       (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
-           (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                       (pair (int %salesCount) (string %shopId)))
-                 (pair (string %slug) (string %updatedAt))))) ;
+        (list %update
+           (pair (pair (pair (pair (pair (bool %active) (string %brand))
+                                   (pair (string %createdAt) (string %deletedAt)))
+                             (pair (pair (string %description) (string %downloadable))
+                                   (pair (string %gtin) (string %gtinType))))
+                       (pair (pair (pair (bool %hasVariant) (string %id))
+                                   (pair (string %manufacturerId) (int %maxPrice)))
+                             (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
+                 (pair (pair (pair (string %originCountry) (bool %requiresShipping))
+                             (pair (int %salesCount) (string %shopId)))
+                       (pair (string %slug) (string %updatedAt)))))) ;
   storage
     (big_map
        string
@@ -49,16 +49,7 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only an admin can create a new product" ; FAILWITH } {} ;
-                 DUP ;
-                 CAR ;
-                 CDR ;
-                 CAR ;
-                 CAR ;
-                 CDR ;
-                 SWAP ;
-                 SOME ;
-                 SWAP ;
-                 UPDATE }
+                 ITER { DROP } }
                { SENDER ;
                  DIG 3 ;
                  SWAP ;
@@ -78,16 +69,7 @@
              EXEC ;
              NOT ;
              IF { PUSH string "Only admin can update product details" ; FAILWITH } {} ;
-             DUP ;
-             DUG 2 ;
-             SOME ;
-             DIG 2 ;
-             CAR ;
-             CDR ;
-             CAR ;
-             CAR ;
-             CDR ;
-             UPDATE } ;
+             ITER { DROP } } ;
          NIL operation ;
          PAIR } }
 

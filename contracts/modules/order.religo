@@ -4,12 +4,6 @@ let is_admin = (user: address): bool => {
 
 type id = string;
 
-type txType = Deposit | Installment;
-
-type txInitiator = Merchant | Provider;
-
-type status = Approved | Declined | Shortlisted | Pending;
-
 type order = {
   id: string,
   assetProviderId: id,
@@ -32,7 +26,7 @@ type storage = big_map(id, order);
 type return = (list(operation), storage);
 
 let create = ((orders, storage): (list(order), storage))
-: return => {
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only an admin can create a new asset")
   };
@@ -44,7 +38,8 @@ let create = ((orders, storage): (list(order), storage))
   storage
 };
 
-let update = (orders: list(order), storage: storage): return => {
+let update = (orders: list(order), storage: storage)
+: storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update order details")
   };
@@ -56,11 +51,11 @@ let update = (orders: list(order), storage: storage): return => {
   storage
 };
 
-let removeOrder = (id: id, storage: storage): return => {
+let remove = (id: id, storage: storage): storage => {
   if(! is_admin(Tezos.sender)) {
     failwith("Only admin can update order")
   };
-  (([] : list(operation)), Big_map.remove(id, storage))
+  Big_map.remove(id, storage)
 };
 
 type parameter = 
@@ -70,9 +65,10 @@ type parameter =
 
 let main = ((action, storage): (parameter, storage))
 : (list(operation), storage) => {
-  (switch (action) {
-   | Create(order) => create((order, storage))
-   | Update(order) => update((order, storage))
-   | Remove(id) => removeOrder((id, storage))
-   })
+  (([] : list(operation)),
+    (switch (action) {
+     | Create(order) => create((order, storage))
+     | Update(order) => update((order, storage))
+     | Remove(id) => remove((id, storage))
+     }))
 };
