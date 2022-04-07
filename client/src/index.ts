@@ -189,7 +189,7 @@ const Main = async () => {
             return;
           }
           /// @dev Add batch insert
-          await platformWrapper.create(record.data, contractAddress);
+          await platformWrapper.create(record.data.create, contractAddress);
           /// TODO update backups refs after an update
         } 
           if (!record.data.update.length) {
@@ -206,7 +206,7 @@ const Main = async () => {
             return;
           }
           /// @dev batch update
-          await platformWrapper.update(record.data, contractAddress);
+          await platformWrapper.update(record.data.update, contractAddress);
           /// TODO update backups refs after an update
         }
       });
