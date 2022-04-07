@@ -5,10 +5,11 @@
                                  (pair (pair (string %description) (string %downloadable))
                                        (pair (string %gtin) (string %gtinType))))
                            (pair (pair (pair (bool %hasVariant) (string %id))
-                                       (pair (string %manufacturerId) (int %maxPrice)))
-                                 (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
+                                       (pair (string %manufacturerId) (string %maxPrice)))
+                                 (pair (pair (string %minPrice) (string %modelNumber))
+                                       (pair (string %mpn) (string %name)))))
                      (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                                 (pair (int %salesCount) (string %shopId)))
+                                 (pair (string %salesCount) (string %shopId)))
                            (pair (string %slug) (string %updatedAt)))))
             (string %remove))
         (list %update
@@ -17,10 +18,11 @@
                              (pair (pair (string %description) (string %downloadable))
                                    (pair (string %gtin) (string %gtinType))))
                        (pair (pair (pair (bool %hasVariant) (string %id))
-                                   (pair (string %manufacturerId) (int %maxPrice)))
-                             (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
+                                   (pair (string %manufacturerId) (string %maxPrice)))
+                             (pair (pair (string %minPrice) (string %modelNumber))
+                                   (pair (string %mpn) (string %name)))))
                  (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                             (pair (int %salesCount) (string %shopId)))
+                             (pair (string %salesCount) (string %shopId)))
                        (pair (string %slug) (string %updatedAt)))))) ;
   storage
     (big_map
@@ -30,10 +32,11 @@
                          (pair (pair (string %description) (string %downloadable))
                                (pair (string %gtin) (string %gtinType))))
                    (pair (pair (pair (bool %hasVariant) (string %id))
-                               (pair (string %manufacturerId) (int %maxPrice)))
-                         (pair (pair (int %minPrice) (string %modelNumber)) (pair (string %mpn) (string %name)))))
+                               (pair (string %manufacturerId) (string %maxPrice)))
+                         (pair (pair (string %minPrice) (string %modelNumber))
+                               (pair (string %mpn) (string %name)))))
              (pair (pair (pair (string %originCountry) (bool %requiresShipping))
-                         (pair (int %salesCount) (string %shopId)))
+                         (pair (string %salesCount) (string %shopId)))
                    (pair (string %slug) (string %updatedAt))))) ;
   code { LAMBDA
            address
@@ -58,9 +61,9 @@
                  IF { PUSH string "Only admin can update product" ; FAILWITH } {} ;
                  NONE (pair (pair (pair (pair (pair bool string) (pair string string))
                                         (pair (pair string string) (pair string string)))
-                                  (pair (pair (pair bool string) (pair string int))
-                                        (pair (pair int string) (pair string string))))
-                            (pair (pair (pair string bool) (pair int string)) (pair string string))) ;
+                                  (pair (pair (pair bool string) (pair string string))
+                                        (pair (pair string string) (pair string string))))
+                            (pair (pair (pair string bool) (pair string string)) (pair string string))) ;
                  SWAP ;
                  UPDATE } }
            { SENDER ;

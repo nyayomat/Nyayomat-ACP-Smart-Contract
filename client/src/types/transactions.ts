@@ -21,7 +21,7 @@ export interface TransactionTezos {
   dueDate: string;
   paidOn: string;
   txType: string;
-  initiator: string;
+  owner: string;
   amount: number;
   createdAt: string;
   updatedAt: string;

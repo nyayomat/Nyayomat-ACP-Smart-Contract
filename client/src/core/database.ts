@@ -1,6 +1,6 @@
-import { Connection, createConnection } from 'mysql';
-import { config } from '../../config';
-import { InventoryDB } from '../types';
+import { Connection, createConnection } from "mysql";
+import { config } from "../../config";
+import { InventoryDB } from "../types";
 
 class Database {
   con: Connection;
@@ -21,10 +21,10 @@ class Database {
     });
     this.con.connect((err) => {
       if (err) {
-        console.log('Error connecting to Db', err);
+        console.log("Error connecting to Db", err);
         return;
       }
-      console.log('Connection established');
+      console.log("Connection established ✔️\n---");
     });
   }
 
