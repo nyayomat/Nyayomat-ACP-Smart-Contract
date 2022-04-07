@@ -34,7 +34,7 @@ class Platform {
    * @param contract  Contract address
    */
 
-  create = async (data: Record<string, any>, contract: string) => {
+  create = async (data: Record<string, any>[], contract: string) => {
     await this.tezos.contract
       .at(contract) //call the contract to get its entry points
       .then(async (contract) => {
@@ -48,8 +48,6 @@ class Platform {
             2
           )}`
         );
-
-        // const storage: any = await contract.storage();
 
         console.log(data);
 
@@ -69,6 +67,45 @@ class Platform {
     // const contract2 = await this.tezos.contract.at(contract);
     // const storage: any = await contract2.storage();
     // console.log({ storage: storage.schema.root });
+  };
+
+  /**
+   * Generic function for updating an existing record in the smart contract
+   *
+   * @param data  Data to be updated in the smart contract
+   * @param contract  Contract address
+   */
+
+  update = async (data: Record<string, any>[], contract: string) => {
+    await this.tezos.contract
+      .at(contract) //call the contract to get its entry points
+      .then(async (contract) => {
+        console.log(
+          `List all contract methods: ${Object.keys(contract.methods)}\n`
+        );
+        console.log(
+          `Inspect the signature of the 'update' contract method: ${JSON.stringify(
+            contract.methodsObject.update().getSignature(),
+            null,
+            2
+          )}`
+        );
+
+        console.log(data);
+
+        return contract.methodsObject
+          .update(data) //call the 'update' entry point
+          .send();
+      })
+      .then(async (op) => {
+        console.log(`Awaiting for ${op.hash} to be confirmed...`);
+        await op.confirmation();
+        return op.hash;
+      })
+      .then((hash) =>
+        console.log(`Operation injected: https://ithaca.tzstats.com/${hash}`)
+      )
+      .catch((err: any) => console.log(err));
   };
 }
 
