@@ -29,7 +29,7 @@
   code { LAMBDA
            address
            bool
-           { PUSH address "tz1WLCViQyiPJ1Qt8RfYDJzr52M4GnYybWFZ" ; SWAP ; COMPARE ; EQ } ;
+           { PUSH address "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU" ; SWAP ; COMPARE ; EQ } ;
          SWAP ;
          UNPAIR ;
          IF_LEFT

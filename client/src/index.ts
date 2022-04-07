@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { schedule } from "node-cron";
 import { resolve } from "path";
 import {
@@ -58,128 +58,104 @@ const Main = async () => {
         "tbl_acp_asset_providers"
       );
 
-
       /// STEP pre 2: Combine records
 
+      const db_records: Record<
+        string,
+        {
+          create: any[];
+          update: any[];
+          records: any[];
+        }
+      > = {
+        /// Get Inventories to add or update
+        inventory: await getRecordsToAddAndUpdate(inventoriesDB, "inventory"),
 
-      /// STEP 2:
-      /// Get Inventories to add or update
-      const {
-        recordsToAdd: inventoriesToAdd,
-        recordsToUpdate: inventoriesToUpdate,
-      } = await getRecordsToAddAndUpdate(inventoriesDB, "inventory");
+        /// Get Products to add or update
+        product: await getRecordsToAddAndUpdate(productsDB, "product"),
 
-      /// Get Products to add or update
-      const { recordsToAdd: productsToAdd, recordsToUpdate: productsToUpdate } =
-        await getRecordsToAddAndUpdate(productsDB, "product");
+        /// Get Invoices to add or update
+        invoice: await getRecordsToAddAndUpdate(invoicesDB, "invoice"),
 
-      /// Get Invoices to add or update
-      const { recordsToAdd: invoicesToAdd, recordsToUpdate: invoicesToUpdate } =
-        await getRecordsToAddAndUpdate(invoicesDB, "invoice");
+        /// Get Assets to add or update
+        asset: await getRecordsToAddAndUpdate(assetsDB, "asset"),
 
-      /// Get Assets to add or update
-      const { recordsToAdd: assetsToAdd, recordsToUpdate: assetsToUpdate } =
-        await getRecordsToAddAndUpdate(assetsDB, "asset");
+        /// Get Users to add or update
+        user: await getRecordsToAddAndUpdate(usersDB, "user"),
 
-      /// Get Users to add or update
-      const { recordsToAdd: usersToAdd, recordsToUpdate: usersToUpdate } =
-        await getRecordsToAddAndUpdate(usersDB, "user");
+        /// Get Provider Transactions to add or update
+        /// Get Merchant Transactions to add or update
 
-      /// Get Provider Transactions to add or update
-      const {
-        recordsToAdd: providerTxToAdd,
-        recordsToUpdate: providerTxToUpdate,
-      } = await getRecordsToAddAndUpdate(providerTxDB, "providerTx");
+        transaction: await getRecordsToAddAndUpdate(
+          [providerTxDB, ...merchantTxDB],
+          "transaction"
+        ),
 
-      /// Get Merchant Transactions to add or update
-      const {
-        recordsToAdd: merchantTxToAdd,
-        recordsToUpdate: merchantTxToUpdate,
-      } = await getRecordsToAddAndUpdate(merchantTxDB, "merchantTx");
-
-      /// Get Providers to add or update
-      const {
-        recordsToAdd: providersToAdd,
-        recordsToUpdate: providersToUpdate,
-      } = await getRecordsToAddAndUpdate(providersDB, "provider");
-
-
-      // DB records expected types
-         // [
-         //     {
-         //       data: {
-         //       update: [],
-         //       create: [],
-         //       contract: 'string'
-         //    },}
-         //  ]
-      const {recordsToAdd: create, recordsToUpdate: update} = await getRecordsToAddAndUpdate(dbName, `${backup_file_name}`);
-    
-   const db_records: any [] = [
-     {
-       data: {
-         create,
-         update
-       }
-     }
-   ]
+        /// Get Providers to add or update
+        provider: await getRecordsToAddAndUpdate(providersDB, "provider"),
+      };
 
       const records: {
         data: {
-          update: any[]
-          create: any[]
+          update: any[];
+          create: any[];
         };
         contract: string;
-      }[] = db_records.map((record) => {
+      }[] = Object.entries(db_records).map(([contract, record]) => {
         let data: any;
-        switch (record.contract) {
-          case 'provider':
+        switch (contract) {
+          case "provider":
             data = {
               create: mapProviderToTezos(record.create, "create"),
-                update: mapProviderToTezos(record.update, "update")
-        }
+              update: mapProviderToTezos(record.update, "update"),
+            };
             break;
-            case 'inventory':
-              data = {create: mapInventoryToTezos(record.create, "create"),
-                  update: mapInventoryToTezos(record.update, "update")
-        }
-              break;
-            case 'invoice':
-              data = {create: mapInvoiceToTezos(record.create, "create"),
-                  update: mapInvoiceToTezos(record.update, "update")
-        }
-              break;
-            case 'product':
-              data = {create: mapProductToTezos(record.create, "create"),
-                  update: mapProductToTezos(record.update, "update")
-        }
-              break;
-            case 'asset':
-              data = {create: mapAssetToTezos(record.create, "create"),
-                  update: mapAssetToTezos(record.update, "update")
-        }
-              break;
-              case 'user':
-                data = {create: mapUserToTezos(record.create, "create"),
-                    update: mapUserToTezos(record.update, "update")
-        }
-                break;
-            case 'transaction':
-              data = {create: mapTransactionToTezos(record.create, "create"),
-                  update: mapTransactionToTezos(record.update, "update")
-        }
-                break;
-      
+          case "inventory":
+            data = {
+              create: mapInventoryToTezos(record.create, "create"),
+              update: mapInventoryToTezos(record.update, "update"),
+            };
+            break;
+          case "invoice":
+            data = {
+              create: mapInvoiceToTezos(record.create, "create"),
+              update: mapInvoiceToTezos(record.update, "update"),
+            };
+            break;
+          case "product":
+            data = {
+              create: mapProductToTezos(record.create, "create"),
+              update: mapProductToTezos(record.update, "update"),
+            };
+            break;
+          case "asset":
+            data = {
+              create: mapAssetToTezos(record.create, "create"),
+              update: mapAssetToTezos(record.update, "update"),
+            };
+            break;
+          case "user":
+            data = {
+              create: mapUserToTezos(record.create, "create"),
+              update: mapUserToTezos(record.update, "update"),
+            };
+            break;
+          case "transaction":
+            data = {
+              create: mapTransactionToTezos(record.create, "create"),
+              update: mapTransactionToTezos(record.update, "update"),
+            };
+            break;
+
           default:
             throw new Error("Invalid contract");
-            
         }
         return {
           data,
-          contract: record.contract,
-        }
-      }
-        
+          contract: contract,
+        };
+      });
+
       /// Get Contract addresses from contracts.json
       const contracts = JSON.parse(
         readFileSync(
@@ -192,8 +168,8 @@ const Main = async () => {
       records.forEach(async (record) => {
         if (!record.data.create.length) {
           /// SKIP if no records to add
-            console.info(`No new records to add for ${record.contract}`);
-          }else{
+          console.info(`No new records to add for ${record.contract}`);
+        } else {
           console.info(
             `Adding ${record.data.create.length} new records to ${record.contract}...`
           );
@@ -203,14 +179,30 @@ const Main = async () => {
             console.error(`Contract address not found for ${record.contract}`);
             return;
           }
-          /// @dev Add batch insert
-          await platformWrapper.create(record.data.create, contractAddress);
-          /// TODO update backups refs after an update
-        } 
-          if (!record.data.update.length) {
+          try {
+            /// @dev Add batch insert
+            await platformWrapper.create(record.data.create, contractAddress);
+            /// TODO update backups refs after an update
+            writeFileSync(
+              resolve(__dirname, `../backups/${record.contract}.json`),
+              JSON.stringify(
+                Object.fromEntries(
+                  db_records[record.contract].records.map((r) => [r.id, r])
+                ),
+                null,
+                2
+              )
+            );
+          } catch (error) {
+            console.error(
+              `Failed with error: ${error} while adding records to ${record.contract}`
+            );
+          }
+        }
+        if (!record.data.update.length) {
           /// SKIP if no records to update
-            console.info(`No records to update for ${record.contract}`);
-          }else {
+          console.info(`No records to update for ${record.contract}`);
+        } else {
           console.info(
             `Updating ${record.data.update.length} records in ${record.contract}...`
           );
@@ -220,9 +212,25 @@ const Main = async () => {
             console.error(`Contract address not found for ${record.contract}`);
             return;
           }
-          /// @dev batch update
-          await platformWrapper.update(record.data.update, contractAddress);
-          /// TODO update backups refs after an update
+          try {
+            /// @dev batch update
+            await platformWrapper.update(record.data.update, contractAddress);
+          } catch (error) {
+            /// TODO update backups refs after an update
+            writeFileSync(
+              resolve(__dirname, `../backups/${record.contract}.json`),
+              JSON.stringify(
+                Object.fromEntries(
+                  db_records[record.contract].records.map((r) => [r.id, r])
+                ),
+                null,
+                2
+              )
+            );
+            console.error(
+              `Failed with error: ${error} while updating records in ${record.contract}`
+            );
+          }
         }
       });
 
