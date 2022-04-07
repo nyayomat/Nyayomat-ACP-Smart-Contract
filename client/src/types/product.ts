@@ -41,7 +41,7 @@ export interface ProductTezos {
   requiresShipping: boolean;
   downloadable: string;
   slug: string;
-  saleCount: string;
+  salesCount: string;
   active: boolean;
   deletedAt: string;
   createdAt: string;

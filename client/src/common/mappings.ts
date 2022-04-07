@@ -24,41 +24,45 @@ export const mapInventoryToTezos = (
 ): InventoryTezos[] => {
   return invetories.map((inventory: InventoryDB) => {
     return {
-      id: inventory.id,
-      shopID: inventory.shop_id,
-      title: inventory.title,
-      warehouseID: inventory.warehouse_id,
-      productID: inventory.product_id,
-      brand: inventory.brand,
-      supplierID: inventory.supplier_id,
-      sku: inventory.sku,
-      condition: inventory.condition,
-      conditionNote: inventory.condition_note,
-      description: inventory.description,
-      keyFeatures: inventory.key_features,
-      stockQuantity: inventory.stock_quantity,
-      damagedQuantity: inventory.damaged_quantity,
-      userID: inventory.user_id,
-      purchasePrice: inventory.purchase_price,
-      salePrice: inventory.sale_price,
-      offerPrice: inventory.offer_price,
-      offerStart: inventory.offer_start,
-      offerEnd: inventory.offer_end,
-      shippingWeight: inventory.shipping_weight,
-      freeShipping: inventory.free_shipping,
-      availableFrom: inventory.available_from,
-      minOrderQuantity: inventory.min_order_quantity,
-      slug: inventory.slug,
-      linkedItems: inventory.linked_items,
-      metaTitle: inventory.meta_title,
-      metaDescription: inventory.meta_description,
-      stuffPick: inventory.stuff_pick,
-      active: inventory.active,
-      deletedAt: inventory.deleted_at,
-      createdAt: inventory.created_at,
-      updatedAt: inventory.updated_at,
+      id: inventory?.id?.toString() || "",
+      shopId: inventory?.shop_id?.toString() || "",
+      title: inventory?.title,
+      warehouseId: inventory?.warehouse_id?.toString() || "",
+      productId: inventory?.product_id?.toString() || "",
+      brand: inventory?.brand?.toString() || "",
+      supplierId: inventory?.supplier_id?.toString() || "",
+      sku: inventory?.sku?.toString() || "",
+      condition: inventory?.condition?.toString() || "",
+      conditionNote: inventory?.condition_note?.toString() || "",
+      description: "",
+      keyFeatures: inventory?.key_features?.toString() || "",
+      stockQuantity: inventory?.stock_quantity?.toString() || "",
+      damagedQuantity: inventory?.damaged_quantity?.toString() || "",
+      userId: inventory?.user_id?.toString() || "",
+      purchasePrice: inventory?.purchase_price?.toString() || "",
+      salePrice: inventory?.sale_price?.toString() || "",
+      offerPrice: inventory?.offer_price?.toString() || "",
+      offerStartDate: new Date(inventory?.offer_start || 0)
+        .getTime()
+        .toString(),
+      offerEndDate: new Date(inventory?.offer_end || 0).getTime().toString(),
+      shippingWeight: inventory?.shipping_weight?.toString() || "",
+      freeShipping: Boolean(inventory?.free_shipping),
+      availableFrom: new Date(inventory?.available_from || 0)
+        .getTime()
+        .toString(),
+      minOrderQuantity: inventory?.min_order_quantity?.toString() || "",
+      slug: inventory?.slug?.toString() || "",
+      linkedItems: inventory?.linked_items?.toString() || "",
+      metaTitle: inventory?.meta_title?.toString() || "",
+      metaDescription: inventory?.meta_description?.toString() || "",
+      stuffPick: inventory?.stuff_pick?.toString() || "",
+      active: Boolean(inventory?.active),
+      deletedAt: new Date(inventory?.deleted_at || 0).getTime().toString(),
+      createdAt: new Date(inventory?.created_at || 0).getTime().toString(),
+      updatedAt: new Date(inventory?.updated_at || 0).getTime().toString(),
       customerPointsDiscountPercentage:
-        inventory.customer_points_discount_percentage,
+        inventory?.customer_points_discount_percentage?.toString() || "",
     };
   });
 };
@@ -114,8 +118,8 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
       manufacturerId: product.manufacturer_id
         ? product.manufacturer_id.toString()
         : "",
-      brand: product.brand,
-      name: product.name,
+      brand: product.brand || "",
+      name: product.name || "",
       modelNumber: product?.model_number?.toString()
         ? product.model_number
         : "",
@@ -134,7 +138,7 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
         ? product.downloadable?.toString()
         : "",
       slug: product.slug,
-      saleCount: product.sale_count ? product.sale_count?.toString() : "",
+      salesCount: product.sale_count ? product.sale_count?.toString() : "",
       active: Boolean(product.active),
       deletedAt: new Date(product.deleted_at).getTime().toString(),
       createdAt: new Date(product.created_at).getTime().toString(),
@@ -208,25 +212,34 @@ export const mapProviderToTezos = (
 export const mapOrderToTezos = (orders: OrdersDB[]): OrdersTezos[] => {
   return orders.map((order: OrdersDB) => {
     return {
-      id: order.id,
+      id: order?.id ? order.id?.toString() : "",
       merchantId: order.merchant_id ? order.merchant_id : "",
       assetProviderId: order.asset_provider_id,
-      assetId: order.asset_id,
-      units: order.units,
-      unitCost: order.unit_cost,
-      holidayProvision: order.holiday_provision,
-      depositAmount: order.deposit_amount,
-      installment: order.installment ? order.installment : 0,
-      installmentAmount: order.installemnt_amount
-        ? order.installemnt_amount
-        : 0,
-      totalOutStandingAmount: order.total_out_standing_amount,
-      paymentFreq: order.payment_frequency,
-      paymentMethod: order.payment_method,
+      assetId: order?.asset_id ? order.asset_id?.toString() : "",
+      units: order?.units ? order.units?.toString() : "",
+      unitCost: order?.unit_cost ? order.unit_cost?.toString() : "",
+      holidayProvision: order?.holiday_provision
+        ? order.holiday_provision?.toString()
+        : "",
+      depositAmount: order?.deposit_amount
+        ? order.deposit_amount?.toString()
+        : "",
+      installment: order?.installment ? order.installment?.toString() : "",
+      installmentAmount: order.installment_amount
+        ? order.installment_amount?.toString()
+        : "",
+      totalOutStandingAmount: order.total_out_standing_amount
+        ? order.total_out_standing_amount?.toString()
+        : "",
+      paymentFreq: order.payment_frequency
+        ? order.payment_frequency?.toString()
+        : "",
+      paymentMethod: order.payment_method
+        ? order.payment_method?.toString()
+        : "",
       status: order.status,
       createdAt: new Date(order.created_at).getTime().toString(),
       updatedAt: new Date(order.updated_at).getTime().toString(),
-      orderBy: order.merchant_id ? "Merchant" : "Provider",
     };
   });
 };

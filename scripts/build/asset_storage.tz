@@ -1,4 +1,4 @@
-{ Elt "0"
+{ Elt "id"
       (Pair (Pair (Pair (Pair (Pair "categoryId" "createdAt") "deletedAt" 0) (Pair "groupId" 0) "id" "image")
                   (Pair (Pair 0 "name") "owner" "paymentFreq")
                   (Pair "paymentMethod" "providerId")

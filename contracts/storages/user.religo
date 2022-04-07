@@ -1,9 +1,8 @@
 let storage = 
 
-  Big_map.literal([(("tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU"
-         : address),
+  Big_map.literal([("id",
        {
-         id: "0",
+         id: "id",
          onChainId: "tz1MwDG66PtctWRXLTNJ89BLWjPtwCm9gXVU",
          shopId: "0",
          role: "init_owner",

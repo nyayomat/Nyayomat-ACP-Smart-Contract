@@ -8,7 +8,7 @@ export interface OrdersDB {
   holiday_provision: number;
   deposit_amount: number;
   installment: number;
-  installemnt_amount: number;
+  installment_amount: number;
   total_out_standing_amount: number;
   payment_frequency: string;
   payment_method: string;
@@ -22,17 +22,16 @@ export interface OrdersTezos {
   merchantId: string;
   assetProviderId: string;
   assetId: string;
-  units: number;
-  unitCost: number;
-  holidayProvision: number;
-  depositAmount: number;
-  installment: number;
-  installmentAmount: number;
-  totalOutStandingAmount: number;
+  units: string;
+  unitCost: string;
+  holidayProvision: string;
+  depositAmount: string;
+  installment: string;
+  installmentAmount: string;
+  totalOutStandingAmount: string;
   paymentFreq: string;
   paymentMethod: string;
   status: string;
   createdAt: string;
   updatedAt: string;
-  orderBy: string;
 }

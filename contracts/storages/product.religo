@@ -1,8 +1,8 @@
 let storage = 
 
-  Big_map.literal([("0",
+  Big_map.literal([("id",
        {
-         id: "0",
+         id: "id",
          shopId: "shopId",
          manufacturerId: "manufacturerId",
          brand: "brand",

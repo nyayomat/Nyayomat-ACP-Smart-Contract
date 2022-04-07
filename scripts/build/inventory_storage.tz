@@ -1,0 +1,12 @@
+{ Elt "id"
+      (Pair (Pair (Pair (Pair (Pair True "string") "string" "string") (Pair "string" "0") "0" "string")
+                  (Pair (Pair "string" True) "id" "string")
+                  (Pair "string" "string")
+                  "string"
+                  "0")
+            (Pair (Pair (Pair "string" "0") "string" "id") (Pair "0" "0") "0" "id")
+            (Pair (Pair "string" "string") "0" "string")
+            (Pair "string" "string")
+            "id"
+            "id") }
+

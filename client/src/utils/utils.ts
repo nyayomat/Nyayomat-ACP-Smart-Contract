@@ -18,17 +18,13 @@ export const getRecordsToAddAndUpdate = async (
       )
     );
   } catch (e) {
-    console.error(e);
+    // console.error(e);
   }
 
   /// @dev Filter out records with no ids
   records = records.filter((record) => record.id);
   for (const record of records) {
     let _record = Records[record.id];
-    console.log({
-      _record,
-      backup_file_name,
-    });
     if (!_record) {
       //   console.error(`Record not found for ${record.id}`);
       create.push(record);
@@ -36,7 +32,10 @@ export const getRecordsToAddAndUpdate = async (
     }
 
     // check if provider has been updated
-    if (record.updated_at !== _record.updated_at) {
+    if (
+      new Date(record.updated_at).getTime() !==
+      new Date(_record.updated_at).getTime()
+    ) {
       update.push(record);
     }
   }

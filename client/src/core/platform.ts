@@ -37,15 +37,8 @@ class Platform {
   create = async (data: Record<string, any>[], contractAddress: string) => {
     try {
       const contract = await this.tezos.contract.at(contractAddress);
-      console.log(
-        `Inspect the signature of the 'create' contract method: ${JSON.stringify(
-          contract.methodsObject.create().getSignature(),
-          null,
-          2
-        )}`
-      );
 
-      const op = await contract.methodsObject.update(data).send();
+      const op = await contract.methodsObject.create(data).send();
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
       await op.confirmation(3);
       console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);

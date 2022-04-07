@@ -9,20 +9,18 @@ type order = {
   assetProviderId: id,
   merchantId: id,
   assetId: id,
-  units: int,
-  unitCost: int,
-  holidayProvision: int,
-  depositAmount: int,
-  installment: option(int),
-  installmentAmount: int,
-  totalOutStandingAmount: int,
+  units: string,
+  unitCost: string,
+  holidayProvision: string,
+  depositAmount: string,
+  installment: string,
+  installmentAmount: string,
+  totalOutStandingAmount: string,
   paymentFreq: string,
   paymentMethod: string,
   status: string,
   createdAt: string,
-  updatedAt: string,
-  orderBy: string
-};
+  updatedAt: string};
 
 type storage = big_map(id, order);
 

@@ -1,2 +1,2 @@
-{ Elt "0" (Pair (Pair (Pair "createdAt" "deletedAt") "0" "operatingDays") "status" "updatedAt") }
+{ Elt "id" (Pair (Pair (Pair "createdAt" "deletedAt") "id" "operatingDays") "status" "updatedAt") }
 

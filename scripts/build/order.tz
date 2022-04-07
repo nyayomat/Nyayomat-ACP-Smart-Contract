@@ -1,31 +1,34 @@
 { parameter
     (or (or (list %create
                (pair (pair (pair (pair (string %assetId) (string %assetProviderId))
-                                 (pair (string %createdAt) (int %depositAmount)))
-                           (pair (pair (int %holidayProvision) (string %id))
-                                 (pair (int %installmentAmount) (string %merchantId))))
-                     (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                                 (pair (string %status) (int %totalOutStandingAmount)))
-                           (pair (pair (int %unitCost) (int %units)) (string %updatedAt)))))
+                                 (pair (string %createdAt) (string %depositAmount)))
+                           (pair (pair (string %holidayProvision) (string %id))
+                                 (pair (string %installment) (string %installmentAmount))))
+                     (pair (pair (pair (string %merchantId) (string %paymentFreq))
+                                 (pair (string %paymentMethod) (string %status)))
+                           (pair (pair (string %totalOutStandingAmount) (string %unitCost))
+                                 (pair (string %units) (string %updatedAt))))))
             (string %remove))
         (list %update
            (pair (pair (pair (pair (string %assetId) (string %assetProviderId))
-                             (pair (string %createdAt) (int %depositAmount)))
-                       (pair (pair (int %holidayProvision) (string %id))
-                             (pair (int %installmentAmount) (string %merchantId))))
-                 (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                             (pair (string %status) (int %totalOutStandingAmount)))
-                       (pair (pair (int %unitCost) (int %units)) (string %updatedAt)))))) ;
+                             (pair (string %createdAt) (string %depositAmount)))
+                       (pair (pair (string %holidayProvision) (string %id))
+                             (pair (string %installment) (string %installmentAmount))))
+                 (pair (pair (pair (string %merchantId) (string %paymentFreq))
+                             (pair (string %paymentMethod) (string %status)))
+                       (pair (pair (string %totalOutStandingAmount) (string %unitCost))
+                             (pair (string %units) (string %updatedAt))))))) ;
   storage
     (big_map
        string
        (pair (pair (pair (pair (string %assetId) (string %assetProviderId))
-                         (pair (string %createdAt) (int %depositAmount)))
-                   (pair (pair (int %holidayProvision) (string %id))
-                         (pair (int %installmentAmount) (string %merchantId))))
-             (pair (pair (pair (string %paymentFreq) (string %paymentMethod))
-                         (pair (string %status) (int %totalOutStandingAmount)))
-                   (pair (pair (int %unitCost) (int %units)) (string %updatedAt))))) ;
+                         (pair (string %createdAt) (string %depositAmount)))
+                   (pair (pair (string %holidayProvision) (string %id))
+                         (pair (string %installment) (string %installmentAmount))))
+             (pair (pair (pair (string %merchantId) (string %paymentFreq))
+                         (pair (string %paymentMethod) (string %status)))
+                   (pair (pair (string %totalOutStandingAmount) (string %unitCost))
+                         (pair (string %units) (string %updatedAt)))))) ;
   code { LAMBDA
            address
            bool
@@ -47,9 +50,10 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only admin can update order" ; FAILWITH } {} ;
-                 NONE (pair (pair (pair (pair string string) (pair string int))
-                                  (pair (pair int string) (pair int string)))
-                            (pair (pair (pair string string) (pair string int)) (pair (pair int int) string))) ;
+                 NONE (pair (pair (pair (pair string string) (pair string string))
+                                  (pair (pair string string) (pair string string)))
+                            (pair (pair (pair string string) (pair string string))
+                                  (pair (pair string string) (pair string string)))) ;
                  SWAP ;
                  UPDATE } }
            { SENDER ;

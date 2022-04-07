@@ -101,12 +101,17 @@ const Main = async () => {
   // contracts = contracts.filter((contract) => !Contracts[contract.split(".")[0]]);
 
   /// Filter out some contracts
-  contracts = contracts.filter(
-    (contract) => !["invoice.tz", "inventory.tz", "order.tz"].includes(contract)
-  );
+  // contracts = contracts.filter(
+  //   (contract) => !["invoice.tz", "inventory.tz", "order.tz"].includes(contract)
+  // );
   /// Deploy specific contracts
-  // contracts = contracts.filter((contract) => !["user.tz"].includes(contract));
+  contracts = contracts.filter((contract) =>
+    ["inventory.tz"].includes(contract)
+  );
 
+  // console.log({
+  //   contracts,
+  // });
   const count = contracts.length;
 
   for (let i = 0; i < contracts.length; i++) {

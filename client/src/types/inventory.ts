@@ -12,7 +12,7 @@ export interface InventoryDB {
   description: string;
   key_features: string;
   stock_quantity: number;
-  damaged_quantity: string;
+  damaged_quantity: number;
   user_id: string;
   purchase_price: string;
   sale_price: number;
@@ -20,7 +20,7 @@ export interface InventoryDB {
   offer_start: string;
   offer_end: string;
   shipping_weight: number;
-  free_shipping: boolean;
+  free_shipping: number;
   available_from: string;
   min_order_quantity: number;
   slug: string;
@@ -28,7 +28,7 @@ export interface InventoryDB {
   meta_title: string;
   meta_description: string;
   stuff_pick: string;
-  active: string;
+  active: number;
   deleted_at: string;
   created_at: string;
   updated_at: string;
@@ -37,37 +37,37 @@ export interface InventoryDB {
 
 export interface InventoryTezos {
   id: string;
-  shopID: string;
+  shopId: string;
   title: string;
-  warehouseID: string;
-  productID: string;
+  warehouseId: string;
+  productId: string;
   brand: string;
-  supplierID: string;
+  supplierId: string;
   sku: string;
   condition: string;
   conditionNote: string;
   description: string;
   keyFeatures: string;
-  stockQuantity: number;
+  stockQuantity: string;
   damagedQuantity: string;
-  userID: string;
+  userId: string;
   purchasePrice: string;
-  salePrice: number;
-  offerPrice: number;
-  offerStart: string;
-  offerEnd: string;
-  shippingWeight: number;
+  salePrice: string;
+  offerPrice: string;
+  offerStartDate: string;
+  offerEndDate: string;
+  shippingWeight: string;
   freeShipping: boolean;
   availableFrom: string;
-  minOrderQuantity: number;
+  minOrderQuantity: string;
   slug: string;
   linkedItems: string;
   metaTitle: string;
   metaDescription: string;
   stuffPick: string;
-  active: string;
+  active: boolean;
   deletedAt: string;
   createdAt: string;
   updatedAt: string;
-  customerPointsDiscountPercentage: number;
+  customerPointsDiscountPercentage: string;
 }

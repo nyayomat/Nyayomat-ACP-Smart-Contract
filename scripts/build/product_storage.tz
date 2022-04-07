@@ -1,9 +1,9 @@
-{ Elt "0"
+{ Elt "id"
       (Pair (Pair (Pair (Pair (Pair True "brand") "createdAt" "deletedAt")
                         (Pair "description" "downloadable")
                         "gtin"
                         "gtinType")
-                  (Pair (Pair False "0") "manufacturerId" "0")
+                  (Pair (Pair False "id") "manufacturerId" "0")
                   (Pair "0" "modelNumber")
                   "mpn"
                   "name")
