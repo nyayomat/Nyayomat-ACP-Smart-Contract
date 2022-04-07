@@ -13,13 +13,16 @@ type order = {
   unitCost: int,
   holidayProvision: int,
   depositAmount: int,
+  installment: option(int),
   installmentAmount: int,
   totalOutStandingAmount: int,
   paymentFreq: string,
   paymentMethod: string,
   status: string,
   createdAt: string,
-  updatedAt: string};
+  updatedAt: string,
+  orderBy: string
+};
 
 type storage = big_map(id, order);
 
