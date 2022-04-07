@@ -182,17 +182,24 @@ export const mapTransactionToTezos = (
   });
 };
 export const mapProviderToTezos = (
-  providers: ProviderDB[]
-): ProviderTezos[] => {
-  return providers.map((provider: ProviderDB) => {
-    return {
-      id: provider.id.toString(),
-      shopName: provider.shop_name,
-      operatingDays: provider.operating_days,
-      status: provider.status,
-      createdAt: new Date(provider.created_at).getTime().toString(),
-      updatedAt: new Date(provider.updated_at).getTime().toString(),
-      deletedAt: new Date(provider.deleted_at).getTime().toString(),
-    };
-  });
+  providers: ProviderDB[],
+  action: "update" | "delete" | "create"
+): {
+  data: ProviderTezos[];
+  action: "update" | "delete" | "create";
+} => {
+  return {
+    data: providers.map((provider: ProviderDB) => {
+      return {
+        id: provider.id.toString(),
+        shopName: provider.shop_name,
+        operatingDays: provider.operating_days,
+        status: provider.status,
+        createdAt: new Date(provider.created_at).getTime().toString(),
+        updatedAt: new Date(provider.updated_at).getTime().toString(),
+        deletedAt: new Date(provider.deleted_at).getTime().toString(),
+      };
+    }),
+    action,
+  };
 };
