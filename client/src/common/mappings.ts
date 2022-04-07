@@ -15,6 +15,8 @@ import {
   InvoiceTezos,
   ProductDB,
   ProductTezos,
+  OrdersDB,
+  OrdersTezos,
 } from "../types";
 
 export const mapInventoryToTezos = (
@@ -193,6 +195,32 @@ export const mapProviderToTezos = (
       createdAt: new Date(provider.created_at).getTime().toString(),
       updatedAt: new Date(provider.updated_at).getTime().toString(),
       deletedAt: new Date(provider.deleted_at).getTime().toString(),
+    };
+  });
+};
+
+export const mapOrderToTezos = (orders: OrdersDB[]): OrdersTezos[] => {
+  return orders.map((order: OrdersDB) => {
+    return {
+      id: order.id,
+      merchantId: order.merchant_id ? order.merchant_id : "",
+      assetProviderId: order.asset_provider_id,
+      assetId: order.asset_id,
+      units: order.units,
+      unitCost: order.unit_cost,
+      holidayProvision: order.holiday_provision,
+      depositAmount: order.deposit_amount,
+      installment: order.installment ? order.installment : 0,
+      installmentAmount: order.installemnt_amount
+        ? order.installemnt_amount
+        : 0,
+      totalOutStandingAmount: order.total_out_standing_amount,
+      paymentFreq: order.payment_frequency,
+      paymentMethod: order.payment_method,
+      status: order.status,
+      createdAt: new Date(order.created_at).getTime().toString(),
+      updatedAt: new Date(order.updated_at).getTime().toString(),
+      orderBy: order.merchant_id ? "Merchant" : "Provider",
     };
   });
 };
