@@ -51,6 +51,9 @@ class Platform {
       console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
       return op.hash;
     } catch (error: any) {
+      console.log({
+        data,
+      });
       throw new Error(error);
     }
   };

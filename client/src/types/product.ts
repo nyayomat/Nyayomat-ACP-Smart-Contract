@@ -12,8 +12,8 @@ export interface ProductDB {
   min_price: string;
   max_price: string;
   origin_country: string;
-  has_variant: boolean;
-  requires_shipping: boolean;
+  has_variant: number;
+  requires_shipping: number;
   downloadable: string;
   slug: string;
   sale_count: string;

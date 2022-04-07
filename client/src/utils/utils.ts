@@ -12,16 +12,23 @@ export const getRecordsToAddAndUpdate = async (
   try {
     /// Get new records to add to onchain storage and the records to update
     Records = JSON.parse(
-      readFileSync(resolve(__dirname, `../${backup_file_name}.json`), "utf8")
+      readFileSync(
+        resolve(__dirname, `../../backups/${backup_file_name}.json`),
+        "utf8"
+      )
     );
   } catch (e) {
-    // console.error(e);
+    console.error(e);
   }
 
   /// @dev Filter out records with no ids
   records = records.filter((record) => record.id);
   for (const record of records) {
     let _record = Records[record.id];
+    console.log({
+      _record,
+      backup_file_name,
+    });
     if (!_record) {
       //   console.error(`Record not found for ${record.id}`);
       create.push(record);

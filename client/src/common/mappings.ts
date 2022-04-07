@@ -71,7 +71,7 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
       subGroupId: asset?.sub_group_id?.toString() || "",
       categoryId: asset?.category_id?.toString() || "",
       image: asset.image ? asset.image : "",
-      units: asset.units,
+      units: asset?.units ? asset.units?.toString() : "",
       unitCost: asset.unit_cost,
       holidayProvision: asset.holiday_provision,
       depositAmount: asset.deposit_amount,
@@ -107,24 +107,32 @@ export const mapInvoiceToTezos = (invoices: InvoiceDB[]): InvoiceTezos[] => {
 export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
   return products.map((product: ProductDB) => {
     return {
-      id: product.id,
-      shopId: product.shop_id,
-      manufacturerId: product.manufacturer_id,
+      id: product.id?.toString() || "",
+      shopId: product.shop_id ? product.shop_id.toString() : "",
+      manufacturerId: product.manufacturer_id
+        ? product.manufacturer_id.toString()
+        : "",
       brand: product.brand,
       name: product.name,
-      modelNumber: product.model_number,
-      mpn: product.mpn,
-      gtin: product.gtin,
-      gtinType: product.gtin_type,
-      description: product.description,
+      modelNumber: product?.model_number?.toString()
+        ? product.model_number
+        : "",
+      mpn: product?.mpn ? product.mpn?.toString() : "",
+      gtin: product?.gtin ? product.gtin?.toString() : "",
+      gtinType: product?.gtin_type ? product.gtin_type?.toString() : "",
+      description: product.description ? product.description?.toString() : "",
       minPrice: product.min_price ? product.min_price?.toString() : "",
       maxPrice: product.max_price ? product.max_price?.toString() : "",
-      originCountry: product.origin_country,
-      hasVariant: product.has_variant,
-      requiresShipping: product.requires_shipping,
-      downloadable: product.downloadable,
+      originCountry: product?.origin_country
+        ? product.origin_country?.toString()
+        : "",
+      hasVariant: Boolean(product.has_variant),
+      requiresShipping: Boolean(product.requires_shipping),
+      downloadable: product.downloadable
+        ? product.downloadable?.toString()
+        : "",
       slug: product.slug,
-      saleCount: product.sale_count ? product.sale_count : "",
+      saleCount: product.sale_count ? product.sale_count?.toString() : "",
       active: Boolean(product.active),
       deletedAt: new Date(product.deleted_at).getTime().toString(),
       createdAt: new Date(product.created_at).getTime().toString(),
@@ -147,7 +155,7 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
           : "Merchant",
       description: user?.description || "",
       roleId: user?.role_id.toString() || "",
-      active: user.active == 1 ? true : false,
+      active: Boolean(user.active),
       createdAt: new Date(user.created_at).getTime().toString(),
       updatedAt: new Date(user.updated_at).getTime().toString(),
       deletedAt: new Date(user.deleted_at).getTime().toString(),
@@ -160,12 +168,10 @@ export const mapTransactionToTezos = (
 ): TransactionTezos[] => {
   return transactions.map((transaction: TransactionDB) => {
     return {
-      id: transaction.id?.toString(),
-      assetId: transaction.asset_id?.toString(),
-      dueDate: new Date(transaction.due_date).getTime().toString(),
-      paidOn: transaction.paid_on
-        ? new Date(transaction.paid_on).getTime().toString()
-        : "",
+      id: transaction.id?.toString() || "",
+      assetId: transaction.asset_id?.toString() || "",
+      dueDate: new Date(transaction.due_date).getTime().toString() || "",
+      paidOn: new Date(transaction.paid_on).getTime().toString() || "",
       txType: transaction.type,
       owner: transaction?.merchant_id ? "Merchant" : "Provider",
       amount: transaction.amount,
