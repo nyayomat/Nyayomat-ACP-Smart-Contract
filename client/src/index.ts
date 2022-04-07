@@ -109,44 +109,55 @@ const Main = async () => {
      ]
 
       const records: {
-        data: any[];
-        action: string;
+        data: {
+          update: any[]
+          create: any[]
+        };
         contract: string;
       }[] = db_records.map((record) => {
 
-        let data: any[] = [];
+        let data: any;
         switch (record.contract) {
           case 'provider':
-            data = [mapProviderToTezos(record, "create"),
-                mapProviderToTezos(record, "update")]
+            data = {
+              create: mapProviderToTezos(record.create, "create"),
+                update: mapProviderToTezos(record.update, "update")
+        }
             break;
             case 'inventory':
-              data = [mapInventoryToTezos(record, "create"),
-                  mapInventoryToTezos(record, "update")]
+              data = {create: mapInventoryToTezos(record.create, "create"),
+                  update: mapInventoryToTezos(record.update, "update")
+        }
               break;
             case 'invoice':
-              data = [mapInvoiceToTezos(record, "create"),
-                  mapInvoiceToTezos(record, "update")]
+              data = {create: mapInvoiceToTezos(record.create, "create"),
+                  update: mapInvoiceToTezos(record.update, "update")
+        }
               break;
             case 'product':
-              data = [mapProductToTezos(record, "create"),
-                  mapProductToTezos(record, "update")]
+              data = {create: mapProductToTezos(record.create, "create"),
+                  update: mapProductToTezos(record.update, "update")
+        }
               break;
             case 'asset':
-              data = [mapAssetToTezos(record, "create"),
-                  mapAssetToTezos(record, "update")]
+              data = {create: mapAssetToTezos(record.create, "create"),
+                  update: mapAssetToTezos(record.update, "update")
+        }
               break;
               case 'user':
-                data = [mapUserToTezos(record, "create"),
-                    mapUserToTezos(record, "update")]
+                data = {create: mapUserToTezos(record.create, "create"),
+                    update: mapUserToTezos(record.update, "update")
+        }
                 break;
             case 'transaction':
-              data = [mapTransactionToTezos(record, "create"),
-                  mapTransactionToTezos(record, "update")]
+              data = {create: mapTransactionToTezos(record.create, "create"),
+                  update: mapTransactionToTezos(record.update, "update")
+        }
                 break;
       
           default:
-            break;
+            throw new Error("Invalid contract");
+            
         }
         return {
           data,
@@ -164,15 +175,12 @@ const Main = async () => {
 
       /// @dev Add or update providers in onchain storage
       records.forEach(async (record) => {
-        if (record.action === "create") {
+        if (!record.data.create.length) {
           /// SKIP if no records to add
-          if (!record.data.length) {
             console.info(`No new records to add for ${record.contract}`);
-            return;
-          }
-
+          }else{
           console.info(
-            `Adding ${record.data.length} new records to ${record.contract}...`
+            `Adding ${record.data.create.length} new records to ${record.contract}...`
           );
           /// Get smart contract address from contracts.json
           const contractAddress = contracts[record.contract];
@@ -182,17 +190,14 @@ const Main = async () => {
           }
           /// @dev Add batch insert
           await platformWrapper.create(record.data, contractAddress);
-
           /// TODO update backups refs after an update
-        } else if (record.action === "update") {
-          /// SKIP if no records to add
-          if (!record.data.length) {
+        } 
+          if (!record.data.update.length) {
+          /// SKIP if no records to update
             console.info(`No records to update for ${record.contract}`);
-            return;
-          }
-
+          }else {
           console.info(
-            `Updating ${record.data.length} records in ${record.contract}...`
+            `Updating ${record.data.update.length} records in ${record.contract}...`
           );
           /// Get smart contract address from contracts.json
           const contractAddress = contracts[record.contract];
@@ -203,10 +208,6 @@ const Main = async () => {
           /// @dev batch update
           await platformWrapper.update(record.data, contractAddress);
           /// TODO update backups refs after an update
-        } else {
-          console.warn(
-            `Unsupported action ${record.action} for ${record.contract}`
-          );
         }
       });
 
