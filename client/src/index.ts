@@ -58,64 +58,79 @@ const Main = async () => {
         "tbl_acp_asset_providers"
       );
 
+
+      /// STEP pre 2: Combine records
+
+
       /// STEP 2:
       /// Get Inventories to add or update
       const {
         recordsToAdd: inventoriesToAdd,
         recordsToUpdate: inventoriesToUpdate,
-      } = await getRecordsToAddAndUpdate(inventoriesDB, "inventories");
+      } = await getRecordsToAddAndUpdate(inventoriesDB, "inventory");
 
       /// Get Products to add or update
       const { recordsToAdd: productsToAdd, recordsToUpdate: productsToUpdate } =
-        await getRecordsToAddAndUpdate(productsDB);
+        await getRecordsToAddAndUpdate(productsDB, "product");
 
       /// Get Invoices to add or update
       const { recordsToAdd: invoicesToAdd, recordsToUpdate: invoicesToUpdate } =
-        await getRecordsToAddAndUpdate(invoicesDB);
+        await getRecordsToAddAndUpdate(invoicesDB, "invoice");
 
       /// Get Assets to add or update
       const { recordsToAdd: assetsToAdd, recordsToUpdate: assetsToUpdate } =
-        await getRecordsToAddAndUpdate(assetsDB);
+        await getRecordsToAddAndUpdate(assetsDB, "asset");
 
       /// Get Users to add or update
       const { recordsToAdd: usersToAdd, recordsToUpdate: usersToUpdate } =
-        await getRecordsToAddAndUpdate(usersDB);
+        await getRecordsToAddAndUpdate(usersDB, "user");
 
       /// Get Provider Transactions to add or update
       const {
         recordsToAdd: providerTxToAdd,
         recordsToUpdate: providerTxToUpdate,
-      } = await getRecordsToAddAndUpdate(providerTxDB);
+      } = await getRecordsToAddAndUpdate(providerTxDB, "providerTx");
 
       /// Get Merchant Transactions to add or update
       const {
         recordsToAdd: merchantTxToAdd,
         recordsToUpdate: merchantTxToUpdate,
-      } = await getRecordsToAddAndUpdate(merchantTxDB);
+      } = await getRecordsToAddAndUpdate(merchantTxDB, "merchantTx");
 
       /// Get Providers to add or update
       const {
         recordsToAdd: providersToAdd,
         recordsToUpdate: providersToUpdate,
-      } = await getRecordsToAddAndUpdate(providersDB);
+      } = await getRecordsToAddAndUpdate(providersDB, "provider");
 
-    [
-        {
-          data: {
-          update: []
-          create: []
-          contract: 'provider'
-       },
-     ]
+
+      // DB records expected types
+         // [
+         //     {
+         //       data: {
+         //       update: [],
+         //       create: [],
+         //       contract: 'string'
+         //    },}
+         //  ]
+      const {recordsToAdd: create, recordsToUpdate: update} = await getRecordsToAddAndUpdate(dbName, `${backup_file_name}`);
+    
+   const db_records: any [] = [
+     {
+       data: {
+         create,
+         update
+       }
+     }
+   ]
 
       const records: {
         data: any[];
-        action: string;
         contract: string;
       }[] = db_records.map((record) => {
 
         let data: any[] = [];
-        switch (record.contract) {
+        switch (record.data.contract) {
           case 'provider':
             data = [mapProviderToTezos(record, "create"),
                 mapProviderToTezos(record, "update")]
