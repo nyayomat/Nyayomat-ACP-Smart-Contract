@@ -24,13 +24,10 @@ export const mapInventoryToTezos = (
   invetories: InventoryDB[]
 ): InventoryTezos[] => {
   return invetories.map((inventory: InventoryDB) => {
-    console.log({
-      title: inventory?.title,
-    });
     return {
       id: inventory?.id?.toString() || "",
       shopId: inventory?.shop_id?.toString() || "",
-      title: inventory?.title.replaceAll(/[\uE000-\uF8FF]/g, "") || "",
+      title: "",
       warehouseId: inventory?.warehouse_id?.toString() || "",
       productId: inventory?.product_id?.toString() || "",
       brand: inventory?.brand?.toString() || "",
@@ -126,17 +123,14 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
         ? product.manufacturer_id.toString()
         : "",
       brand: product.brand || "",
-      name: product?.name.replaceAll(/[\uE000-\uF8FF]/g, ""),
+      name: "",
       modelNumber: product?.model_number?.toString()
         ? product.model_number
         : "",
       mpn: product?.mpn ? product.mpn?.toString() : "",
       gtin: product?.gtin ? product.gtin?.toString() : "",
       gtinType: product?.gtin_type ? product.gtin_type?.toString() : "",
-      description: striptags(product.description || "").replaceAll(
-        /[\uE000-\uF8FF]/g,
-        ""
-      ),
+      description: "",
       minPrice: product.min_price ? product.min_price?.toString() : "",
       maxPrice: product.max_price ? product.max_price?.toString() : "",
       originCountry: product?.origin_country

@@ -40,7 +40,7 @@ export const getRecordsToAddAndUpdate = async (
     }
   }
 
-  return { create, update, records };
+  return { create, update, records, backup_file_name };
 };
 
 export const chunk = <T>(arr: T[], size: number): T[][] =>

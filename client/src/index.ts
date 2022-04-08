@@ -38,31 +38,52 @@ const Main = async () => {
   console.info(
     `Fetching providers, inventories, invoices, assets, users records...`
   );
-  const inventoriesDB: InventoryDB[] = await databaseWrapper.fetchTable(
-    "inventories"
-  );
-  const invoicesDB: InvoiceDB[] = await databaseWrapper.fetchTable("invoices");
-  const assetsDB: AssetDB[] = await databaseWrapper.fetchTable(
+
+  /// @notice ASSETS
+  let providerAssetsDB: AssetDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_assets"
   );
+  /// @dev filter out pending assets
+  providerAssetsDB = providerAssetsDB.filter(
+    (asset) => asset.status !== "pending"
+  );
+
+  const merchatAssetsDB: AssetDB[] = await databaseWrapper.fetchTable(
+    "tbl_acp_merchant_assets"
+  );
+
+  /// @notice USERS
   const usersDB: UserDB[] = await databaseWrapper.fetchTable("users");
+
+  /// @notice TRANSACTIONS
   const providerTxDB: TransactionDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_asset_provider_transaction"
   );
   const merchantTxDB: TransactionDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_merchant_transaction"
   );
-  const productsDB: ProductDB[] = await databaseWrapper.fetchTable("products");
 
+  /// @notice Provider
   const providersDB: ProviderDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_asset_providers"
   );
 
-  const merchantOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
+  /// @notice ORDERS
+  let providerOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
+    "tbl_acp_asset_provider_order"
+  );
+  // @dev capture only delivered provider orders
+  providerOrdersDB = providerOrdersDB.filter(
+    (order) => order.status === "delivered"
+  );
+
+  let merchantOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_merchant_asset_order"
   );
-  const providerOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
-    "tbl_acp_asset_provider_order"
+
+  /// @dev capture only delivered merchant orders
+  merchantOrdersDB = merchantOrdersDB.filter(
+    (order) => order.status === "delivered"
   );
 
   /// STEP 2: Get records to add or update
@@ -75,38 +96,34 @@ const Main = async () => {
       create: any[];
       update: any[];
       records: any[];
+      backup_file_name: string;
     }
   > = {
-    /// Get Inventories to add or update
-    inventory: await getRecordsToAddAndUpdate(inventoriesDB, "inventory"),
-
-    /// Get Products to add or update
-    product: await getRecordsToAddAndUpdate(productsDB, "product"),
-
-    /// Get Invoices to add or update
-    invoice: await getRecordsToAddAndUpdate(invoicesDB, "invoice"),
-
     /// Get Assets to add or update
-    asset: await getRecordsToAddAndUpdate(assetsDB, "asset"),
+    asset: {
+      ...(await getRecordsToAddAndUpdate(merchatAssetsDB, "merchantAssets")),
+      ...(await getRecordsToAddAndUpdate(providerAssetsDB, "providerAssets")),
+    },
 
     /// Get Users to add or update
-    user: await getRecordsToAddAndUpdate(usersDB, "user"),
+    user: await getRecordsToAddAndUpdate(usersDB, "users"),
 
     /// Get Provider Transactions to add or update
     /// Get Merchant Transactions to add or update
-
-    transaction: await getRecordsToAddAndUpdate(
-      [providerTxDB, ...merchantTxDB],
-      "transaction"
-    ),
+    transaction: {
+      ...(await getRecordsToAddAndUpdate(providerTxDB, "providerTxs")),
+      ...(await getRecordsToAddAndUpdate(merchantTxDB, "merchantTxs")),
+    },
 
     /// Get Providers to add or update
-    provider: await getRecordsToAddAndUpdate(providersDB, "provider"),
+    provider: await getRecordsToAddAndUpdate(providersDB, "providers"),
+
+    /// @notice Orders
     /// Get Provider and Merchant orders to add or update
-    order: await getRecordsToAddAndUpdate(
-      [providerOrdersDB, ...merchantOrdersDB],
-      "order"
-    ),
+    order: {
+      ...(await getRecordsToAddAndUpdate(providerOrdersDB, "providerOrders")),
+      ...(await getRecordsToAddAndUpdate(merchantOrdersDB, "merchantOrders")),
+    },
   };
 
   console.info(
@@ -124,8 +141,10 @@ const Main = async () => {
     data: {
       update: any[];
       create: any[];
+      backup_file_name: string;
     };
     contract: string;
+    backup_file_name: string;
   }[] = Object.entries(db_records).map(([contract, record]) => {
     let data: any;
     switch (contract) {
@@ -183,6 +202,7 @@ const Main = async () => {
     return {
       data,
       contract: contract,
+      backup_file_name: record.backup_file_name,
     };
   });
 
@@ -223,11 +243,15 @@ const Main = async () => {
             continue;
           }
           try {
+            console.log({
+              record,
+            });
             /// @dev Add batch insert
             await platformWrapper.create(data, contractAddress);
             /// TODO update backups refs after an update
+
             writeFileSync(
-              resolve(__dirname, `../backups/${record.contract}.json`),
+              resolve(__dirname, `../backups/${record.backup_file_name}.json`),
               JSON.stringify(
                 Object.fromEntries(
                   db_records[record.contract].records.map((r) => [r.id, r])
@@ -268,7 +292,7 @@ const Main = async () => {
           } catch (error) {
             /// TODO update backups refs after an update
             writeFileSync(
-              resolve(__dirname, `../backups/${record.contract}.json`),
+              resolve(__dirname, `../backups/${record.backup_file_name}.json`),
               JSON.stringify(
                 Object.fromEntries(
                   db_records[record.contract].records.map((r) => [r.id, r])

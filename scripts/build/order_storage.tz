@@ -1,7 +1,8 @@
 { Elt "id"
-      (Pair (Pair (Pair (Pair "id" "id") "string" "0") (Pair "0" "id") "0" "0")
-            (Pair (Pair "id" "string") "string" "string")
-            (Pair "0" "0")
-            "0"
+      (Pair (Pair (Pair (Pair (Pair "id" "id") "string" "0") (Pair "0" "id") "0" "0")
+                  (Pair (Pair "id" "string") "string" "string")
+                  (Pair "string" "0")
+                  "0"
+                  "0")
             "string") }
 
