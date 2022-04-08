@@ -9,6 +9,7 @@ import {
   mapUserToTezos,
   mapTransactionToTezos,
   mapProviderToTezos,
+  mapOrderToTezos,
 } from "./common";
 import { databaseWrapper, platformWrapper } from "./core";
 import {
@@ -19,6 +20,7 @@ import {
   TransactionDB,
   InvoiceDB,
   InventoryDB,
+  OrdersDB,
 } from "./types";
 import { chunk, getRecordsToAddAndUpdate } from "./utils";
 
@@ -54,6 +56,13 @@ const Main = async () => {
 
   const providersDB: ProviderDB[] = await databaseWrapper.fetchTable(
     "tbl_acp_asset_providers"
+  );
+
+  const merchantOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
+    "tbl_acp_merchant_asset_order"
+  );
+  const providerOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
+    "tbl_acp_asset_provider_order"
   );
 
   /// STEP 2: Get records to add or update
@@ -93,6 +102,11 @@ const Main = async () => {
 
     /// Get Providers to add or update
     provider: await getRecordsToAddAndUpdate(providersDB, "provider"),
+    /// Get Provider and Merchant orders to add or update
+    order: await getRecordsToAddAndUpdate(
+      [providerOrdersDB, ...merchantOrdersDB],
+      "order"
+    ),
   };
 
   console.info(
@@ -157,7 +171,12 @@ const Main = async () => {
           update: mapTransactionToTezos(record.update),
         };
         break;
-
+      case "order":
+        data = {
+          create: mapOrderToTezos(record.create),
+          update: mapOrderToTezos(record.update),
+        };
+        break;
       default:
         throw new Error("Invalid contract");
     }

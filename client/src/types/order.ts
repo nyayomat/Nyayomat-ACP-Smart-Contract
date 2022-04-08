@@ -32,6 +32,7 @@ export interface OrdersTezos {
   paymentFreq: string;
   paymentMethod: string;
   status: string;
+  orderBy: string;
   createdAt: string;
   updatedAt: string;
 }

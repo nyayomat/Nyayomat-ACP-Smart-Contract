@@ -19,8 +19,10 @@ type order = {
   paymentFreq: string,
   paymentMethod: string,
   status: string,
+  orderBy: string,
   createdAt: string,
-  updatedAt: string};
+  updatedAt: string
+};
 
 type storage = big_map(id, order);
 

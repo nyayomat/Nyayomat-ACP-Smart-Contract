@@ -217,8 +217,8 @@ export const mapOrderToTezos = (orders: OrdersDB[]): OrdersTezos[] => {
   return orders.map((order: OrdersDB) => {
     return {
       id: order?.id ? order.id?.toString() : "",
-      merchantId: order.merchant_id ? order.merchant_id : "",
-      assetProviderId: order.asset_provider_id,
+      merchantId: order.merchant_id ? order.merchant_id.toString() : "",
+      assetProviderId: order.asset_provider_id.toString(),
       assetId: order?.asset_id ? order.asset_id?.toString() : "",
       units: order?.units ? order.units?.toString() : "",
       unitCost: order?.unit_cost ? order.unit_cost?.toString() : "",
@@ -242,6 +242,7 @@ export const mapOrderToTezos = (orders: OrdersDB[]): OrdersTezos[] => {
         ? order.payment_method?.toString()
         : "",
       status: order.status,
+      orderBy: order?.merchant_id ? "Merchant" : "Provider",
       createdAt: new Date(order.created_at).getTime().toString(),
       updatedAt: new Date(order.updated_at).getTime().toString(),
     };
