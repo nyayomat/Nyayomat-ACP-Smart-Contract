@@ -104,10 +104,11 @@ const Main = async () => {
   // contracts = contracts.filter(
   //   (contract) => !["invoice.tz", "inventory.tz", "order.tz"].includes(contract)
   // );
-  /// Deploy specific contracts
-  contracts = contracts.filter((contract) =>
-    ["inventory.tz"].includes(contract)
-  );
+
+  // /// Deploy specific contracts
+  // contracts = contracts.filter((contract) =>
+  //   ["inventory.tz"].includes(contract)
+  // );
 
   // console.log({
   //   contracts,
