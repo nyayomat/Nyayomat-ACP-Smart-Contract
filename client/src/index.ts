@@ -20,7 +20,7 @@ import {
   InvoiceDB,
   InventoryDB,
 } from "./types";
-import { getRecordsToAddAndUpdate } from "./utils";
+import { chunk, getRecordsToAddAndUpdate } from "./utils";
 
 const Main = async () => {
   console.log(`---`.repeat(10));
@@ -188,35 +188,40 @@ const Main = async () => {
           `No new records to add to ${record.contract}. SKIPPING...\n---`
         );
       } else {
-        console.info(
-          `Adding ${record.data.create.length} new records to ${record.contract}...\n- - -`
-        );
-        /// Get smart contract address from contracts.json
-        const contractAddress = contracts[record.contract];
-        if (!contractAddress) {
-          console.error(
-            `Contract address not found for ${record.contract}. SKIPPING\n---`
+        const chunks = chunk(record.data.create, 60);
+        for (let j = 0; j < chunks.length; j++) {
+          const data = chunks[j];
+
+          console.info(
+            `Adding ${data.length} new records to ${record.contract}...\n- - -`
           );
-          continue;
-        }
-        try {
-          /// @dev Add batch insert
-          await platformWrapper.create(record.data.create, contractAddress);
-          /// TODO update backups refs after an update
-          writeFileSync(
-            resolve(__dirname, `../backups/${record.contract}.json`),
-            JSON.stringify(
-              Object.fromEntries(
-                db_records[record.contract].records.map((r) => [r.id, r])
-              ),
-              null,
-              2
-            )
-          );
-        } catch (error) {
-          console.error(
-            `Failed with error: ${error} while adding records to ${record.contract}`
-          );
+          /// Get smart contract address from contracts.json
+          const contractAddress = contracts[record.contract];
+          if (!contractAddress) {
+            console.error(
+              `Contract address not found for ${record.contract}. SKIPPING\n---`
+            );
+            continue;
+          }
+          try {
+            /// @dev Add batch insert
+            await platformWrapper.create(data, contractAddress);
+            /// TODO update backups refs after an update
+            writeFileSync(
+              resolve(__dirname, `../backups/${record.contract}.json`),
+              JSON.stringify(
+                Object.fromEntries(
+                  db_records[record.contract].records.map((r) => [r.id, r])
+                ),
+                null,
+                2
+              )
+            );
+          } catch (error) {
+            console.error(
+              `Failed with error: ${error} while adding records to ${record.contract}`
+            );
+          }
         }
       }
       if (!record.data.update.length) {
@@ -225,33 +230,38 @@ const Main = async () => {
           `No records to update for ${record.contract}. SKIPPING...\n---`
         );
       } else {
-        console.info(
-          `Updating ${record.data.update.length} records in ${record.contract}...\n---`
-        );
-        /// Get smart contract address from contracts.json
-        const contractAddress = contracts[record.contract];
-        if (!contractAddress) {
-          console.error(`Contract address not found for ${record.contract}`);
-          continue;
-        }
-        try {
-          /// @dev batch update
-          await platformWrapper.update(record.data.update, contractAddress);
-        } catch (error) {
-          /// TODO update backups refs after an update
-          writeFileSync(
-            resolve(__dirname, `../backups/${record.contract}.json`),
-            JSON.stringify(
-              Object.fromEntries(
-                db_records[record.contract].records.map((r) => [r.id, r])
-              ),
-              null,
-              2
-            )
+        const chunks = chunk(record.data.update, 60);
+        for (let j = 0; j < chunks.length; j++) {
+          const data = chunks[j];
+
+          console.info(
+            `Updating ${data.length} records in ${record.contract}...\n---`
           );
-          console.error(
-            `Failed with error: ${error} while updating records in ${record.contract}`
-          );
+          /// Get smart contract address from contracts.json
+          const contractAddress = contracts[record.contract];
+          if (!contractAddress) {
+            console.error(`Contract address not found for ${record.contract}`);
+            continue;
+          }
+          try {
+            /// @dev batch update
+            await platformWrapper.update(data, contractAddress);
+          } catch (error) {
+            /// TODO update backups refs after an update
+            writeFileSync(
+              resolve(__dirname, `../backups/${record.contract}.json`),
+              JSON.stringify(
+                Object.fromEntries(
+                  db_records[record.contract].records.map((r) => [r.id, r])
+                ),
+                null,
+                2
+              )
+            );
+            console.error(
+              `Failed with error: ${error} while updating records in ${record.contract}`
+            );
+          }
         }
       }
     }

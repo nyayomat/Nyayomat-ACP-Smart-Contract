@@ -42,3 +42,8 @@ export const getRecordsToAddAndUpdate = async (
 
   return { create, update, records };
 };
+
+export const chunk = <T>(arr: T[], size: number): T[][] =>
+  [...Array(Math.ceil(arr.length / size))].map((_, i) =>
+    arr.slice(size * i, size + size * i)
+  );
