@@ -30,7 +30,7 @@ export const mapInventoryToTezos = (
     return {
       id: inventory?.id?.toString() || "",
       shopId: inventory?.shop_id?.toString() || "",
-      title: inventory?.title,
+      title: inventory?.title.replace(/[\uE000-\uF8FF]/g, "") || "",
       warehouseId: inventory?.warehouse_id?.toString() || "",
       productId: inventory?.product_id?.toString() || "",
       brand: inventory?.brand?.toString() || "",
