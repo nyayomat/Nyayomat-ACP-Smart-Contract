@@ -1,5 +1,6 @@
 /// @dev DB Mappings
 
+import striptags from "striptags";
 import {
   InventoryDB,
   InventoryTezos,
@@ -23,6 +24,9 @@ export const mapInventoryToTezos = (
   invetories: InventoryDB[]
 ): InventoryTezos[] => {
   return invetories.map((inventory: InventoryDB) => {
+    console.log({
+      title: inventory?.title,
+    });
     return {
       id: inventory?.id?.toString() || "",
       shopId: inventory?.shop_id?.toString() || "",
@@ -34,7 +38,7 @@ export const mapInventoryToTezos = (
       sku: inventory?.sku?.toString() || "",
       condition: inventory?.condition?.toString() || "",
       conditionNote: inventory?.condition_note?.toString() || "",
-      description: "",
+      description: striptags(inventory?.description || ""),
       keyFeatures: inventory?.key_features?.toString() || "",
       stockQuantity: inventory?.stock_quantity?.toString() || "",
       damagedQuantity: inventory?.damaged_quantity?.toString() || "",
@@ -119,14 +123,14 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
         ? product.manufacturer_id.toString()
         : "",
       brand: product.brand || "",
-      name: product.name || "",
+      name: "" || product.name,
       modelNumber: product?.model_number?.toString()
         ? product.model_number
         : "",
       mpn: product?.mpn ? product.mpn?.toString() : "",
       gtin: product?.gtin ? product.gtin?.toString() : "",
       gtinType: product?.gtin_type ? product.gtin_type?.toString() : "",
-      description: product.description ? product.description?.toString() : "",
+      description: "desc" || striptags(product.description || ""),
       minPrice: product.min_price ? product.min_price?.toString() : "",
       maxPrice: product.max_price ? product.max_price?.toString() : "",
       originCountry: product?.origin_country
@@ -137,7 +141,7 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
       downloadable: product.downloadable
         ? product.downloadable?.toString()
         : "",
-      slug: product.slug,
+      slug: "slug" || product.slug,
       salesCount: product.sale_count ? product.sale_count?.toString() : "",
       active: Boolean(product.active),
       deletedAt: new Date(product.deleted_at).getTime().toString(),
@@ -159,7 +163,7 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
           : user.role_id == "2"
           ? "Admin"
           : "Merchant",
-      description: user?.description || "",
+      description: striptags(user?.description || ""),
       roleId: user?.role_id.toString() || "",
       active: Boolean(user.active),
       createdAt: new Date(user.created_at).getTime().toString(),
