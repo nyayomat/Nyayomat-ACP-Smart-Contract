@@ -38,7 +38,10 @@ export const mapInventoryToTezos = (
       sku: inventory?.sku?.toString() || "",
       condition: inventory?.condition?.toString() || "",
       conditionNote: inventory?.condition_note?.toString() || "",
-      description: striptags(inventory?.description || ""),
+      description: striptags(inventory?.description || "").replaceAll(
+        /[\uE000-\uF8FF]/g,
+        ""
+      ),
       keyFeatures: inventory?.key_features?.toString() || "",
       stockQuantity: inventory?.stock_quantity?.toString() || "",
       damagedQuantity: inventory?.damaged_quantity?.toString() || "",
@@ -76,7 +79,7 @@ export const mapAssetToTezos = (assets: AssetDB[]): AssetTezos[] => {
     return {
       id: asset.id?.toString() || "",
       providerId: asset?.asset_provider_id?.toString() || "",
-      name: asset.asset_name,
+      name: asset?.asset_name.replaceAll(/[\uE000-\uF8FF]/g, ""),
       groupId: asset?.group_id?.toString() || "",
       subGroupId: asset?.sub_group_id?.toString() || "",
       categoryId: asset?.category_id?.toString() || "",
@@ -123,14 +126,17 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
         ? product.manufacturer_id.toString()
         : "",
       brand: product.brand || "",
-      name: "" || product.name,
+      name: product?.name.replaceAll(/[\uE000-\uF8FF]/g, ""),
       modelNumber: product?.model_number?.toString()
         ? product.model_number
         : "",
       mpn: product?.mpn ? product.mpn?.toString() : "",
       gtin: product?.gtin ? product.gtin?.toString() : "",
       gtinType: product?.gtin_type ? product.gtin_type?.toString() : "",
-      description: "desc" || striptags(product.description || ""),
+      description: striptags(product.description || "").replaceAll(
+        /[\uE000-\uF8FF]/g,
+        ""
+      ),
       minPrice: product.min_price ? product.min_price?.toString() : "",
       maxPrice: product.max_price ? product.max_price?.toString() : "",
       originCountry: product?.origin_country
@@ -141,7 +147,7 @@ export const mapProductToTezos = (products: ProductDB[]): ProductTezos[] => {
       downloadable: product.downloadable
         ? product.downloadable?.toString()
         : "",
-      slug: "slug" || product.slug,
+      slug: product.slug,
       salesCount: product.sale_count ? product.sale_count?.toString() : "",
       active: Boolean(product.active),
       deletedAt: new Date(product.deleted_at).getTime().toString(),
@@ -163,7 +169,10 @@ export const mapUserToTezos = (users: UserDB[]): UserTezos[] => {
           : user.role_id == "2"
           ? "Admin"
           : "Merchant",
-      description: striptags(user?.description || ""),
+      description: striptags(user?.description || "").replaceAll(
+        /[\uE000-\uF8FF]/g,
+        ""
+      ),
       roleId: user?.role_id.toString() || "",
       active: Boolean(user.active),
       createdAt: new Date(user.created_at).getTime().toString(),
