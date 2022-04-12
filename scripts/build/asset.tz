@@ -8,8 +8,9 @@
                                        (pair (string %owner) (string %paymentFreq)))
                                  (pair (pair (string %paymentMethod) (string %providerId))
                                        (pair (string %status) (string %subGroupId)))))
-                     (pair (pair (int %totalOutStandingAmount) (int %unitCost))
-                           (pair (string %units) (string %updatedAt)))))
+                     (pair (pair (pair (string %table) (string %totalOutStandingAmount))
+                                 (pair (int %unitCost) (string %units)))
+                           (string %updatedAt))))
             (string %remove))
         (list %update
            (pair (pair (pair (pair (pair (string %categoryId) (string %createdAt))
@@ -20,8 +21,9 @@
                                    (pair (string %owner) (string %paymentFreq)))
                              (pair (pair (string %paymentMethod) (string %providerId))
                                    (pair (string %status) (string %subGroupId)))))
-                 (pair (pair (int %totalOutStandingAmount) (int %unitCost))
-                       (pair (string %units) (string %updatedAt)))))) ;
+                 (pair (pair (pair (string %table) (string %totalOutStandingAmount))
+                             (pair (int %unitCost) (string %units)))
+                       (string %updatedAt))))) ;
   storage
     (big_map
        string
@@ -33,8 +35,9 @@
                                (pair (string %owner) (string %paymentFreq)))
                          (pair (pair (string %paymentMethod) (string %providerId))
                                (pair (string %status) (string %subGroupId)))))
-             (pair (pair (int %totalOutStandingAmount) (int %unitCost))
-                   (pair (string %units) (string %updatedAt))))) ;
+             (pair (pair (pair (string %table) (string %totalOutStandingAmount))
+                         (pair (int %unitCost) (string %units)))
+                   (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -60,7 +63,7 @@
                                         (pair (pair string int) (pair string string)))
                                   (pair (pair (pair int string) (pair string string))
                                         (pair (pair string string) (pair string string))))
-                            (pair (pair int int) (pair string string))) ;
+                            (pair (pair (pair string string) (pair int string)) string)) ;
                  SWAP ;
                  UPDATE } }
            { SENDER ;

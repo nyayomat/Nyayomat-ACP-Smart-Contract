@@ -19,4 +19,11 @@ export const config = {
 
   RPC_TESTNET_URL: `https://rpc.tzkt.io/ithacanet`,
   RPC_MAINNET_URL: "https://mainnet.smartpy.io/",
+
+  /*
+   * Backup Time Config
+   * @example
+   * BACKUP_TIME: "19:40"
+   */
+  BACKUP_TIME: "21:12",
 };

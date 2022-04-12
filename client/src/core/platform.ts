@@ -40,7 +40,7 @@ class Platform {
 
       const op = await contract.methodsObject.create(data).send();
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
-      await op.confirmation(3);
+      await op.confirmation(2);
       console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
       return op.hash;
     } catch (error: any) {

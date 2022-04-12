@@ -14,11 +14,12 @@ let storage =
          holidayProvision: 0,
          depositAmount: 0,
          installment: 0,
-         totalOutStandingAmount: 0,
+         totalOutStandingAmount: "string",
          paymentFreq: "paymentFreq",
          paymentMethod: "paymentMethod",
          status: "status",
          owner: "owner",
+         table: "table",
          createdAt: "createdAt",
          updatedAt: "updatedAt",
          deletedAt: "deletedAt"})]);

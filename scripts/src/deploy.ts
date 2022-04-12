@@ -100,10 +100,11 @@ const Main = async () => {
   /// Exclude contracts that are already deployed ?
   // contracts = contracts.filter((contract) => !Contracts[contract.split(".")[0]]);
 
-  /// Filter out some contracts
-  // contracts = contracts.filter(
-  //   (contract) => !["invoice.tz", "inventory.tz", "order.tz"].includes(contract)
-  // );
+  // Filter out some contracts
+  contracts = contracts.filter(
+    (contract) =>
+      !["invoice.tz", "inventory.tz", "product.tz"].includes(contract)
+  );
 
   // /// Deploy specific contracts
   // contracts = contracts.filter((contract) =>

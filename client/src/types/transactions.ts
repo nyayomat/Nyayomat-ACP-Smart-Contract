@@ -22,7 +22,7 @@ export interface TransactionTezos {
   paidOn: string;
   txType: string;
   owner: string;
-  amount: number;
+  amount: string;
   createdAt: string;
   updatedAt: string;
 }

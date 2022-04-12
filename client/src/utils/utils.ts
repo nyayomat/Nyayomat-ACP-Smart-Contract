@@ -3,7 +3,8 @@ import { resolve } from "path";
 
 export const getRecordsToAddAndUpdate = async (
   records: any[],
-  backup_file_name: string
+  backup_file_name: string,
+  db_table: string
 ) => {
   const create = [];
   const update = [];
@@ -40,7 +41,7 @@ export const getRecordsToAddAndUpdate = async (
     }
   }
 
-  return { create, update, records, backup_file_name };
+  return { create, update, records, backup_file_name, db_table };
 };
 
 export const chunk = <T>(arr: T[], size: number): T[][] =>

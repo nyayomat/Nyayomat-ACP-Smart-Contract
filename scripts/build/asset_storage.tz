@@ -4,7 +4,6 @@
                   (Pair "paymentMethod" "providerId")
                   "status"
                   "subGroupId")
-            (Pair 0 0)
-            "units"
+            (Pair (Pair "table" "string") 0 "units")
             "updatedAt") }
 

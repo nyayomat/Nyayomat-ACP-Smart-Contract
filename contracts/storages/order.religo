@@ -16,7 +16,7 @@ let storage =
          paymentFreq: "string",
          paymentMethod: "string",
          status: "string",
+         table: "table",
          orderBy: "string",
          createdAt: "string",
-         updatedAt: "string"
-       })]);
+         updatedAt: "string"})]);

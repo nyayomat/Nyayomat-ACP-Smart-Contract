@@ -1,28 +1,28 @@
 { parameter
     (or (or (list %create
-               (pair (pair (pair (pair (int %amount) (string %assetId))
+               (pair (pair (pair (pair (string %amount) (string %assetId))
                                  (pair (string %assetProviderId) (string %createdAt)))
                            (pair (pair (string %dueDate) (string %id))
                                  (pair (string %merchantId) (string %orderId))))
-                     (pair (pair (string %owner) (string %paidOn))
-                           (pair (string %txType) (string %updatedAt)))))
+                     (pair (pair (pair (string %owner) (string %paidOn)) (pair (string %table) (string %txType)))
+                           (string %updatedAt))))
             (string %remove))
         (list %update
-           (pair (pair (pair (pair (int %amount) (string %assetId))
+           (pair (pair (pair (pair (string %amount) (string %assetId))
                              (pair (string %assetProviderId) (string %createdAt)))
                        (pair (pair (string %dueDate) (string %id))
                              (pair (string %merchantId) (string %orderId))))
-                 (pair (pair (string %owner) (string %paidOn))
-                       (pair (string %txType) (string %updatedAt)))))) ;
+                 (pair (pair (pair (string %owner) (string %paidOn)) (pair (string %table) (string %txType)))
+                       (string %updatedAt))))) ;
   storage
     (big_map
        string
-       (pair (pair (pair (pair (int %amount) (string %assetId))
+       (pair (pair (pair (pair (string %amount) (string %assetId))
                          (pair (string %assetProviderId) (string %createdAt)))
                    (pair (pair (string %dueDate) (string %id))
                          (pair (string %merchantId) (string %orderId))))
-             (pair (pair (string %owner) (string %paidOn))
-                   (pair (string %txType) (string %updatedAt))))) ;
+             (pair (pair (pair (string %owner) (string %paidOn)) (pair (string %table) (string %txType)))
+                   (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -44,9 +44,9 @@
                  EXEC ;
                  NOT ;
                  IF { PUSH string "Only admin can update tx" ; FAILWITH } {} ;
-                 NONE (pair (pair (pair (pair int string) (pair string string))
+                 NONE (pair (pair (pair (pair string string) (pair string string))
                                   (pair (pair string string) (pair string string)))
-                            (pair (pair string string) (pair string string))) ;
+                            (pair (pair (pair string string) (pair string string)) string)) ;
                  SWAP ;
                  UPDATE } }
            { SENDER ;

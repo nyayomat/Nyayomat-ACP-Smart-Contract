@@ -6,9 +6,9 @@
                                        (pair (string %installment) (string %installmentAmount))))
                            (pair (pair (pair (string %merchantId) (string %orderBy))
                                        (pair (string %paymentFreq) (string %paymentMethod)))
-                                 (pair (pair (string %status) (string %totalOutStandingAmount))
-                                       (pair (string %unitCost) (string %units)))))
-                     (string %updatedAt)))
+                                 (pair (pair (string %status) (string %table))
+                                       (pair (string %totalOutStandingAmount) (string %unitCost)))))
+                     (pair (string %units) (string %updatedAt))))
             (string %remove))
         (list %update
            (pair (pair (pair (pair (pair (string %assetId) (string %assetProviderId))
@@ -17,9 +17,9 @@
                                    (pair (string %installment) (string %installmentAmount))))
                        (pair (pair (pair (string %merchantId) (string %orderBy))
                                    (pair (string %paymentFreq) (string %paymentMethod)))
-                             (pair (pair (string %status) (string %totalOutStandingAmount))
-                                   (pair (string %unitCost) (string %units)))))
-                 (string %updatedAt)))) ;
+                             (pair (pair (string %status) (string %table))
+                                   (pair (string %totalOutStandingAmount) (string %unitCost)))))
+                 (pair (string %units) (string %updatedAt))))) ;
   storage
     (big_map
        string
@@ -29,9 +29,9 @@
                                (pair (string %installment) (string %installmentAmount))))
                    (pair (pair (pair (string %merchantId) (string %orderBy))
                                (pair (string %paymentFreq) (string %paymentMethod)))
-                         (pair (pair (string %status) (string %totalOutStandingAmount))
-                               (pair (string %unitCost) (string %units)))))
-             (string %updatedAt))) ;
+                         (pair (pair (string %status) (string %table))
+                               (pair (string %totalOutStandingAmount) (string %unitCost)))))
+             (pair (string %units) (string %updatedAt)))) ;
   code { LAMBDA
            address
            bool
@@ -57,7 +57,7 @@
                                         (pair (pair string string) (pair string string)))
                                   (pair (pair (pair string string) (pair string string))
                                         (pair (pair string string) (pair string string))))
-                            string) ;
+                            (pair string string)) ;
                  SWAP ;
                  UPDATE } }
            { SENDER ;

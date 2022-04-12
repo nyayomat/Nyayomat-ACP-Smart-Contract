@@ -34,7 +34,7 @@ export interface AssetTezos {
   holidayProvision: number;
   depositAmount: number;
   installment: number;
-  totalOutStandingAmount?: number;
+  totalOutStandingAmount?: string;
   paymentFreq: string;
   paymentMethod: string;
   status: string;

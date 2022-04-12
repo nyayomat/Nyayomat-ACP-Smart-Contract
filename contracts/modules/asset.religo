@@ -17,11 +17,12 @@ type asset = {
   holidayProvision: int,
   depositAmount: int,
   installment: int,
-  totalOutStandingAmount: int,
+  totalOutStandingAmount: string,
   paymentFreq: string,
   paymentMethod: string,
   status: string,
   owner: string,
+  table: string,
   createdAt: string,
   updatedAt: string,
   deletedAt: string};

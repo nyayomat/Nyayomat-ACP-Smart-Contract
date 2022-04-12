@@ -14,7 +14,8 @@ type tx = {
   paidOn: string,
   txType: string,
   owner: string,
-  amount: int,
+  amount: string,
+  table: string,
   createdAt: string,
   updatedAt: string};
 
