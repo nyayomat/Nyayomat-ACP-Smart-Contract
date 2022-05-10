@@ -1,14 +1,14 @@
 # Nyayomat ACP
 
 **Project Overview**
-
+```
 .
 ├── client
 ├── contracts
 ├── LICENSE
 ├── README.md
 ├── scripts
-
+```
 #### Prerequisites
 
 There are the required prerequisites to run the project.
@@ -130,4 +130,4 @@ On the scripts folder there are a few things to configure.
 
 and then run the following command to start the client bot:
 
-    ``    yarn start    ``
+```yarn start```
