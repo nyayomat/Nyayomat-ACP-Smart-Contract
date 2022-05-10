@@ -113,9 +113,9 @@ You can easily create an account for tezos testnet by following this guide, the 
 
 #### Client
 
-Contains adapters for fetching data from Nyayomant DB, parsing in a format that is expected in the smart contracts and pushing it to onchain smart contracts on Tezos blockchain.
+Contains adapters for fetching data from Nyayomat DB, parsing it in a format that is expected in the smart contracts and pushing it to onchain smart contracts on Tezos blockchain.
 
-On the scripts folder there are a few things to configure.
+On the client folder there are a few things to configure.
 
 1. Ensure you have backups folder. If it doesn't exist, create it. It is used to store the backups of the smart contracts. This necessary to speed up the process of backing up data, as it acts as an intermediate step that is crucial for checking what has changed or new new and to be backed up.
 2. Rename/or copy `.env.example` to `.env`
