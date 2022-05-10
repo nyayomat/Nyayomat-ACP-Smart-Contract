@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "fs";
 import { schedule } from "node-cron";
 import { resolve } from "path";
 import { config } from "../config";
@@ -262,7 +262,10 @@ const Main = async () => {
                 /// @dev Add batch insert
                 await platformWrapper.create(data, contractAddress);
                 /// TODO update backups refs after an update
-
+                let dir = resolve(__dirname, `../backups/`);
+                if (!existsSync(dir)) {
+                  mkdirSync(dir, { recursive: true });
+                }
                 writeFileSync(
                   resolve(
                     __dirname,

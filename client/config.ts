@@ -25,5 +25,5 @@ export const config = {
    * @example
    * BACKUP_TIME: "19:40"
    */
-  BACKUP_TIME: "22:34",
+  BACKUP_TIME: "17:38",
 };
