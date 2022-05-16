@@ -100,7 +100,7 @@ You can easily create an account for tezos testnet by following this guide, the 
 
 #### Installation && Deployment
 
-0. Ensure you have dependencies according to the [prerequisites](#prerequisites) beofre you continue.
+0. Ensure you have dependencies according to the [prerequisites](#prerequisites) before you continue.
 1. Deploy the smart contracts to the testnet by running the following command:
 
    ```
@@ -109,7 +109,7 @@ You can easily create an account for tezos testnet by following this guide, the 
 
    This will deploy the smart contracts to the testnet, and copy the new contract addresses to the `scripts/utils/contracts.json` file.
 
-2. And that's it on the scripts folder. You only only have to deploy the smart contracts once and client bot will be able to push data to each of the deployed smart contract.
+2. And that's it on the scripts folder. You only only have to deploy the smart contracts once and client bot will be able to push data to each of the deployed smart contracts.
 
 #### Client
 
