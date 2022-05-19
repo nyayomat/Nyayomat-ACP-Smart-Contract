@@ -7,7 +7,7 @@
          dueDate: "1645822800000",
          paidOn: "",
          txType: "installment",
-         initiator: "Merchant",
+         owner: "Merchant",
          amount: "130",
          createdAt: "1645345483000",
          updatedAt: "1645345483000",
