@@ -2,7 +2,7 @@ import { Connection, createConnection } from "mysql";
 import { config } from "../../config";
 import { InventoryDB } from "../types";
 
-class Database {
+export class Database {
   con: Connection;
   constructor() {
     console.log(`Connecting to database...`);
@@ -37,5 +37,7 @@ class Database {
       });
     });
   };
+  close = () => {
+    this.con.end();
+  };
 }
-export const databaseWrapper = new Database();

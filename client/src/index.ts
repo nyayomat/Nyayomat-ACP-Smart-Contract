@@ -9,7 +9,7 @@ import {
   mapProviderToTezos,
   mapOrderToTezos,
 } from "./common";
-import { databaseWrapper, platformWrapper } from "./core";
+import { Database, platformWrapper } from "./core";
 import { ProviderDB, UserDB, AssetDB, TransactionDB, OrdersDB } from "./types";
 import { chunk, getRecordsToAddAndUpdate } from "./utils";
 
@@ -28,7 +28,7 @@ const Main = async () => {
       console.info(
         `Fetching providers, inventories, invoices, assets, users records...`
       );
-
+      const databaseWrapper = new Database();
       /// @dev Database Tables to read from
       const ProviderAssetTable = "tbl_acp_assets";
       const MerchantAssetTable = "tbl_acp_merchant_assets";
@@ -85,6 +85,9 @@ const Main = async () => {
       let merchantOrdersDB: OrdersDB[] = await databaseWrapper.fetchTable(
         MerchantOrderTable
       );
+
+      // close the db connection
+      databaseWrapper.close();
 
       /// @dev capture only delivered merchant orders
       merchantOrdersDB = merchantOrdersDB.filter(
