@@ -16,15 +16,6 @@ class Platform {
       ? config.RPC_TESTNET_URL
       : config.RPC_MAINNET_URL;
     this.tezos = new TezosToolkit(this.rpcUrl);
-
-    //declaring the parameters using fromFundraiser: mail, password, and passphrase from which one can extract the private key
-    this.tezos.setSignerProvider(
-      InMemorySigner.fromFundraiser(
-        Account.email,
-        Account.password,
-        Account.mnemonic.join(" ")
-      )
-    );
   }
 
   /**
@@ -36,12 +27,34 @@ class Platform {
 
   create = async (data: Record<string, any>[], contractAddress: string) => {
     try {
+      //declaring the parameters using fromFundraiser: mail, password, and passphrase from which one can extract the private key
+
+      config.TEST_MODE
+        ? this.tezos.setSignerProvider(
+            InMemorySigner.fromFundraiser(
+              Account.email,
+              Account.password,
+              Account.mnemonic.join(" ")
+            )
+          )
+        : this.tezos.setSignerProvider(
+            await InMemorySigner.fromSecretKey(config.PRIVATE_KEY)
+          );
+    } catch (error) {
+      console.log(error);
+    }
+
+    try {
       const contract = await this.tezos.contract.at(contractAddress);
 
       const op = await contract.methodsObject.create(data).send();
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
       await op.confirmation(2);
-      console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      console.log(
+        `Operation injected: ${
+          config.TEST_MODE ? "https://ithacanet.tzkt.io/" : "https://tzkt.io/"
+        }${op.hash}`
+      );
       return op.hash;
     } catch (error: any) {
       console.log({
@@ -62,13 +75,34 @@ class Platform {
 
   update = async (data: Record<string, any>[], contractAddress: string) => {
     try {
+      //declaring the parameters using fromFundraiser: mail, password, and passphrase from which one can extract the private key
+
+      config.TEST_MODE
+        ? this.tezos.setSignerProvider(
+            InMemorySigner.fromFundraiser(
+              Account.email,
+              Account.password,
+              Account.mnemonic.join(" ")
+            )
+          )
+        : this.tezos.setSignerProvider(
+            await InMemorySigner.fromSecretKey(config.PRIVATE_KEY)
+          );
+    } catch (error) {
+      console.log(error);
+    }
+    try {
       const contract = await this.tezos.contract.at(contractAddress);
 
       const op = await contract.methodsObject.update(data).send();
 
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
       await op.confirmation(3);
-      console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      console.log(
+        `Operation injected: ${
+          config.TEST_MODE ? "https://ithacanet.tzkt.io/" : "https://tzkt.io/"
+        }${op.hash}`
+      );
       return op.hash;
     } catch (error: any) {
       throw new Error(error);

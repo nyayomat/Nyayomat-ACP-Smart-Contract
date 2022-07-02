@@ -14,7 +14,7 @@ export const config = {
    * @dev S.C is the smart contract
    */
   // The public node address of the Tezos network
-  TEST_MODE: true,
+  TEST_MODE: process.env.TEST_MODE === "true",
   // TEST_MODE: false,
 
   RPC_TESTNET_URL: `https://rpc.tzkt.io/ithacanet`,
@@ -26,4 +26,10 @@ export const config = {
    * BACKUP_TIME: "19:40"
    */
   BACKUP_TIME: "17:38",
+
+  /**
+   * TEZOS Account Config
+   */
+  PRIVATE_KEY: process.env.PRIVATE_KEY!,
+  PUBLIC_KEY: process.env.PUBLIC_KEY!,
 };

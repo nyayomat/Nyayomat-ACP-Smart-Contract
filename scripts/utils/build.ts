@@ -1,5 +1,6 @@
 import { exec } from "child_process";
 import { writeFileSync } from "fs";
+import { config } from "../config";
 import Account from "../ithacanet.json";
 
 export const compileAndSaveBuild = async (
@@ -18,7 +19,10 @@ export const compileAndSaveBuild = async (
       } else {
         if (stdout) {
           /// @dev Replace all hardcoded owner addresses with the actual owner addresses
-          stdout = stdout.replace(/"tz1[a-zA-Z0-9]{33}"/g, `"${Account.pkh}"`);
+          stdout = stdout.replace(
+            /"tz1[a-zA-Z0-9]{33}"/g,
+            `"${config.TEST_MODE ? Account.pkh : config.PUBLIC_KEY}"`
+          );
           writeFileSync(outPath, stdout);
         }
         if (stderr) {

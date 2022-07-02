@@ -18,13 +18,15 @@ class Deployer {
   }
 
   deploy = async (contract_name: string) => {
-    await importKey(
-      this.tezos,
-      Account.email, //mail
-      Account.password, //password
-      Account.mnemonic.join(" "), //passphrase
-      Account.activation_code //private key
-    );
+    config.TEST_MODE
+      ? await importKey(
+          this.tezos,
+          Account.email, //mail
+          Account.password, //password
+          Account.mnemonic.join(" "), //passphrase
+          Account.activation_code //private key
+        )
+      : await importKey(this.tezos, config.PRIVATE_KEY);
 
     try {
       let code = readFileSync(
@@ -50,7 +52,11 @@ class Deployer {
       console.log("Contract Address", contract.address);
       //operation hash one can use to find the contract in the explorer
       console.info(`---`);
-      console.log(`Operation injected: https://ithacanet.tzkt.io/${op.hash}`);
+      console.log(
+        `Operation injected: ${
+          config.TEST_MODE ? "https://ithacanet.tzkt.io/" : "https://tzkt.io/"
+        }${op.hash}`
+      );
 
       /// @dev save address to contracts.json
       let contracts = {
