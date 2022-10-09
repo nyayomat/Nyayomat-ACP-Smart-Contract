@@ -49,7 +49,11 @@ class Platform {
       const op = await contract.methodsObject.create(data).send();
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
       await op.confirmation(2);
-      console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      console.log(
+        `Operation injected: ${
+          config.TEST_MODE ? "https://ithacanet.tzkt.io/" : "https://tzkt.io/"
+        }${op.hash}`
+      );
       return op.hash;
     } catch (error: any) {
       console.log({
@@ -85,7 +89,6 @@ class Platform {
     } catch (error) {
       console.log(error);
     }
-
     try {
       const contract = await this.tezos.contract.at(contractAddress);
 
@@ -93,7 +96,11 @@ class Platform {
 
       console.log(`Awaiting for ${op.hash} to be confirmed...`);
       await op.confirmation(3);
-      console.log(`Operation injected: https://ithaca.tzstats.com/${op.hash}`);
+      console.log(
+        `Operation injected: ${
+          config.TEST_MODE ? "https://ithacanet.tzkt.io/" : "https://tzkt.io/"
+        }${op.hash}`
+      );
       return op.hash;
     } catch (error: any) {
       throw new Error(error);

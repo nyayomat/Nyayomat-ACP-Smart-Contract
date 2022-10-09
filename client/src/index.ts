@@ -28,9 +28,13 @@ const Main = async () => {
       console.info(
         `Fetching providers, inventories, invoices, assets, users records...`
       );
+<<<<<<< HEAD
 
       let databaseWrapper = new Database();
 
+=======
+      const databaseWrapper = new Database();
+>>>>>>> dca5a5aa0ff68ec7cf7a9e02c0cbca39e7c8f983
       /// @dev Database Tables to read from
       const ProviderAssetTable = "tbl_acp_assets";
       const MerchantAssetTable = "tbl_acp_merchant_assets";

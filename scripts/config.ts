@@ -8,7 +8,9 @@ export const config = {
   RPC_TESTNET_URL: `https://rpc.tzkt.io/ithacanet`,
   RPC_MAINNET_URL: "https://mainnet.smartpy.io/",
 
-  PUBLIC_KEY: process.env.PUBLIC_KEY!,
-
+  /**
+   * TEZOS Account Config
+   */
   PRIVATE_KEY: process.env.PRIVATE_KEY!,
+  PUBLIC_KEY: process.env.PUBLIC_KEY!,
 };
