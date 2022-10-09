@@ -1,6 +1,7 @@
 # Nyayomat ACP
 
 **Project Overview**
+
 ```
 .
 ├── client
@@ -8,8 +9,10 @@
 ├── LICENSE
 ├── README.md
 ├── scripts
+├── tests
 ```
-#### Prerequisites
+
+#### **Prerequisites**
 
 There are the required prerequisites to run the project.
 
@@ -60,7 +63,10 @@ yarn install
 
 This will install all the dependencies needed to run the project.
 
-#### Contracts
+4. Ensure ligo is installed
+   To install ligo, **[follow this guide](https://ligolang.org/docs/intro/installation)** from their official documentation.
+
+#### **Contracts**
 
 Contains the marketplace smart contracts as shown below
 
@@ -76,7 +82,7 @@ contracts
 1 directory, 5 files
 ```
 
-#### Scripts
+#### **Scripts**
 
 The deployment scripts to tezos testnet and mainnet i.e [ithacanet](https://ithacanet.tzkt.io/), [mainnet](https://tzkt.io/), [hangzhounet](https://hangzhounet.tzkt.io/)
 
@@ -98,9 +104,9 @@ You can easily create an account for tezos testnet by following this guide, the 
 
 5. Once done you are now ready to install dependencies and deploy your s.c
 
-#### Installation && Deployment
+#### **Installation && Deployment**
 
-0. Ensure you have dependencies according to the [prerequisites](#prerequisites) beofre you continue.
+0. Ensure you have dependencies according to the [prerequisites](#prerequisites) before you continue.
 1. Deploy the smart contracts to the testnet by running the following command:
 
    ```
@@ -109,9 +115,9 @@ You can easily create an account for tezos testnet by following this guide, the 
 
    This will deploy the smart contracts to the testnet, and copy the new contract addresses to the `scripts/utils/contracts.json` file.
 
-2. And that's it on the scripts folder. You only only have to deploy the smart contracts once and client bot will be able to push data to each of the deployed smart contract.
+2. And that's it on the scripts folder. You only only have to deploy the smart contracts once and client bot will be able to push data to each of the deployed smart contracts.
 
-#### Client
+#### **Client**
 
 Contains adapters for fetching data from Nyayomat DB, parsing it in a format that is expected in the smart contracts and pushing it to onchain smart contracts on Tezos blockchain.
 
@@ -131,3 +137,23 @@ On the client folder there are a few things to configure.
 and then run the following command to start the client bot:
 
 ```yarn start```
+
+#### **Test**
+
+Contains smart contracts test written in `religo`.
+
+##### How to run the tests
+
+1. Navigate into the scripts folder
+
+   ```
+   cd scripts
+   ```
+
+2. Once there run the following command
+
+   ```
+   yarn test:ligo
+   ```
+
+      Your tests should run succesfully
