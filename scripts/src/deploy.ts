@@ -18,13 +18,15 @@ class Deployer {
   }
 
   deploy = async (contract_name: string) => {
-    await importKey(
-      this.tezos,
-      Account.email, //mail
-      Account.password, //password
-      Account.mnemonic.join(" "), //passphrase
-      Account.activation_code //private key
-    );
+    config.TEST_MODE
+      ? await importKey(
+          this.tezos,
+          Account.email, //mail
+          Account.password, //password
+          Account.mnemonic.join(" "), //passphrase
+          Account.activation_code //private key
+        )
+      : await importKey(this.tezos, config.PRIVATE_KEY);
 
     try {
       let code = readFileSync(
@@ -32,7 +34,10 @@ class Deployer {
         "utf8"
       );
       /// @dev Replace all hardcoded owner addresses with the actual owner addresses
-      code = code.replace(/"tz1[a-zA-Z0-9]{33}"/g, `"${Account.pkh}"`);
+      code = code.replace(
+        /"tz1[a-zA-Z0-9]{33}"/g,
+        `"${config.TEST_MODE ? Account.pkh : config.PUBLIC_KEY}"`
+      );
       const op = await this.tezos.contract.originate({
         //smart contract code
         code,
